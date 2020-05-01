@@ -4,8 +4,7 @@ public class ValidadorContraseñas{
     private List<Validador> validadores;
 
     // Bool?
-    private bool validarContraseña(){
-
-    };
-
+    private boolean validarContraseña(){
+        return true;
+    }
 }

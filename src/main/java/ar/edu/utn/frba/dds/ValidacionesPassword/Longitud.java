@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds.ValidacionesPassword;
 
-public class CantMinCaracteres implements Validacion {
+public class Longitud implements Validacion {
 
     @Override
-    public boolean validarPassword(String password) {
+    public boolean validarPassword(String password){
         return password.length() >= 8;
     }
 }

@@ -11,7 +11,6 @@ public class BuilderUsuario {
     private Organizacion organizacion;
 
     private ValidadorPassword validadorPassword = ValidadorPassword.getInstance();
-    ;
 
     public String getUsuario() {
         return usuario;

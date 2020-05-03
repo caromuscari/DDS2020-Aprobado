@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.Usuario;
 
-public class Usuario {
+public class BuilderUsuario {
 
     private String usuario;
 
@@ -10,15 +10,8 @@ public class Usuario {
 
     private Organizacion organizacion;
 
-    private int cantidadIntentos;
-
-    public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){
-        this.usuario = usuario;
-        this.password = password;
-        this.perfil = perfil;
-        this.organizacion = organizacion;
-        this.cantidadIntentos = 0;
-    }
+    private ValidadorPassword validadorPassword = ValidadorPassword.getInstance();
+    ;
 
     public String getUsuario() {
         return usuario;
@@ -36,14 +29,6 @@ public class Usuario {
         this.password = password;
     }
 
-    public int getCantidadIntentos() {
-        return cantidadIntentos;
-    }
-
-    public void setCantidadIntentos(int cantidadIntentos) {
-        this.cantidadIntentos = cantidadIntentos;
-    }
-
     public TipoPerfil getPerfil() {
         return perfil;
     }
@@ -58,5 +43,14 @@ public class Usuario {
 
     public void setOrganizacion(Organizacion organizacion) {
         this.organizacion = organizacion;
+    }
+
+    public Usuario registrar() throws Exception{
+
+        if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null){
+            return new Usuario(usuario,password,perfil,organizacion);
+        }else{
+            throw new Exception("No se puede crear un usuario");
+        }
     }
 }

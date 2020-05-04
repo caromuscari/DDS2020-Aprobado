@@ -15,7 +15,7 @@ public class PasswordValidatorTest {
     public void Top10000(){
         validador.getValidadores().clear();
         validador.getValidadores().add(new Top10000());
-        Assert.assertEquals(true , validador.validarPassword("pasfasdasfaasf"));
+        Assert.assertEquals(true , validador.validarPassword("Pepito1234"));
     }
 
     @Test
@@ -45,18 +45,25 @@ public class PasswordValidatorTest {
         validador.getValidadores().add(new Longitud());
         validador.getValidadores().add(new Top10000());
         validador.getValidadores().add(new Complejidad());
-        Assert.assertEquals(true , validador.validarPassword("afasfasAaasfa"));
+        Assert.assertEquals(true , validador.validarPassword("Pepito1234"));
     }
 
     @Test
     public void CreacionDeAdminsitradorYHasheoDePass() throws Exception {
+
+        validador.getValidadores().clear();
+        validador.getValidadores().add(new Longitud());
+        validador.getValidadores().add(new Top10000());
+        validador.getValidadores().add(new Complejidad());
+
         BuilderUsuario builderUsuario = new BuilderUsuario();
         builderUsuario.setUsuario("pepito");
         builderUsuario.setPassword("Pepito1234");
-        builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
+        builderUsuario.setPerfil(TipoPerfil.OPERADOR);
         builderUsuario.setOrganizacion(new Organizacion());
         Usuario u = builderUsuario.registrar();
         Assert.assertTrue(u.getPassword() != "Pepito1234");
+
     }
 
     /*

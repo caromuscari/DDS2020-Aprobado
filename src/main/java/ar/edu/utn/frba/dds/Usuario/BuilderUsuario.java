@@ -61,10 +61,13 @@ public class BuilderUsuario {
 
     public Usuario registrar() throws Exception{
 
-        if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null){
+        if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null)
+        {
             return new Usuario(usuario,hash(sha256(password)),perfil,organizacion);
-        }else{
-            throw new Exception("No se puede crear un usuario");
+        }
+        else
+        {
+            throw new Exception("No se pudo crear un usuario");
         }
     }
 }

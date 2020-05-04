@@ -10,7 +10,7 @@ public class App
 {
     public static void main( String[] args ) {
         BuilderUsuario builderUsuario = new BuilderUsuario();
-        builderUsuario.setUsuario("pepito");
+        builderUsuario.setUsuario("e");
         builderUsuario.setPassword("Pepito1234");
         builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
         builderUsuario.setOrganizacion(new Organizacion());

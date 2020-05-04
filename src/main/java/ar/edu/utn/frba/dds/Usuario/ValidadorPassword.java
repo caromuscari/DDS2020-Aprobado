@@ -22,14 +22,14 @@ public class ValidadorPassword {
 
     private List<Validacion> validadores = new ArrayList<Validacion>();
 
-
     public List<Validacion> getValidadores() {
         return validadores;
     }
-
     public void setValidadores(List<Validacion> validadores) {
         validadores = validadores;
     }
+
+
 
     public boolean validarPassword(String password){
         return validadores.stream().allMatch(validacion -> validacion.validarPassword(password));

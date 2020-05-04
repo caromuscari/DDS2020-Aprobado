@@ -1,11 +1,8 @@
 package ar.edu.utn.frba.dds.ValidacionesPassword;
 
-import javax.sound.midi.SysexMessage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.nio.file.FileAlreadyExistsException;
 
 public class Top10000 implements Validacion {
 

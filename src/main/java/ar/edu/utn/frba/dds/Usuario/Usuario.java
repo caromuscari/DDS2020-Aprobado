@@ -1,16 +1,16 @@
 package ar.edu.utn.frba.dds.Usuario;
 
+import java.util.Hashtable;
+
 public class Usuario {
 
     private String usuario;
-
     private String password;
-
     private TipoPerfil perfil;
-
     private Organizacion organizacion;
-
     private int cantidadIntentos;
+
+
 
     public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){
         this.usuario = usuario;
@@ -23,7 +23,6 @@ public class Usuario {
     public String getUsuario() {
         return usuario;
     }
-
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
@@ -31,7 +30,6 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -39,7 +37,6 @@ public class Usuario {
     public int getCantidadIntentos() {
         return cantidadIntentos;
     }
-
     public void setCantidadIntentos(int cantidadIntentos) {
         this.cantidadIntentos = cantidadIntentos;
     }
@@ -47,7 +44,6 @@ public class Usuario {
     public TipoPerfil getPerfil() {
         return perfil;
     }
-
     public void setPerfil(TipoPerfil perfil) {
         this.perfil = perfil;
     }
@@ -55,7 +51,6 @@ public class Usuario {
     public Organizacion getOrganizacion() {
         return organizacion;
     }
-
     public void setOrganizacion(Organizacion organizacion) {
         this.organizacion = organizacion;
     }

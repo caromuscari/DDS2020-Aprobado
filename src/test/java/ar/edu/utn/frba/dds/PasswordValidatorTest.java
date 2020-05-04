@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds;
 
+import ar.edu.utn.frba.dds.Usuario.*;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Longitud;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Complejidad;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Top10000;
-import ar.edu.utn.frba.dds.Usuario.ValidadorPassword;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,4 +47,22 @@ public class PasswordValidatorTest {
         validador.getValidadores().add(new Complejidad());
         Assert.assertEquals(true , validador.validarPassword("afasfasAaasfa"));
     }
+
+    @Test
+    public void CreacionDeAdminsitradorYHasheoDePass() throws Exception {
+        BuilderUsuario builderUsuario = new BuilderUsuario();
+        builderUsuario.setUsuario("pepito");
+        builderUsuario.setPassword("Pepito1234");
+        builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
+        builderUsuario.setOrganizacion(new Organizacion());
+        Usuario u = builderUsuario.registrar();
+        Assert.assertTrue(u.getPassword() != "Pepito1234");
+    }
+
+    /*
+    @Test
+    public void CreacionDeOperador(){
+
+    }
+     */
 }

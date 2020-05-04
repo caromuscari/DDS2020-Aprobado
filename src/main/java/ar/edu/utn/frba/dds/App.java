@@ -12,7 +12,7 @@ public class App
         BuilderUsuario builderUsuario = new BuilderUsuario();
         builderUsuario.setUsuario("pepito");
         builderUsuario.setPassword("Pepito1234");
-        builderUsuario.setPerfil(new TipoPerfil());
+        builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
         builderUsuario.setOrganizacion(new Organizacion());
 
         try {

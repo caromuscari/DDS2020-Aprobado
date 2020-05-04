@@ -1,8 +1,5 @@
 package ar.edu.utn.frba.dds.ValidacionesPassword;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Complejidad implements Validacion{
 
     private boolean valido = false;

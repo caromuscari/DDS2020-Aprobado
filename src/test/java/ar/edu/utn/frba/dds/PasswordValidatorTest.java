@@ -15,28 +15,28 @@ public class PasswordValidatorTest {
     public void Top10000(){
         validador.getValidadores().clear();
         validador.getValidadores().add(new Top10000());
-        Assert.assertEquals(true , validador.validarPassword("Pepito1234"));
+        Assert.assertTrue(validador.validarPassword("Pepito1234"));
     }
 
     @Test
     public void CantMinCaracteresTrue(){
         validador.getValidadores().clear();
         validador.getValidadores().add(new Longitud());
-        Assert.assertEquals(true , validador.validarPassword("pasfasdasfaasf"));
+        Assert.assertTrue(validador.validarPassword("pasfasdasfaasf"));
     }
 
     @Test
     public void CantMinCaracteresFalse(){
         validador.getValidadores().clear();
         validador.getValidadores().add(new Longitud());
-        Assert.assertNotEquals(true , validador.validarPassword("asd"));
+        Assert.assertFalse(validador.validarPassword("asd"));
     }
 
     @Test
     public void ContieneMayuscula(){
         validador.getValidadores().clear();
         validador.getValidadores().add(new Complejidad());
-        Assert.assertEquals(true , validador.validarPassword("afasfAfaasf"));
+        Assert.assertTrue(validador.validarPassword("afasfAfaasf"));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class PasswordValidatorTest {
         validador.getValidadores().add(new Longitud());
         validador.getValidadores().add(new Top10000());
         validador.getValidadores().add(new Complejidad());
-        Assert.assertEquals(true , validador.validarPassword("Pepito1234"));
+        Assert.assertTrue(validador.validarPassword("Pepito1234"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class PasswordValidatorTest {
         builderUsuario.setPerfil(TipoPerfil.OPERADOR);
         builderUsuario.setOrganizacion(new Organizacion());
         Usuario u = builderUsuario.registrar();
-        Assert.assertTrue(u.getPassword() != "Pepito1234");
+        Assert.assertFalse(u.getPassword().equals("Pepito1234")); // La pass hasheada no es igual a la recien ingresada
 
     }
 

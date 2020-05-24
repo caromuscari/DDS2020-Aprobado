@@ -16,7 +16,7 @@ public class Top10000 implements Validacion {
     public boolean validarPassword(String password) {
 
         try{
-            malasPasswords = new File("top10000.txt");
+            malasPasswords = new File("src//main//resources//top10000.txt");
             fr = new FileReader(malasPasswords);
             br = new BufferedReader(fr);
             while((linea = br.readLine()) != null)

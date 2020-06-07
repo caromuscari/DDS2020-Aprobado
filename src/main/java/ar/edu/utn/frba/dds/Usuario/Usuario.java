@@ -13,7 +13,7 @@ public class Usuario {
     private List<String> ultimasPasswords;
     //private List<Mensaje> bandejaDeMensajes;
 
-    private ValidadorPassword listaValidadores;
+    private ValidadorPassword validar;
 
     public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){
         this.usuario = usuario;
@@ -65,9 +65,11 @@ public class Usuario {
         boolean seModifico = false;
 
         if (!password.equals(aux.hashear(passNueva)) && !new RotacionPassword().validarRotacion(ultimasPasswords, aux.hashear(passNueva))){
-            ultimasPasswords.add(password);
-            password = aux.hashear(passNueva);
-            seModifico = !seModifico;
+            if(validar.validarPassword(passNueva)) {
+                ultimasPasswords.add(password);
+                password = aux.hashear(passNueva);
+                seModifico = !seModifico;
+            }
         }
         return seModifico;
     }

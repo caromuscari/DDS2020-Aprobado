@@ -1,16 +1,19 @@
 package ar.edu.utn.frba.dds.Usuario;
-
-import java.util.Hashtable;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Usuario {
 
     private String usuario;
     private String password;
+    private int cantidadIntentos;
     private TipoPerfil perfil;
     private Organizacion organizacion;
-    private int cantidadIntentos;
+    private List<String> ultimasPasswords;
+    //private List<Mensaje> bandejaDeMensajes;
 
-
+    private ValidadorPassword listaValidadores;
 
     public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){
         this.usuario = usuario;
@@ -18,6 +21,7 @@ public class Usuario {
         this.perfil = perfil;
         this.organizacion = organizacion;
         this.cantidadIntentos = 0;
+        this.ultimasPasswords = new ArrayList<String>();
     }
 
     public String getUsuario() {
@@ -53,5 +57,18 @@ public class Usuario {
     }
     public void setOrganizacion(Organizacion organizacion) {
         this.organizacion = organizacion;
+    }
+
+    public boolean modificarPassword(String passNueva) throws NoSuchAlgorithmException {
+        Hash aux = new Hash();
+
+        boolean seModifico = false;
+
+        if (!password.equals(aux.hashear(passNueva)) && !new RotacionPassword().validarRotacion(ultimasPasswords, aux.hashear(passNueva))){
+            ultimasPasswords.add(password);
+            password = aux.hashear(passNueva);
+            seModifico = !seModifico;
+        }
+        return seModifico;
     }
 }

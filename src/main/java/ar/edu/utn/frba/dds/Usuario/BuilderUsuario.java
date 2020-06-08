@@ -39,11 +39,10 @@ public class BuilderUsuario {
         this.organizacion = organizacion;
     }
 
-    public Usuario registrar() throws Exception{
-
+    public Usuario registrar() throws Exception {
         if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null)
             return new Usuario(usuario, encriptador.hashear(password),perfil,organizacion);
         else
-            throw new Exception("No se pudo crear un usuario");
+            throw new Exception();
     }
 }

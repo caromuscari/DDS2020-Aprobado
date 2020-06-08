@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-public class Empresa {
+public class Empresa extends EntidadJuridica{
 
     private TipoEmpresa tipoEmpresa;
 
@@ -13,6 +13,6 @@ public class Empresa {
     }
 
     public void recategorizar(){
-        //TODO
+        this.tipoEmpresa = super.getTipoActividad().obtenerTipoEmpresa(super.getVentasPromedio());
     }
 }

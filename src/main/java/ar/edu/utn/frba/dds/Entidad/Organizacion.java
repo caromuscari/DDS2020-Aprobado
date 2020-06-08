@@ -17,15 +17,9 @@ public class Organizacion {
         this.entidades = entidades;
     }
 
-    public void generarIngreso(List<ItemOperacion> items, Proveedor proveedor, Entidad entidad){
-        //TODO
-    }
-
     public double obtenerEgresos(){
         return entidades.stream().
-                mapToDouble(entidad -> entidad.getEgresos().stream().
-                        mapToDouble(egreso -> egreso.getPrecioTotal()
-                        ).sum()).
+                mapToDouble(entidad -> entidad.obtenerTotalEgresos()).
                 sum();
     }
 }

@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.Entidad;
 
 import ar.edu.utn.frba.dds.Egreso.Egreso;
+import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
+import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
 import java.util.List;
 
@@ -22,5 +24,14 @@ public abstract class Entidad {
 
     public void setEgresos(List<Egreso> egresos) {
         this.egresos = egresos;
+    }
+
+    public double obtenerTotalEgresos(){
+        return this.egresos.stream().
+            mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
+    }
+
+    public void generarIngreso(List<ItemOperacion> items, Proveedor proveedor){
+        //TODO
     }
 }

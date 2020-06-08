@@ -1,13 +1,14 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-public class EntidadJuridica {
+public abstract class EntidadJuridica {
     private String razonSocial;
     private int cuit;
     private int codigoPostal;
     private int codigoInscripcion;
     private int cantidadPersonal;
-    private double ventasProyectadas;
+    private int ventasProyectadas;
     private TipoActividad tipoActividad;
+    private int ventasPromedio;
 
 
     public TipoActividad getTipoActividad() {
@@ -58,11 +59,19 @@ public class EntidadJuridica {
         this.cantidadPersonal = cantidadPersonal;
     }
 
-    public double getVentasProyectadas() {
+    public int getVentasProyectadas() {
         return ventasProyectadas;
     }
 
-    public void setVentasProyectadas(double ventasProyectadas) {
+    public void setVentasProyectadas(int ventasProyectadas) {
         this.ventasProyectadas = ventasProyectadas;
+    }
+
+    public int getVentasPromedio() {
+        return ventasPromedio;
+    }
+
+    public void setVentasPromedio(int ventasPromedio) {
+        this.ventasPromedio = ventasPromedio;
     }
 }

@@ -1,4 +1,4 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-public class OSC {
+public class OSC extends EntidadJuridica {
 }

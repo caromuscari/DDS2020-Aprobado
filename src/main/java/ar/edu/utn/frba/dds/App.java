@@ -5,18 +5,21 @@ import ar.edu.utn.frba.dds.Usuario.Organizacion;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Usuario.Hash;
-
-import java.awt.event.ActionListener;
 import java.util.*;
 
 
 public class App
 {
+    public static int limiteIntentos = 2;
+
     public static void main( String[] args ) {
 
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
         Map<String, Usuario> registrados = new HashMap<String, Usuario>();
+
+        long inicio;
+        long fin;
 
         // Consola
         try
@@ -25,6 +28,7 @@ public class App
             String pass;
             int opcion;
             Usuario user;
+            int intentosFallidos = 0;
 
             System.out.println("");
             System.out.println("\u001B[36m" + "Bienvenido a GeSoc!" + "\u001B[0m");
@@ -36,6 +40,7 @@ public class App
                 System.out.println(">> 4. Salir");
 
                 opcion = sn.nextInt();
+
                 switch(opcion) {
                     case 1: {
                         // Registrar Operador
@@ -74,7 +79,6 @@ public class App
                         break;
                     case 3:
                         // Login.
-
                         System.out.println("Ingrese usuario: ");
                         usuario = sn.next();
                         System.out.println("Ingrese contraseña: ");
@@ -86,20 +90,32 @@ public class App
                             {
                                 System.out.println("\u001B[32m" + "Ha iniciado sesión. Bienvenido " + user.getUsuario() + "\u001B[0m");
                                 sn.reset();
+                                user.setCantidadIntentos(0);
 
-                                System.out.println("Seleccione una opción");
-                                System.out.println(">> 1. ");
-                                System.out.println(">> 2. ");
-                                System.out.println(">> 3. ");
-                                System.out.println(">> 4. ");
-                                sn.nextInt();
+                                System.out.println("----------TODO----------");
                             }
-                            else
-                            {
-                                System.out.println("\u001B[31m" + "Usuario/Contraseña inválida." + "\u001B[0m");
+                            else {
+                                System.out.println("\u001B[31m" + "Contraseña inválida." + "\u001B[0m");
+                                if(registrados.get(usuario).getCantidadIntentos() < limiteIntentos) {
+                                    intentosFallidos++;
+                                    registrados.get(usuario).setCantidadIntentos(intentosFallidos);
+                                    System.out.println("Intentos fallidos: " + intentosFallidos + "/" + limiteIntentos);
+                                }
+                                else {
+                                    System.out.println("Bloqueado por 15 segundos");
+                                    inicio = System.currentTimeMillis();
+                                    fin = inicio + 15*1000;
+                                    while(System.currentTimeMillis() < fin)
+                                    {
+                                        // NO hago nada -- Bloqueado --
+                                    }
+                                }
                             }
                         }
-
+                        else
+                        {
+                            System.out.println("\u001B[31m" + "Usuario inexistente." + "\u001B[0m");
+                        }
                         break;
                     default:
                         System.out.println("Inserte un número válido para seleccionar una opción");
@@ -116,5 +132,6 @@ public class App
             e.printStackTrace();
         }
     }
+
 
 }

@@ -41,9 +41,7 @@ public class Usuario {
         this.password = password;
     }
 
-    public int getCantidadIntentos() {
-        return cantidadIntentos;
-    }
+    public int getCantidadIntentos() { return cantidadIntentos; }
     public void setCantidadIntentos(int cantidadIntentos) {
         this.cantidadIntentos = cantidadIntentos;
     }

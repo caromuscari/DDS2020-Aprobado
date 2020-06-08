@@ -1,12 +1,18 @@
 package ar.edu.utn.frba.dds.Usuario;
 
-public class Organizacion {
+import ar.edu.utn.frba.dds.Egreso.Egreso;
+import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
+import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
-    /*
-    private List<Egreso> egresos;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Organizacion {
     private List<Entidad> entidad;
 
-    private void generarEgreso();
 
-     */
+    public List<Egreso> obtenerEgresos(){
+        return this.entidad.stream().map(e -> e.getEgresos()).flatMap(Collection::stream).collect(Collectors.toList());
+    }
 }

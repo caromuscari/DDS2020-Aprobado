@@ -1,4 +1,7 @@
 package ar.edu.utn.frba.dds.Usuario;
+import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,7 @@ public class Usuario {
     private TipoPerfil perfil;
     private Organizacion organizacion;
     private List<String> ultimasPasswords;
-    //private List<Mensaje> bandejaDeMensajes;
+    private List<Mensaje> bandejaDeMensajes;
 
     private ValidadorPassword validar;
 
@@ -72,5 +75,14 @@ public class Usuario {
             }
         }
         return seModifico;
+    }
+
+    public void recibirMensaje(ResultadoValidacion resultado){
+        Mensaje mensaje = new Mensaje(resultado);
+        this.bandejaDeMensajes.add(mensaje);
+    }
+
+    public void eliminarMensaje(Mensaje mensaje){
+        this.bandejaDeMensajes.remove(mensaje);
     }
 }

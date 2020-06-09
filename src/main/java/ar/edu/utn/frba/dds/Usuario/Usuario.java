@@ -25,6 +25,7 @@ public class Usuario {
         this.organizacion = organizacion;
         this.cantidadIntentos = 0;
         this.ultimasPasswords = new ArrayList<String>();
+        ultimasPasswords.add(password);
     }
 
     public String getUsuario() {
@@ -60,15 +61,17 @@ public class Usuario {
     public void setValidar(ValidadorPassword validar) { this.validar = validar; }
 
     public boolean modificarPassword(String passNueva) throws NoSuchAlgorithmException {
-        Hash aux = new Hash();
 
+        RotacionPassword rotacionPassword = new RotacionPassword();
+        Hash hashAlgorithm = new Hash();
+        String passNuevaHasheada = hashAlgorithm.hashear(passNueva);
         boolean seModifico = false;
 
-        if (!password.equals(aux.hashear(passNueva)) && !new RotacionPassword().validarRotacion(ultimasPasswords, aux.hashear(passNueva)))
+        if (!password.equals(passNuevaHasheada) && !rotacionPassword.validarRotacion(ultimasPasswords, passNuevaHasheada))
             if (validar.validarPassword(passNueva)) {
                 ultimasPasswords.add(password);
-                password = aux.hashear(passNueva);
-                seModifico = !seModifico;
+                password = passNuevaHasheada;
+                seModifico = true;
             }
         return seModifico;
     }

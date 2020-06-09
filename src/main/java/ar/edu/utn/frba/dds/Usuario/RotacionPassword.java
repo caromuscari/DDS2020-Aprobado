@@ -3,8 +3,8 @@ import java.util.List;
 
 public class RotacionPassword{
 
-    public boolean validarRotacion(List<String> contraseñas, String passActual)
+    public boolean validarRotacion(List<String> passwords, String passActual)
     {
-        return contraseñas.contains(passActual);
+        return passwords.contains(passActual);
     }
 }

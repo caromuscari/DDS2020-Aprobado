@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Usuario;
-import ar.edu.utn.frba.dds.Usuario.Hash;
+
+import ar.edu.utn.frba.dds.Excepciones.BusinessException;
 
 public class BuilderUsuario {
 
@@ -7,7 +8,6 @@ public class BuilderUsuario {
     private String password;
     private TipoPerfil perfil;
     private Organizacion organizacion;
-
     private ValidadorPassword validadorPassword = new ValidadorPassword();
     private Hash encriptador = new Hash();
 
@@ -43,6 +43,6 @@ public class BuilderUsuario {
         if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null)
             return new Usuario(usuario, encriptador.hashear(password),perfil,organizacion);
         else
-            throw new Exception();
+            throw new BusinessException("La password no es valida");
     }
 }

@@ -10,6 +10,10 @@ public abstract class Entidad {
     private String nombre;
     private List<Egreso> egresos;
 
+    public Entidad(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getNombre() {
         return nombre;
     }

@@ -26,6 +26,7 @@ public class Usuario {
         this.organizacion = organizacion;
         this.cantidadIntentos = 0;
         this.ultimasPasswords = new ArrayList<String>();
+        this.bandejaDeMensajes = new ArrayList<Mensaje>();
     }
 
     public String getUsuario() {

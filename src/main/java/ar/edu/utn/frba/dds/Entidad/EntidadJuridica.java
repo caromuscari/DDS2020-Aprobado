@@ -21,6 +21,9 @@ public abstract class EntidadJuridica extends Entidad {
         this.ventasPromedio = ventasPromedio;
     }
 
+    public EntidadJuridica() {
+    }
+
     public TipoActividad getTipoActividad() {
         return tipoActividad;
     }

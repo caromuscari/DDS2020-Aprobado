@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.Usuario.*;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Longitud;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Complejidad;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Top10000;
-import ar.edu.utn.frba.dds.Usuario.Hash;
 import org.junit.Assert;
 import org.junit.Test;
 

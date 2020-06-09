@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Usuario;
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
 import java.security.NoSuchAlgorithmException;

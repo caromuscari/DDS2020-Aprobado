@@ -1,4 +1,5 @@
 package ar.edu.utn.frba.dds.Usuario;
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 
 public class BuilderUsuario {

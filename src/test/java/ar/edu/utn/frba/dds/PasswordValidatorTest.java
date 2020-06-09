@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds;
 
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Usuario.*;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Longitud;
 import ar.edu.utn.frba.dds.ValidacionesPassword.Complejidad;

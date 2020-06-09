@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class Organizacion {
     private List<Entidad> entidad;
 
-
     public List<Egreso> obtenerEgresos(){
         return this.entidad.stream().map(e -> e.getEgresos()).flatMap(Collection::stream).collect(Collectors.toList());
     }

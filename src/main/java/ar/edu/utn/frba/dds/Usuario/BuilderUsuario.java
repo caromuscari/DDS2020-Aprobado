@@ -43,6 +43,6 @@ public class BuilderUsuario {
         if(usuario != null && validadorPassword.validarPassword(password) && perfil != null && organizacion != null)
             return new Usuario(usuario, encriptador.hashear(password),perfil,organizacion);
         else
-            throw new Exception();
+            throw new Exception("No se pudo crear el usuario");
     }
 }

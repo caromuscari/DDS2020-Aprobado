@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-public abstract class EntidadJuridica {
+public abstract class EntidadJuridica extends Entidad {
     private String razonSocial;
     private int cuit;
     private int codigoPostal;
@@ -10,6 +10,19 @@ public abstract class EntidadJuridica {
     private TipoActividad tipoActividad;
     private int ventasPromedio;
 
+    public EntidadJuridica(String nombre, String razonSocial, int cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, int ventasProyectadas, int ventasPromedio) {
+        super(nombre);
+        this.razonSocial = razonSocial;
+        this.cuit = cuit;
+        this.codigoPostal = codigoPostal;
+        this.codigoInscripcion = codigoInscripcion;
+        this.cantidadPersonal = cantidadPersonal;
+        this.ventasProyectadas = ventasProyectadas;
+        this.ventasPromedio = ventasPromedio;
+    }
+
+    public EntidadJuridica() {
+    }
 
     public TipoActividad getTipoActividad() {
         return tipoActividad;

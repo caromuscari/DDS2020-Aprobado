@@ -4,11 +4,20 @@ import ar.edu.utn.frba.dds.Egreso.Egreso;
 import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
 import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Entidad {
     private String nombre;
     private List<Egreso> egresos;
+
+    public Entidad() {
+    }
+
+    public Entidad(String nombre) {
+        this.nombre = nombre;
+        this.egresos = new ArrayList<>();
+    }
 
     public String getNombre() {
         return nombre;
@@ -31,7 +40,8 @@ public abstract class Entidad {
             mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
     }
 
-    public void generarIngreso(List<ItemOperacion> items, Proveedor proveedor){
-        //TODO
+    public void generarEgreso(List<ItemOperacion> items, Proveedor proveedor){
+        Egreso egreso = new Egreso(items,proveedor);
+        this.egresos.add(egreso);
     }
 }

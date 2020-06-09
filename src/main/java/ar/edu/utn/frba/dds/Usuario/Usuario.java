@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Usuario;
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
 import java.security.NoSuchAlgorithmException;
@@ -26,6 +27,7 @@ public class Usuario {
         this.cantidadIntentos = 0;
         this.ultimasPasswords = new ArrayList<String>();
         ultimasPasswords.add(password);
+        this.bandejaDeMensajes = new ArrayList<Mensaje>();
     }
 
     public String getUsuario() {

@@ -12,6 +12,7 @@ public class Egreso {
     public Egreso(List<ItemOperacion> items, Proveedor proveedor) {
         this.items = items;
         this.proveedor = proveedor;
+        calcularPrecio();
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }

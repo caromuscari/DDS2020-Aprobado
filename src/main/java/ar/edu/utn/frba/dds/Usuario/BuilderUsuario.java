@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.Usuario;
-
 import ar.edu.utn.frba.dds.Excepciones.BusinessException;
-
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 public class BuilderUsuario {
 
     private String usuario;

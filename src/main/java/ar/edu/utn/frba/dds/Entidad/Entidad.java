@@ -11,6 +11,9 @@ public abstract class Entidad {
     private String nombre;
     private List<Egreso> egresos;
 
+    public Entidad() {
+    }
+
     public Entidad(String nombre) {
         this.nombre = nombre;
         this.egresos = new ArrayList<>();

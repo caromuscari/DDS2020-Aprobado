@@ -8,6 +8,17 @@ public class ResultadoValidacion {
     public ResultadoValidacion() {
     }
 
+    public ResultadoValidacion(EstadoValidacion estado, Integer idLicitacion) {
+        this.estado = estado;
+        this.idLicitacion = idLicitacion;
+    }
+
+    public ResultadoValidacion(EstadoValidacion estado, ErrorValidacion error, Integer idLicitacion) {
+        this.estado = estado;
+        this.error = error;
+        this.idLicitacion = idLicitacion;
+    }
+
     public EstadoValidacion getEstado() { return estado; }
 
     public void setEstado(EstadoValidacion estado) { this.estado = estado; }

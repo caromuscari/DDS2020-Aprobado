@@ -32,7 +32,7 @@ public abstract class Entidad {
         this.egresos = egresos;
     }
 
-    public double obtenerTotalEgresos(){
+    public Double obtenerTotalEgresos(){
         return this.egresos.stream().
             mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
     }

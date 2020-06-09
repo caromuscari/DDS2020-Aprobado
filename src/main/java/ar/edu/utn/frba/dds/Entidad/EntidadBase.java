@@ -2,15 +2,21 @@ package ar.edu.utn.frba.dds.Entidad;
 
 public class EntidadBase extends Entidad {
 
-    private String descriptcion;
+    private String descripcion;
     private EntidadJuridica entidadJuridica;
 
-    public String getDescriptcion() {
-        return descriptcion;
+    public EntidadBase(String nombre, String descripcion, EntidadJuridica entidadJuridica) {
+        super(nombre);
+        this.descripcion = descripcion;
+        this.entidadJuridica = entidadJuridica;
     }
 
-    public void setDescriptcion(String descriptcion) {
-        this.descriptcion = descriptcion;
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public EntidadJuridica getEntidadJuridica() {

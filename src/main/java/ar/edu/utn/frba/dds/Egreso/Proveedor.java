@@ -5,6 +5,12 @@ public class Proveedor {
     private Long identificador;
     private String direccionPostal;
 
+    public Proveedor(String nombre, Long identificador, String direccionPostal) {
+        this.nombre = nombre;
+        this.identificador = identificador;
+        this.direccionPostal = direccionPostal;
+    }
+
     public String getNombre() { return nombre; }
 
     public void setNombre(String nombre) { this.nombre = nombre; }

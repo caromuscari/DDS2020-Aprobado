@@ -8,8 +8,8 @@ public class Empresa extends EntidadJuridica{
         return tipoEmpresa;
     }
 
-    public Empresa(String nombre, String razonSocial, int cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, int ventasProyectadas, int ventasPromedio) {
-        super(nombre, razonSocial, cuit, codigoPostal, codigoInscripcion, cantidadPersonal, ventasProyectadas, ventasPromedio);
+    public Empresa(String nombre, String razonSocial, Long cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, Double ventasProyectadas, TipoActividad tipoActividad, Double ventasPromedio) {
+        super(nombre, razonSocial, cuit, codigoPostal, codigoInscripcion, cantidadPersonal, ventasProyectadas, tipoActividad, ventasPromedio);
         this.tipoEmpresa = super.getTipoActividad().obtenerTipoEmpresa(ventasPromedio);
     }
 

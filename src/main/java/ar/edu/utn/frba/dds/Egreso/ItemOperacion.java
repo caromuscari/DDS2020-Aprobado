@@ -4,6 +4,11 @@ public class ItemOperacion {
     private Integer cantidad;
     private Item item;
 
+    public ItemOperacion(Integer cantidad, Item item) {
+        this.cantidad = cantidad;
+        this.item = item;
+    }
+
     public Integer getCantidad() { return cantidad; }
 
     public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }

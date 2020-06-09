@@ -17,7 +17,7 @@ public class Organizacion {
         this.entidades = entidades;
     }
 
-    public double obtenerEgresos(){
+    public Double obtenerEgresos(){
         return entidades.stream().
                 mapToDouble(entidad -> entidad.obtenerTotalEgresos()).
                 sum();

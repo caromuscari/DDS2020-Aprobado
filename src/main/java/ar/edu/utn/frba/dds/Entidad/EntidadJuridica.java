@@ -2,15 +2,15 @@ package ar.edu.utn.frba.dds.Entidad;
 
 public abstract class EntidadJuridica extends Entidad {
     private String razonSocial;
-    private int cuit;
+    private Long cuit;
     private int codigoPostal;
     private int codigoInscripcion;
     private int cantidadPersonal;
-    private int ventasProyectadas;
+    private Double ventasProyectadas;
     private TipoActividad tipoActividad;
-    private int ventasPromedio;
+    private Double ventasPromedio;
 
-    public EntidadJuridica(String nombre, String razonSocial, int cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, int ventasProyectadas, int ventasPromedio) {
+    public EntidadJuridica(String nombre, String razonSocial, Long cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, Double ventasProyectadas, TipoActividad tipoActividad, Double ventasPromedio) {
         super(nombre);
         this.razonSocial = razonSocial;
         this.cuit = cuit;
@@ -18,6 +18,7 @@ public abstract class EntidadJuridica extends Entidad {
         this.codigoInscripcion = codigoInscripcion;
         this.cantidadPersonal = cantidadPersonal;
         this.ventasProyectadas = ventasProyectadas;
+        this.tipoActividad = tipoActividad;
         this.ventasPromedio = ventasPromedio;
     }
 
@@ -37,11 +38,11 @@ public abstract class EntidadJuridica extends Entidad {
         this.razonSocial = razonSocial;
     }
 
-    public int getCuit() {
+    public Long getCuit() {
         return cuit;
     }
 
-    public void setCuit(int cuit) {
+    public void setCuit(Long cuit) {
         this.cuit = cuit;
     }
 
@@ -69,19 +70,19 @@ public abstract class EntidadJuridica extends Entidad {
         this.cantidadPersonal = cantidadPersonal;
     }
 
-    public int getVentasProyectadas() {
+    public Double getVentasProyectadas() {
         return ventasProyectadas;
     }
 
-    public void setVentasProyectadas(int ventasProyectadas) {
+    public void setVentasProyectadas(Double ventasProyectadas) {
         this.ventasProyectadas = ventasProyectadas;
     }
 
-    public int getVentasPromedio() {
+    public Double getVentasPromedio() {
         return ventasPromedio;
     }
 
-    public void setVentasPromedio(int ventasPromedio) {
+    public void setVentasPromedio(Double ventasPromedio) {
         this.ventasPromedio = ventasPromedio;
     }
 }

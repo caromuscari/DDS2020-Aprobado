@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.Entidad;
 public enum TipoActividad {
     CONSTRUCCION{
         @Override
-        public TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio) {
+        public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 15230000){
                 return new MicroEmpresa();
             }else if(ingresosPromedio < 90310000){
@@ -17,7 +17,7 @@ public enum TipoActividad {
     },
     SERVICIOS{
         @Override
-        public TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio) {
+        public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 8500000){
                 return new MicroEmpresa();
             }else if(ingresosPromedio < 50950000){
@@ -31,7 +31,7 @@ public enum TipoActividad {
     },
     COMERCIO{
         @Override
-        public TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio) {
+        public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 29740000){
                 return new MicroEmpresa();
             }else if(ingresosPromedio < 178860000){
@@ -45,7 +45,7 @@ public enum TipoActividad {
     },
     INDUSTRIAYMINERIA{
         @Override
-        public TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio) {
+        public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 26540000){
                 return new MicroEmpresa();
             }else if(ingresosPromedio < 190410000){
@@ -59,7 +59,7 @@ public enum TipoActividad {
     },
     AGROPECUARIO{
         @Override
-        public TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio) {
+        public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 12890000){
                 return new MicroEmpresa();
             }else if(ingresosPromedio < 48480000){
@@ -72,5 +72,5 @@ public enum TipoActividad {
         }
     };
 
-    public abstract TipoEmpresa obtenerTipoEmpresa(int ingresosPromedio);
+    public abstract TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio);
 }

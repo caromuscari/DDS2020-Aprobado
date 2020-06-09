@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.Egreso.Egreso;
 import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
 import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Entidad {
@@ -12,6 +13,7 @@ public abstract class Entidad {
 
     public Entidad(String nombre) {
         this.nombre = nombre;
+        this.egresos = new ArrayList<>();
     }
 
     public String getNombre() {

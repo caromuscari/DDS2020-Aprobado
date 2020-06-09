@@ -43,23 +43,22 @@ public class Usuario {
     }
 
     public int getCantidadIntentos() { return cantidadIntentos; }
-    public void setCantidadIntentos(int cantidadIntentos) {
-        this.cantidadIntentos = cantidadIntentos;
-    }
+    public void setCantidadIntentos(int cantidadIntentos) { this.cantidadIntentos = cantidadIntentos; }
 
-    public TipoPerfil getPerfil() {
-        return perfil;
-    }
-    public void setPerfil(TipoPerfil perfil) {
-        this.perfil = perfil;
-    }
+    public TipoPerfil getPerfil() { return perfil; }
+    public void setPerfil(TipoPerfil perfil) { this.perfil = perfil; }
 
-    public Organizacion getOrganizacion() {
-        return organizacion;
-    }
-    public void setOrganizacion(Organizacion organizacion) {
-        this.organizacion = organizacion;
-    }
+    public Organizacion getOrganizacion() { return organizacion; }
+    public void setOrganizacion(Organizacion organizacion) { this.organizacion = organizacion; }
+
+    public List<String> getUltimasPasswords() { return ultimasPasswords; }
+    public void setUltimasPasswords(List<String> ultimasPasswords) { this.ultimasPasswords = ultimasPasswords; }
+
+    public List<Mensaje> getBandejaDeMensajes() { return bandejaDeMensajes; }
+    public void setBandejaDeMensajes(List<Mensaje> bandejaDeMensajes) { this.bandejaDeMensajes = bandejaDeMensajes; }
+
+    public ValidadorPassword getValidar() { return validar; }
+    public void setValidar(ValidadorPassword validar) { this.validar = validar; }
 
     public boolean modificarPassword(String passNueva) throws NoSuchAlgorithmException {
         Hash aux = new Hash();

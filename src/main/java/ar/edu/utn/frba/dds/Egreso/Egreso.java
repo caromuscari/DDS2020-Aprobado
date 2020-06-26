@@ -16,23 +16,21 @@ public class Egreso {
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
-
     public void setDocumentos(List<DocumentoComercial> documentos) { this.documentos = documentos; }
 
     public List<ItemOperacion> getItems() { return items; }
-
     public void setItems(List<ItemOperacion> items) { this.items = items; }
 
     public MedioDePago getMedioDePago() { return medioDePago; }
 
     public Double getPrecioTotal() { return precioTotal; }
-
     public void setPrecioTotal(Double precioTotal) { this.precioTotal = precioTotal; }
 
     public Proveedor getProveedor() { return proveedor; }
-
     public void setProveedor(Proveedor proveedor) { this.proveedor = proveedor; }
 
+
+    //Metodos
     public void registrarMedioDePago(MedioDePago medioDePago) {
         this.medioDePago = medioDePago;
     }

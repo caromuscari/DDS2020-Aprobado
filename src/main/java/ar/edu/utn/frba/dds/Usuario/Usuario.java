@@ -78,7 +78,7 @@ public class Usuario {
         return seModifico;
     }
 
-    public void recibirMensaje(ResultadoValidacion resultado){
+    public void recibirMensaje(List<ResultadoValidacion> resultado){
         Mensaje mensaje = new Mensaje(resultado);
         this.bandejaDeMensajes.add(mensaje);
     }

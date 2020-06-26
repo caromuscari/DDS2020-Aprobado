@@ -1,9 +1,12 @@
 package ar.edu.utn.frba.dds.Entidad;
 
+import ar.edu.utn.frba.dds.Egreso.Egreso;
 import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
 import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Organizacion {
 
@@ -17,9 +20,14 @@ public class Organizacion {
         this.entidades = entidades;
     }
 
-    public Double obtenerEgresos(){
+    public Double obtenerTotalEgresos(){
         return entidades.stream().
                 mapToDouble(entidad -> entidad.obtenerTotalEgresos()).
                 sum();
+    }
+
+    public List<Egreso> obtenerEgresos(){
+        return this.entidades.stream().map(e -> e.getEgresos()).
+                flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

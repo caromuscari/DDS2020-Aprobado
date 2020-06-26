@@ -2,16 +2,19 @@ package ar.edu.utn.frba.dds.BandejaDeMendajes;
 
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Mensaje {
-    private ResultadoValidacion resultado;
+    private List<ResultadoValidacion> resultados;
     private Boolean leido;
 
-    public Mensaje(ResultadoValidacion resultado) {
-        this.resultado = resultado;
+    public Mensaje(List<ResultadoValidacion> resultados) {
+        this.resultados = resultados;
         this.leido = false;
     }
 
-    public ResultadoValidacion getResultado() { return resultado; }
+    public List<ResultadoValidacion> getResultados() { return resultados; }
 
     public Boolean getLeido() { return leido; }
 
@@ -21,6 +24,8 @@ public class Mensaje {
     }
 
     public String obtenerMensaje(){
-        return this.resultado.obtenerMensaje();
+        //String mensaje = String.format("Resultados de la licitacion {0}", resultados.get(0).getLicitacion().getNombre());
+        String msjResultados = this.resultados.stream().map(r -> r.obtenerMensaje()).collect(Collectors.joining());
+        return msjResultados;
     }
 }

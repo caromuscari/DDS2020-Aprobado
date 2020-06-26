@@ -23,7 +23,7 @@ public class NotificadorValidador {
         this.revisores.remove(usuario);
     }
 
-    public void notificar(ResultadoValidacion resultado){
-        this.revisores.forEach(usuario -> usuario.recibirMensaje(resultado));
+    public void notificar(List<ResultadoValidacion> resultados){
+        this.revisores.forEach(usuario -> usuario.recibirMensaje(resultados));
     }
 }

@@ -37,7 +37,7 @@ public class OrganizacionTest {
         entidadBase.generarEgreso(itemsOperacion1, proveedor);
         empresa.generarEgreso(itemsOperacion2, proveedor);
 
-        Assert.assertEquals(Double.valueOf(110.0), organizacion.obtenerEgresos());
+        Assert.assertEquals(Double.valueOf(110.0), organizacion.obtenerTotalEgresos());
 
     }
 

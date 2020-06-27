@@ -26,7 +26,7 @@ public class Organizacion {
                 sum();
     }
 
-    public List<Egreso> obtenerEgresos(){
+    public List<Egreso> obtenerListaEgresos(){
         return this.entidades.stream().map(e -> e.getEgresos()).
                 flatMap(Collection::stream).collect(Collectors.toList());
     }

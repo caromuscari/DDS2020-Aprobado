@@ -23,7 +23,7 @@ public class RecategorizacionTest {
 
         Recategorizador.getInstance().recategorizarEmpresas();
 
-        Assert.assertEquals(PequenaEmpresa.class, empresa.getTipoEmpresa().getClass());
+        Assert.assertEquals(TipoEmpresa.Pequeña, empresa.getTipoEmpresa());
     }
 
     @Test

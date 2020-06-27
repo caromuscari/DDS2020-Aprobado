@@ -1,5 +1,8 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-public interface TipoEmpresa {
-
+public enum TipoEmpresa {
+    Micro,
+    Pequeña,
+    MedianaT1,
+    MedianaT2
 }

@@ -5,13 +5,13 @@ public enum TipoActividad {
         @Override
         public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 15230000){
-                return new MicroEmpresa();
+                return TipoEmpresa.Micro;
             }else if(ingresosPromedio < 90310000){
-                return new PequenaEmpresa();
+                return TipoEmpresa.Pequeña;
             }else if(ingresosPromedio < 503880000){
-                return new MedianaT1Empresa();
+                return TipoEmpresa.MedianaT1;
             }else{
-                return new MedianaT2Empresa();
+                return TipoEmpresa.MedianaT2;
             }
         }
     },
@@ -19,13 +19,13 @@ public enum TipoActividad {
         @Override
         public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 8500000){
-                return new MicroEmpresa();
+                return TipoEmpresa.Micro;
             }else if(ingresosPromedio < 50950000){
-                return new PequenaEmpresa();
+                return TipoEmpresa.Pequeña;
             }else if(ingresosPromedio < 425170000){
-                return new MedianaT1Empresa();
+                return TipoEmpresa.MedianaT1;
             }else{
-                return new MedianaT2Empresa();
+                return TipoEmpresa.MedianaT2;
             }
         }
     },
@@ -33,13 +33,13 @@ public enum TipoActividad {
         @Override
         public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 29740000){
-                return new MicroEmpresa();
+                return TipoEmpresa.Micro;
             }else if(ingresosPromedio < 178860000){
-                return new PequenaEmpresa();
+                return TipoEmpresa.Pequeña;
             }else if(ingresosPromedio < 1502750000){
-                return new MedianaT1Empresa();
+                return TipoEmpresa.MedianaT1;
             }else{
-                return new MedianaT2Empresa();
+                return TipoEmpresa.MedianaT2;
             }
         }
     },
@@ -47,13 +47,13 @@ public enum TipoActividad {
         @Override
         public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 26540000){
-                return new MicroEmpresa();
+                return TipoEmpresa.Micro;
             }else if(ingresosPromedio < 190410000){
-                return new PequenaEmpresa();
+                return TipoEmpresa.Pequeña;
             }else if(ingresosPromedio < 1190330000){
-                return new MedianaT1Empresa();
+                return TipoEmpresa.MedianaT1;
             }else{
-                return new MedianaT2Empresa();
+                return TipoEmpresa.MedianaT2;
             }
         }
     },
@@ -61,13 +61,13 @@ public enum TipoActividad {
         @Override
         public TipoEmpresa obtenerTipoEmpresa(Double ingresosPromedio) {
             if(ingresosPromedio < 12890000){
-                return new MicroEmpresa();
+                return TipoEmpresa.Micro;
             }else if(ingresosPromedio < 48480000){
-                return new PequenaEmpresa();
+                return TipoEmpresa.Pequeña;
             }else if(ingresosPromedio < 345430000){
-                return new MedianaT1Empresa();
+                return TipoEmpresa.MedianaT1;
             }else{
-                return new MedianaT2Empresa();
+                return TipoEmpresa.MedianaT2;
             }
         }
     };

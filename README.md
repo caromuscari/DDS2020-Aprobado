@@ -7,3 +7,7 @@
 * Muscari, Carolina
 * Torres, Juan Martín
 
+### Links útiles
+* Diagrama de clases: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/Diagrama_de_Clases.drawio
+* Diagrama de secuencia: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/Diagrama%20secuencia.drawio
+* DER: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/DER.drawio

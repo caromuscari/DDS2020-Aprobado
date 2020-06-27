@@ -50,7 +50,7 @@ public class OrganizacionTest {
     }
 
     @Test
-    public void recategorizarTest() {
+    public void recategorizarEmpresaTest() {
         Empresa empresa = new Empresa("La mejor empresa", "LME SRL", Long.parseLong("11123456789"),
                 1111, 1, 1000, 10000.0, TipoActividad.AGROPECUARIO, 1000.0);
 

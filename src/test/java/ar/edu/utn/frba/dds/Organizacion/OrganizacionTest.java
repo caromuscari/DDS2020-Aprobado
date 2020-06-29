@@ -34,15 +34,15 @@ public class OrganizacionTest {
         entidades.add(empresa);
         organizacion.setEntidades(entidades);
 
-        Item item = new Item("1234", "item 1", 10.0, TipoItem.PRODUCTO);
-        Item item2 = new Item("5678", "item 2", 50.0, TipoItem.PRODUCTO);
-        ItemOperacion itemOperacion = new ItemOperacion(1, item);
-        ItemOperacion itemOperacion2 = new ItemOperacion(2, item2);
+        ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, Categoria.COMPUTADORA);
+        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, Categoria.COMPUTADORA);
+        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
+        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
 
-        List<ItemOperacion> itemsOperacion1 = new ArrayList<>();
-        itemsOperacion1.add(itemOperacion);
-        List<ItemOperacion> itemsOperacion2 = new ArrayList<>();
-        itemsOperacion2.add(itemOperacion2);
+        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
+        itemsOperacion1.add(itemOperacionEgreso);
+        List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
+        itemsOperacion2.add(itemOperacionEgreso2);
         Proveedor proveedor = new Proveedor("Provedor 1", Long.parseLong("123"), "1234");
 
         entidadBase.generarEgreso(itemsOperacion1, proveedor);

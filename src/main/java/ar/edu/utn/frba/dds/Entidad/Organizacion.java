@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.Entidad;
 
 import ar.edu.utn.frba.dds.Egreso.Egreso;
-import ar.edu.utn.frba.dds.Egreso.ItemOperacion;
-import ar.edu.utn.frba.dds.Egreso.Proveedor;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,16 +1,17 @@
 package ar.edu.utn.frba.dds.Licitacion;
 
-import ar.edu.utn.frba.dds.Egreso.DocumentoComercial;
-import ar.edu.utn.frba.dds.Egreso.ItemOperacionEgreso;
-import ar.edu.utn.frba.dds.Egreso.Proveedor;
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import ar.edu.utn.frba.dds.Operaciones.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Presupuesto {
     private List<DocumentoComercial> documentos;
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
     private Proveedor proveedor;
+    private List<Categoria> categorias;
 
     public Presupuesto(List<DocumentoComercial> documentos, List<ItemOperacionPresupuesto> items, Double precioTotal, Proveedor proveedor) {
         this.documentos = documentos;
@@ -30,4 +31,30 @@ public class Presupuesto {
 
     public Proveedor getProveedor() { return proveedor; }
     public void setProveedor(Proveedor proveedor) { this.proveedor = proveedor; }
+
+    public List<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
+
+    //Metodos
+    public void asociarCategoria(Categoria categoria){
+        this.categorias.add(categoria);
+    }
+
+    public boolean contieneCategoria(Categoria categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.equals(categoria)) return true;
+            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
+    public void calcularPrecio(){
+        this.precioTotal = this.items.stream().mapToDouble(i -> i.precioTotal()).sum();
+    }
+
+    public boolean itemsIguales(List<ItemOperacionEgreso> itemsEgreso){
+        List<CategoriaItem> categorias = this.items.stream().map(ItemOperacionPresupuesto::getItemPresupuesto).map(ItemPresupuesto::getCategoria).collect(Collectors.toList());
+        categorias.removeAll(itemsEgreso.stream().map(ItemOperacionEgreso::getItemEgreso).map(ItemEgreso::getCategoria).collect(Collectors.toList()));
+        if (categorias.size() == 0) return true;
+        else return false;
+    }
 }

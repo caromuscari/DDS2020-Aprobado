@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.Egreso;
+package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
@@ -13,8 +13,8 @@ public class EgresoTest {
 
     // Presupuesto
     Proveedor prov = new Proveedor("Alejandro",21314l,"666");
-    ItemPresupuesto p1 = new ItemPresupuesto(200.0,Categoria.MONITOR,TipoItem.PRODUCTO);
-    ItemPresupuesto p2 = new ItemPresupuesto(300.0, Categoria.COMPUTADORA, TipoItem.PRODUCTO);
+    ItemPresupuesto p1 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+    ItemPresupuesto p2 = new ItemPresupuesto(300.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
     ItemOperacionPresupuesto pp1 = new ItemOperacionPresupuesto(5,p1);
     ItemOperacionPresupuesto pp2 = new ItemOperacionPresupuesto(5,p2);
     DocumentoComercial prueba1 = new DocumentoComercial();
@@ -22,8 +22,8 @@ public class EgresoTest {
     List<ItemOperacionPresupuesto> products = new ArrayList<>();
 
     // Egreso
-    ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, Categoria.MONITOR);
-    ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, Categoria.COMPUTADORA);
+    ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+    ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
     ItemOperacionEgreso ee1 = new ItemOperacionEgreso(5,e1);
     ItemOperacionEgreso ee2 = new ItemOperacionEgreso(5,e2);
     List<ItemOperacionEgreso> compras = new ArrayList<>();

@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.Licitacion;
 
 import ar.edu.utn.frba.dds.BandejaDeMendajes.NotificadorValidador;
-import ar.edu.utn.frba.dds.Egreso.Egreso;
+import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 

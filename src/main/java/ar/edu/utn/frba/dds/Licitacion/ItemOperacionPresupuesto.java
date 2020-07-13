@@ -15,5 +15,6 @@ public class ItemOperacionPresupuesto {
     public ItemPresupuesto getItemPresupuesto(){return itemPresupuesto;}
     public void setItemPresupuesto(ItemPresupuesto itemPresupuesto){this.itemPresupuesto = itemPresupuesto;}
 
+    //Metodos
     public Double precioTotal(){return cantidad * itemPresupuesto.getPrecio();}
 }

@@ -1,11 +1,13 @@
 package ar.edu.utn.frba.dds.Entidad;
 
-import ar.edu.utn.frba.dds.Egreso.Egreso;
-import ar.edu.utn.frba.dds.Egreso.ItemOperacionEgreso;
-import ar.edu.utn.frba.dds.Egreso.Proveedor;
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import ar.edu.utn.frba.dds.Operaciones.Egreso;
+import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
+import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Entidad {
     private String nombre;
@@ -43,5 +45,9 @@ public abstract class Entidad {
     public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor){
         Egreso egreso = new Egreso(items,proveedor);
         this.egresos.add(egreso);
+    }
+
+    public List<Egreso> filtrarEgresos(Categoria categoria){
+        return this.egresos.stream().filter(e -> e.contieneCategoria(categoria)).collect(Collectors.toList());
     }
 }

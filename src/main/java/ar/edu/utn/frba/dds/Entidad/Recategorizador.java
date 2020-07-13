@@ -26,4 +26,7 @@ public class Recategorizador {
         this.empresas.add(empresa);
     }
 
+    public void quitarEmpresa(Empresa empresa){
+        this.empresas.remove(empresa);
+    }
 }

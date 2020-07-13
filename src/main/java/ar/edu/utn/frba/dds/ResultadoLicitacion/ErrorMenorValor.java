@@ -4,6 +4,10 @@ public class ErrorMenorValor implements ErrorValidacion {
     private Double precioTotalEgreso;
     private Double precioTotalMenorPresupuesto;
 
+    public ErrorMenorValor(Double precioTotalEgreso, Double precioTotalMenorPresupuesto) {
+        this.precioTotalEgreso = precioTotalEgreso;
+        this.precioTotalMenorPresupuesto = precioTotalMenorPresupuesto;
+    }
 
     @Override
     public String obtenerMensaje() {

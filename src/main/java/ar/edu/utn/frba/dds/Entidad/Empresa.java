@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Empresa extends EntidadJuridica{
-
     private TipoEmpresa tipoEmpresa;
-
     private List<RegistroRecategorizacion> historial;
 
     public List<RegistroRecategorizacion> getHistorial() {
         return historial;
     }
-
     public void setHistorial(List<RegistroRecategorizacion> historial) {
         this.historial = historial;
     }
@@ -20,7 +17,6 @@ public class Empresa extends EntidadJuridica{
     public TipoEmpresa getTipoEmpresa() {
         return tipoEmpresa;
     }
-
     public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
         this.tipoEmpresa = tipoEmpresa;
     }
@@ -32,6 +28,7 @@ public class Empresa extends EntidadJuridica{
         Recategorizador.getInstance().agregarEmpresa(this);
     }
 
+    //Metodos
     public void recategorizar(){
         TipoEmpresa tipo = getTipoActividad().obtenerTipoEmpresa(getVentasPromedio(), getCantidadPersonal());
         this.historial.add(new RegistroRecategorizacion(this.tipoEmpresa,tipo));

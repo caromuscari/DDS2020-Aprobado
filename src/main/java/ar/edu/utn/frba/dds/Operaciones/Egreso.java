@@ -1,11 +1,13 @@
-package ar.edu.utn.frba.dds.Egreso;
+package ar.edu.utn.frba.dds.Operaciones;
 
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
-import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Egreso {
     private List<DocumentoComercial> documentos;
@@ -14,6 +16,8 @@ public class Egreso {
     private Double precioTotal;
     private Proveedor proveedor;
     private Presupuesto presupuesto;
+    private List<Categoria> categorias;
+    private LocalDate fecha;
 
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor) {
         this.items = items;
@@ -37,6 +41,12 @@ public class Egreso {
 
     public Presupuesto getPresupuesto() { return presupuesto; }
     public void setPresupuesto(Presupuesto presupuesto) { this.presupuesto = presupuesto; }
+
+    public List<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
+
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
     //Metodos
     public void registrarMedioDePago(MedioDePago medioDePago) {
@@ -71,5 +81,16 @@ public class Egreso {
             }
         }
         return !validez;
+    }
+
+    public void asociarCategoria(Categoria categoria){
+        this.categorias.add(categoria);
+    }
+
+    public boolean contieneCategoria(Categoria categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.equals(categoria)) return true;
+                                        return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
     }
 }

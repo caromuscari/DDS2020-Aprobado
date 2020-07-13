@@ -10,7 +10,6 @@ public class RegistroRecategorizacion {
     public TipoEmpresa getTipoPrevio() {
         return tipoPrevio;
     }
-
     public void setTipoPrevio(TipoEmpresa tipoPrevio) {
         this.tipoPrevio = tipoPrevio;
     }
@@ -18,7 +17,6 @@ public class RegistroRecategorizacion {
     public TipoEmpresa getTipoNuevo() {
         return tipoNuevo;
     }
-
     public void setTipoNuevo(TipoEmpresa tipoNuevo) {
         this.tipoNuevo = tipoNuevo;
     }
@@ -26,7 +24,6 @@ public class RegistroRecategorizacion {
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }

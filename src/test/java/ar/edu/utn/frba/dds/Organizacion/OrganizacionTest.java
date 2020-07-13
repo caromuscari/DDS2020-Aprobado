@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.Organizacion;
 
-import ar.edu.utn.frba.dds.Egreso.*;
+import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Entidad.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,8 +34,8 @@ public class OrganizacionTest {
         entidades.add(empresa);
         organizacion.setEntidades(entidades);
 
-        ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, Categoria.COMPUTADORA);
-        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, Categoria.COMPUTADORA);
+        ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
         ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
 

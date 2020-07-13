@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.Egreso;
+package ar.edu.utn.frba.dds.Operaciones;
 
 public class DocumentoComercial {
     private Long id;

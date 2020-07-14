@@ -8,6 +8,11 @@ import java.util.List;
 
 public class Mix extends Vinculador{
 
+    public Mix(TipoOrden ordenIngresos, TipoOrden ordenEgresos) {
+        this.setOrdenIngresos(ordenIngresos);
+        this.setOrdenEgresos(ordenEgresos);
+    }
+
     public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
         Iterator<CriterioEjecucion> ejecutador = null;
         while(ejecutador.hasNext()) {

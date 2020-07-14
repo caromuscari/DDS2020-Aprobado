@@ -11,6 +11,14 @@ import java.util.List;
 
 public class PrimeroIngreso extends Vinculador{
 
+    public PrimeroIngreso(TipoOrden orden) {
+        if (orden == TipoOrden.FECHA) throw new IllegalArgumentException("El tipo de orden Fecha no esta permitido en este vinculador");
+        else {
+            this.setOrdenEgresos(orden);
+            this.setOrdenIngresos(orden);
+        }
+    }
+
     public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
 
         List<Egreso> egrOrdenados = new ArrayList<>();

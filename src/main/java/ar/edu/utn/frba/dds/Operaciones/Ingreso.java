@@ -25,4 +25,9 @@ public class Ingreso {
     public void asociarEgreso(Egreso egreso){
         this.egresos.add(egreso);
     }
+
+    public Double montoTotalEgresos()
+    {
+        return egresos.stream().mapToDouble(Egreso::getPrecioTotal).sum();
+    }
 }

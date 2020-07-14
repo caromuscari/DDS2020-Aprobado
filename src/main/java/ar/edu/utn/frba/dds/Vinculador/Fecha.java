@@ -11,6 +11,12 @@ import java.util.List;
 
 public class Fecha extends Vinculador{
 
+    public Fecha() {
+        this.setOrdenEgresos(TipoOrden.FECHA);
+        this.setOrdenIngresos(TipoOrden.FECHA);
+
+    }
+
     public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
         // Me falta ordenarlas POR FECHA
         List<Egreso> egrOrdenados = new ArrayList<>();

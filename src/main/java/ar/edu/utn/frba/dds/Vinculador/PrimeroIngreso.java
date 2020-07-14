@@ -4,8 +4,6 @@ import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,42 +17,47 @@ public class PrimeroIngreso extends Vinculador{
         }
     }
 
-    public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
+    @Override
+    public void vincular(Entidad entidad) {
+        Iterator<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos()).iterator();
+        List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
 
-        List<Egreso> egrOrdenados = new ArrayList<>();
-        List <Ingreso> igrOrdenados = new ArrayList<>();
-        Collections.sort(igrOrdenados, (i1, i2) -> comparadorIngresos(i1,i2));
-        Collections.sort(egrOrdenados, (e1,e2) -> comparadorEgresos(e1,e2));
-
-        Iterator<CondicionVinculacion> verificador = condiciones.listIterator();
-        CondicionVinculacion condicion;
-        double total = 0;
-
-        // Itero
-        for(int i = 0; i<egrOrdenados.size();i++){
-            Egreso egr = egrOrdenados.get(i);
-            for(int k = 0; k<igrOrdenados.size();k++){
-                Ingreso ingr = igrOrdenados.get(k);
-                while(verificador.hasNext()){
-                    condicion = verificador.next();
-                    if(condicion.validarCondicion(egr,ingr))
-                        if(total + egr.getPrecioTotal() < ingr.getMontoTotal())
-                            ingr.asociarEgreso(egr);
+        for(int i = 0; i<egrOrdenados.size(); i++) {
+            Egreso egreso = egrOrdenados.get(i);
+            while (ingrOrdenados.hasNext()) {
+                Ingreso ingreso = ingrOrdenados.next();
+                while (ingreso.montoTotalEgresos() < ingreso.getMontoTotal()) {
+                    if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())){
+                        ingreso.asociarEgreso(egreso);
+                    }
                 }
             }
-            total = 0;
         }
     }
 
-    private int comparadorIngresos(Ingreso i1, Ingreso i2){
-        return i1.getMontoTotal().compareTo(i2.getMontoTotal());
-    }
-    private int comparadorEgresos(Egreso e1, Egreso e2){
-        return e1.getPrecioTotal().compareTo(e2.getPrecioTotal());
+    private List<Ingreso> ordenarIngresos(List<Ingreso> ingresos) {
+        List<Ingreso> ingresosOrdenados = ingresos;
+        switch (this.getOrdenIngresos()){
+            case ORDENASCENDENTE:
+                ingresosOrdenados.sort((i1,i2) -> (int) (i1.getMontoTotal() - i2.getMontoTotal()));
+                break;
+            case ORDENDESCENDENTE:
+                ingresosOrdenados.sort((i1,i2) -> (int) (i2.getMontoTotal() - i1.getMontoTotal()));
+                break;
+        }
+        return ingresosOrdenados;
     }
 
-    @Override
-    public void vincular(Entidad entidad) {
-
+    private List<Egreso> ordenarEgresos(List<Egreso> egresos) {
+        List<Egreso> egresosOrdenados = egresos;
+        switch (this.getOrdenIngresos()){
+            case ORDENASCENDENTE:
+                egresosOrdenados.sort((e1,e2) -> (int) (e1.getPrecioTotal() - e2.getPrecioTotal()));
+                break;
+            case ORDENDESCENDENTE:
+                egresosOrdenados.sort((e1,e2) -> (int) (e2.getPrecioTotal() - e1.getPrecioTotal()));
+                break;
+        }
+        return egresosOrdenados;
     }
 }

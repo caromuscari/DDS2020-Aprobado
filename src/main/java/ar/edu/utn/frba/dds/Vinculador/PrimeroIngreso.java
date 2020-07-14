@@ -19,18 +19,16 @@ public class PrimeroIngreso extends Vinculador{
 
     @Override
     public void vincular(Entidad entidad) {
-        Iterator<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos()).iterator();
+        List<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
         List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
+        Iterator<Ingreso> ingresos = ingrOrdenados.iterator();
 
         for(int i = 0; i<egrOrdenados.size(); i++) {
             Egreso egreso = egrOrdenados.get(i);
-            while (ingrOrdenados.hasNext()) {
-                Ingreso ingreso = ingrOrdenados.next();
-                while (ingreso.montoTotalEgresos() < ingreso.getMontoTotal()) {
-                    if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())){
-                        ingreso.asociarEgreso(egreso);
-                    }
-                }
+            if (!ingresos.hasNext()) ingresos = ingrOrdenados.iterator();
+            Ingreso ingreso = ingresos.next();
+            if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())){
+                ingreso.asociarEgreso(egreso);
             }
         }
     }

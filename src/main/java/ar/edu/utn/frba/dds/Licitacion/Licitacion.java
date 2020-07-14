@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.BandejaDeMendajes.NotificadorValidador;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import ar.edu.utn.frba.dds.Vinculador.CriterioEjecucion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Licitacion {
         this.presupuestosRequeridos = presupuestosRequeridos;
         this.presupuestos = new ArrayList<Presupuesto>();
         this.criterios = new ArrayList<CriterioSeleccion>();
+        this.notificador = new NotificadorValidador();
     }
 
     //Setters y Getters
@@ -60,5 +62,9 @@ public class Licitacion {
     public void validarLicitacion(){
         List<ResultadoValidacion> resultados = this.criterios.stream().map(c -> c.validar(this)).collect(Collectors.toList());
         this.notificador.notificar(resultados);
+    }
+
+    public void agregarCriterio(CriterioSeleccion criterio){
+        this.criterios.add(criterio);
     }
 }

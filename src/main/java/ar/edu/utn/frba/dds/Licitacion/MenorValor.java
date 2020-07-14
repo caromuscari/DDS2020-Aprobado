@@ -12,7 +12,7 @@ public class MenorValor implements CriterioSeleccion{
         ResultadoValidacion resultado;
         licitacion.getPresupuestos().sort(Comparator.comparingDouble(Presupuesto::getPrecioTotal));
         Presupuesto menorValor = licitacion.getPresupuestos().get(0);
-        if (licitacion.getEgreso().getPrecioTotal() != menorValor.getPrecioTotal()){
+        if (Double.compare(licitacion.getEgreso().getPrecioTotal(),menorValor.getPrecioTotal()) != 0){
             resultado = new ResultadoValidacion(EstadoValidacion.ERROR,new ErrorMenorValor(licitacion.getEgreso().getPrecioTotal(),menorValor.getPrecioTotal()),licitacion);
         }
         else resultado = new ResultadoValidacion(EstadoValidacion.OK, licitacion);

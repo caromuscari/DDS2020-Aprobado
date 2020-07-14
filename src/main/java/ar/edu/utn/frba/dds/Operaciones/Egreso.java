@@ -33,7 +33,7 @@ public class Egreso {
 
     public MedioDePago getMedioDePago() { return medioDePago; }
 
-    public Double getPrecioTotal() { return precioTotal; }
+    public Double getPrecioTotal() { calcularPrecio(); return precioTotal; }
     public void setPrecioTotal(Double precioTotal) { this.precioTotal = precioTotal; }
 
     public Proveedor getProveedor() { return proveedor; }

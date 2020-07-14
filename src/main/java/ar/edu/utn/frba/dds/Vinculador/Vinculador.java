@@ -6,21 +6,19 @@ import ar.edu.utn.frba.dds.Entidad.Entidad;
 
 import java.util.List;
 
-public class Vinculador {
+public abstract class Vinculador {
     private List<CondicionVinculacion> condiciones;
-    private CriterioEjecucion criterio;
+    private TipoOrden ordenIngresos;
+    private TipoOrden ordenEgresos;
 
     public List<CondicionVinculacion> getCondiciones() { return condiciones; }
     public void setCondiciones(List<CondicionVinculacion> condiciones) { this.condiciones = condiciones; }
 
-    public CriterioEjecucion getCriterio() { return criterio; }
-    public void setCriterio(CriterioEjecucion criterio) { this.criterio = criterio; }
+    public TipoOrden getOrdenIngresos() { return ordenIngresos; }
+    public void setOrdenIngresos(TipoOrden ordenIngresos) { this.ordenIngresos = ordenIngresos; }
 
+    public TipoOrden getOrdenEgresos() { return ordenEgresos; }
+    public void setOrdenEgresos(TipoOrden ordenEgresos) { this.ordenEgresos = ordenEgresos; }
 
-    public void vincular(Entidad entidad){
-        // Proceso de vinculación
-        List<Ingreso> ingresos = entidad.getIngresos();
-        List<Egreso> egresos = entidad.getEgresos();
-        criterio.procesarEjecucion(egresos, ingresos, condiciones);
-    }
+    public abstract void vincular(Entidad entidad);
 }

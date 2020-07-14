@@ -9,9 +9,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class Fecha implements CriterioEjecucion{
+public class Fecha extends Vinculador{
 
-    @Override
     public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
         // Me falta ordenarlas POR FECHA
         List<Egreso> egrOrdenados = new ArrayList<>();
@@ -44,5 +43,10 @@ public class Fecha implements CriterioEjecucion{
     }
     private int comparadorEgresos(Egreso e1, Egreso e2){
         return e1.getFecha().compareTo(e2.getFecha());
+    }
+
+    @Override
+    public void vincular(Entidad entidad) {
+
     }
 }

@@ -9,9 +9,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class PrimeroIngreso implements CriterioEjecucion{
+public class PrimeroIngreso extends Vinculador{
 
-    @Override
     public void procesarEjecucion(List<Egreso> egresos, List<Ingreso> ingresos, List<CondicionVinculacion> condiciones) {
 
         List<Egreso> egrOrdenados = new ArrayList<>();
@@ -44,5 +43,10 @@ public class PrimeroIngreso implements CriterioEjecucion{
     }
     private int comparadorEgresos(Egreso e1, Egreso e2){
         return e1.getPrecioTotal().compareTo(e2.getPrecioTotal());
+    }
+
+    @Override
+    public void vincular(Entidad entidad) {
+
     }
 }

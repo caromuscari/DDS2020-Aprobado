@@ -1,9 +1,18 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ingreso {
+
+    public Ingreso(String descripcion, Double montoTotal, LocalDate fecha) {
+        this.descripcion = descripcion;
+        this.montoTotal = montoTotal;
+        this.fecha = fecha;
+        this.egresos = new ArrayList<>();
+    }
+
     private String descripcion;
     private Double montoTotal;
     private LocalDate fecha;

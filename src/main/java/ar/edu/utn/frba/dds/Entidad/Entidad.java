@@ -34,9 +34,7 @@ public abstract class Entidad {
         this.nombre = nombre;
     }
 
-    public List<Egreso> getEgresos() {
-        return egresos;
-    }
+    public List<Egreso> getEgresos() { return egresos; }
     public void setEgresos(List<Egreso> egresos) {
         this.egresos = egresos;
     }

@@ -14,10 +14,10 @@ import java.util.List;
 
 public class VinculadorTest {
     ItemEgreso item1, item2, item3;
-    ItemOperacionEgreso itemOp1;
-    List<ItemOperacionEgreso> itemsOperacion;
+    ItemOperacionEgreso itemOp1, itemOp2;
+    List<ItemOperacionEgreso> itemsOperacion, itemsOperacion2;
     Ingreso i1, i2, i3;
-    Egreso e1;
+    Egreso e1, e2;
     List<Egreso> egresos;
     List<Ingreso> ingresos;
     Vinculador vinculador;
@@ -42,8 +42,8 @@ public class VinculadorTest {
         i1 = new Ingreso("Venta Servicio", 200.0, LocalDate.of(2020,05,30));
         i2 = new Ingreso("Venta Servicio", 350.0, LocalDate.of(2020,04,23));
         i3 = new Ingreso("Venta VALIDA", 330.5, LocalDate.of(2020,06,14));
-        item1= new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-        item2= new ItemEgreso("274816","Computadora", 200.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        item1= new ItemEgreso("274818","Computadora", 310.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        item2= new ItemEgreso("274816","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         item3= new ItemEgreso("274817","Monitor", 250.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
 
         itemOp1 = new ItemOperacionEgreso(1,item1);
@@ -134,4 +134,28 @@ public class VinculadorTest {
         // egreso no puede estar asignado a mas de un ingreso
     }
 
+    @Test
+    public void vinculacionXFecha(){
+
+        // Agrego un nuevo egreso
+        itemsOperacion2 = new ArrayList<>();
+        itemOp2 = new ItemOperacionEgreso(1,item2);
+        itemsOperacion2.add(itemOp2);
+        e2 = new Egreso(itemsOperacion2,null);
+
+        e1.setFecha(LocalDate.of(2020,05, 17));
+        e2.setFecha(LocalDate.of(2020,04, 19));
+        egresos.add(e1);
+        egresos.add(e2);
+        ingresos.add(i2); // 350
+        ingresos.add(i1); // 200
+
+        fecha = new Fecha();
+        fecha.setCondiciones(condiciones);
+        fecha.vincular(empresa);
+        Assert.assertEquals(empresa.getIngresos().get(0).montoTotalEgresos(),e2.getPrecioTotal());
+
+        // El Ingreso i2 es valido para la vinculacion con el egreso por el precio 350 admite este egreso. El egreso
+        // e2 es el valido por estar dentro de la fecha de aceptabilidad de egresos
+    }
 }

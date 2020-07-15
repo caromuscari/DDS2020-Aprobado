@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,11 @@ public class Organizacion {
 
     private List<Entidad> entidades;
     private List<CriterioCategoria> criterios;
+
+    public Organizacion() {
+        this.entidades = new ArrayList<>();
+        this.criterios = new ArrayList<>();
+    }
 
     public List<Entidad> getEntidades() {
         return entidades;
@@ -35,12 +41,7 @@ public class Organizacion {
                 flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    public void crearCriterio(String nombre, List<Categoria> categorias){
-        CriterioCategoria criterio = new CriterioCategoria(nombre,categorias);
-        this.criterios.add(criterio);
-    }
-
-    public void crearCategoria(String categoria, CriterioCategoria criterio){
-        criterio.getCategorias().add(new Categoria(categoria));
+    public void asociarCriterio(CriterioCategoria criterioCategoria){
+        this.criterios.add(criterioCategoria);
     }
 }

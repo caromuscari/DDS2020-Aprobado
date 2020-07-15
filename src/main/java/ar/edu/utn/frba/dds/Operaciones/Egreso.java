@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class Egreso {
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor) {
         this.items = items;
         this.proveedor = proveedor;
+        this.categorias = new ArrayList<>();
         calcularPrecio();
     }
 
@@ -89,7 +91,7 @@ public class Egreso {
 
     public boolean contieneCategoria(Categoria categoria){
         List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.equals(categoria)) return true;
-                                        return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+                                        return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
 
         return resultados.stream().anyMatch(c -> c.equals(true));
     }

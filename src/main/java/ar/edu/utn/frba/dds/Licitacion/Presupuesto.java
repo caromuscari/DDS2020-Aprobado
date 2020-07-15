@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.Licitacion;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Operaciones.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,13 @@ public class Presupuesto {
         this.items = items;
         this.precioTotal = precioTotal;
         this.proveedor = proveedor;
+        this.categorias = new ArrayList<>();
     }
 
     public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor) {
         this.items = items;
         this.proveedor = proveedor;
+        this.categorias = new ArrayList<>();
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }

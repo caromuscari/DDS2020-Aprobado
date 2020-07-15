@@ -20,13 +20,18 @@ public class Presupuesto {
         this.proveedor = proveedor;
     }
 
+    public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor) {
+        this.items = items;
+        this.proveedor = proveedor;
+    }
+
     public List<DocumentoComercial> getDocumentos() { return documentos; }
     public void setDocumentos(List<DocumentoComercial> documentos) { this.documentos = documentos; }
 
     public List<ItemOperacionPresupuesto> getItems() { return items; }
     public void setItems(List<ItemOperacionPresupuesto> items) { this.items = items; }
 
-    public Double getPrecioTotal() { return precioTotal; }
+    public Double getPrecioTotal() { calcularPrecio(); return precioTotal; }
     public void setPrecioTotal(Double precioTotal) { this.precioTotal = precioTotal; }
 
     public Proveedor getProveedor() { return proveedor; }

@@ -4,8 +4,11 @@ import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PrimeroIngreso extends Vinculador{
 
@@ -18,7 +21,7 @@ public class PrimeroIngreso extends Vinculador{
     }
 
     @Override
-    public void vincular(Entidad entidad) {
+    public ResultadoVinculacion vincular(Entidad entidad) {
         List<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
         List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
         Iterator<Ingreso> ingresos = ingrOrdenados.iterator();
@@ -31,10 +34,11 @@ public class PrimeroIngreso extends Vinculador{
                 ingreso.asociarEgreso(egreso);
             }
         }
+        return new ResultadoVinculacion(entidad, LocalDate.now(), ingresosNoCompletos(entidad.getIngresos()), egresosNoVinculados(entidad.getEgresos()));
     }
 
     private List<Ingreso> ordenarIngresos(List<Ingreso> ingresos) {
-        List<Ingreso> ingresosOrdenados = ingresos;
+        List<Ingreso> ingresosOrdenados = ingresosNoCompletos(ingresos);
         switch (this.getOrdenIngresos()){
             case ORDENASCENDENTE:
                 ingresosOrdenados.sort((i1,i2) -> (int) (i1.getMontoTotal() - i2.getMontoTotal()));
@@ -47,7 +51,7 @@ public class PrimeroIngreso extends Vinculador{
     }
 
     private List<Egreso> ordenarEgresos(List<Egreso> egresos) {
-        List<Egreso> egresosOrdenados = egresos;
+        List<Egreso> egresosOrdenados = egresosNoVinculados(egresos);
         switch (this.getOrdenIngresos()){
             case ORDENASCENDENTE:
                 egresosOrdenados.sort((e1,e2) -> (int) (e1.getPrecioTotal() - e2.getPrecioTotal()));

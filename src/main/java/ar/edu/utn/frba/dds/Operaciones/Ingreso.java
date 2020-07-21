@@ -33,6 +33,7 @@ public class Ingreso {
     //Metodos
     public void asociarEgreso(Egreso egreso){
         this.egresos.add(egreso);
+        egreso.vincular();
     }
 
     public Double montoTotalEgresos()

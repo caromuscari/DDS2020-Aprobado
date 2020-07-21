@@ -4,7 +4,9 @@ import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Fecha extends Vinculador{
 
@@ -14,7 +16,7 @@ public class Fecha extends Vinculador{
     }
     
     @Override
-    public void vincular(Entidad entidad) {
+    public ResultadoVinculacion vincular(Entidad entidad) {
         Iterator<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos()).iterator();
         List <Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
 
@@ -27,16 +29,18 @@ public class Fecha extends Vinculador{
                 }
             }
         }
+
+        return new ResultadoVinculacion(entidad, LocalDate.now(), ingresosNoCompletos(entidad.getIngresos()), egresosNoVinculados(entidad.getEgresos()));
     }
 
     private List<Ingreso> ordenarIngresos(List<Ingreso> ingresos) {
-        List<Ingreso> ingresosOrdenados = ingresos;
+        List<Ingreso> ingresosOrdenados = ingresosNoCompletos(ingresos);
         ingresosOrdenados.sort(Comparator.comparing(Ingreso::getFecha));
         return ingresosOrdenados;
     }
 
     private List<Egreso> ordenarEgresos(List<Egreso> egresos) {
-        List<Egreso> egresosOrdenados = egresos;
+        List<Egreso> egresosOrdenados = egresosNoVinculados(egresos);
         egresosOrdenados.sort(Comparator.comparing(Egreso::getFecha));
         return egresosOrdenados;
     }

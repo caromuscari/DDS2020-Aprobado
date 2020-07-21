@@ -19,12 +19,14 @@ public class Egreso {
     private Presupuesto presupuesto;
     private List<Categoria> categorias;
     private LocalDate fecha;
+    private Boolean vinculado;
 
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor) {
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
         calcularPrecio();
+        this.vinculado = false;
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
@@ -34,6 +36,7 @@ public class Egreso {
     public void setItems(List<ItemOperacionEgreso> items) { this.items = items; }
 
     public MedioDePago getMedioDePago() { return medioDePago; }
+    public void setMedioDePago(MedioDePago medioDePago) { this.medioDePago = medioDePago; }
 
     public Double getPrecioTotal() { calcularPrecio(); return precioTotal; }
     public void setPrecioTotal(Double precioTotal) { this.precioTotal = precioTotal; }
@@ -49,6 +52,9 @@ public class Egreso {
 
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
+    public Boolean getVinculado() { return vinculado; }
+    public void setVinculado(Boolean vinculado) { this.vinculado = vinculado; }
 
     //Metodos
     public void registrarMedioDePago(MedioDePago medioDePago) {
@@ -94,5 +100,9 @@ public class Egreso {
                                         return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
 
         return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
+    public void vincular(){
+        this.vinculado = true;
     }
 }

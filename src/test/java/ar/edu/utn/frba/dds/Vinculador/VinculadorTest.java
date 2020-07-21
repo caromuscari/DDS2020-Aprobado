@@ -111,7 +111,7 @@ public class VinculadorTest {
         primeroIngreso = new PrimeroIngreso(TipoOrden.ORDENDESCENDENTE);
         primeroIngreso.setCondiciones(condiciones);
         primeroIngreso.vincular(empresa);
-        Assert.assertEquals(empresa.getIngresos().get(0).montoTotalEgresos(),e1.getPrecioTotal());
+        Assert.assertEquals(i2.montoTotalEgresos(),e1.getPrecioTotal());
 
         // El Ingreso i2 es valido para la vinculacion con el egreso. Cambiando de orden a Ascendente,
         // el test falla (Demuestra que ordena correctamente)

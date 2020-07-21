@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Vinculador {
     private List<CondicionVinculacion> condiciones;
@@ -20,5 +21,13 @@ public abstract class Vinculador {
     public TipoOrden getOrdenEgresos() { return ordenEgresos; }
     public void setOrdenEgresos(TipoOrden ordenEgresos) { this.ordenEgresos = ordenEgresos; }
 
-    public abstract void vincular(Entidad entidad);
+    public abstract ResultadoVinculacion vincular(Entidad entidad);
+
+    public List<Ingreso> ingresosNoCompletos(List<Ingreso> ingresos){
+        return ingresos.stream().filter(i -> i.getMontoTotal() > i.montoTotalEgresos()).collect(Collectors.toList());
+    }
+
+    public List<Egreso> egresosNoVinculados(List<Egreso> egresos){
+        return egresos.stream().filter(e -> !e.getVinculado()).collect(Collectors.toList());
+    }
 }

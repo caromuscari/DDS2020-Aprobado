@@ -6,6 +6,13 @@ import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import java.util.*;
+import static spark.Spark.*;
+import static spark.debug.DebugScreen.enableDebugScreen;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.template.handlebars.HandlebarsTemplateEngine;
+
 
 
 public class App
@@ -13,6 +20,23 @@ public class App
     public static int limiteIntentos = 2;
 
     public static void main( String[] args ) {
+
+        enableDebugScreen();
+        port(4567);
+        boolean localhost = true;
+        if (localhost) {
+            String projectDir = System.getProperty("user.dir");
+            String staticDir = "/src/main/resources/static/";
+            staticFiles.externalLocation(projectDir + staticDir);
+        } else {
+            staticFiles.location("/public");
+        }
+
+        // Ejemplo de acceso: http://localhost:4567/prueba
+        HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
+
+        get("/prueba", App::paginaPrueba, engine);
+
 
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
@@ -132,6 +156,13 @@ public class App
             e.printStackTrace();
         }
     }
+
+    public static ModelAndView paginaPrueba(Request request, Response response) {
+
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "prueba.html");
+    }
+
 
 
 }

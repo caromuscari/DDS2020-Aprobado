@@ -38,7 +38,12 @@ public class App
 
         // Acceso: http://localhost:4567/home
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
-        get("/home", App::paginaPrueba, engine);
+        get("/login", App::paginaPrueba, engine);
+        get("/home", App::paginaHome, engine);
+        get("/egreso", App::paginaEgresos, engine);
+        get("/ingreso", App::paginaIngresos, engine);
+        get("/presupuesto", App::paginaPresupuestos, engine);
+        get("/vinculador", App::paginaVinculador, engine);
 
         // ===============================================================================
         // Consola
@@ -163,11 +168,32 @@ public class App
     }
 
     public static ModelAndView paginaPrueba(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "login.html");
+    }
 
+    public static ModelAndView paginaEgresos(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "egresos.html");
+    }
+
+    public static ModelAndView paginaIngresos(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "ingresos.html");
+    }
+
+    public static ModelAndView paginaPresupuestos(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "presupuestos.html");
+    }
+
+    public static ModelAndView paginaVinculador(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "vinculador.html");
+    }
+
+    public static ModelAndView paginaHome(Request request, Response response) {
         Map<String, Object> map = new HashMap<>();
         return new ModelAndView(map, "home.html");
     }
-
-
-
 }

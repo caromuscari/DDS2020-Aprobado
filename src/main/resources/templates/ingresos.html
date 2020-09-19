@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<title>GeSoc - Ingresos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+
+<link href="public/bootstrap.min.css" rel="stylesheet">
+<link href="public/css/main.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="public/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" href="/home">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/ingreso">Egresos</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" href="#">Ingresos <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/presupuesto">Presupuesto</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/vinculador">Vinculador</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/login">Logout</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<br>
+				<h1>GeSoc</h1>
+				<br>
+				<h2>Ingresos</h2>
+				<div class="float-right">
+					<input placeholder="buscar ingreso" type="text" id="filtroCodigo" />
+					<a href="#" class="btn btn-outline-primary">Crear Ingreso</a>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Egreso</th>
+							<th>Proveedor</th>
+							<th>Entidad</th>
+							<th>Fecha</th>
+							<th>Monto</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>58001</td>
+							<td>LG</td>
+							<td>Acevedo SA</td>
+							<td>2/06/2018</td>
+							<td>150.000</td>
+							<td><a href="#" class="btn btn-outline-primary">Modificar</a>
+								<button class="btn btn-outline-primary" onclick="borrarEgreso('1');">Eliminar</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function borrarEgreso(codigo){
+			var confirmaBorrado = confirm("Desea borrar el ingreso" + codigo);
+			if (confirmaBorrado == true) {
+				alert('borrado');
+			} else {
+				alert('no borrado');
+			}
+		}
+	</script>
+</body>
+</html>

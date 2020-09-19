@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import java.util.*;
+
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 import spark.ModelAndView;
@@ -21,6 +22,9 @@ public class App
 
     public static void main( String[] args ) {
 
+        // ===============================================================================
+        // Server
+
         enableDebugScreen();
         port(4567);
         boolean localhost = true;
@@ -32,11 +36,12 @@ public class App
             staticFiles.location("/public");
         }
 
-        // Ejemplo de acceso: http://localhost:4567/prueba
+        // Acceso: http://localhost:4567/home
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
+        get("/home", App::paginaPrueba, engine);
 
-        get("/prueba", App::paginaPrueba, engine);
-
+        // ===============================================================================
+        // Consola
 
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
@@ -160,7 +165,7 @@ public class App
     public static ModelAndView paginaPrueba(Request request, Response response) {
 
         Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "prueba.html");
+        return new ModelAndView(map, "home.html");
     }
 
 

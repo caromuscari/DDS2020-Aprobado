@@ -49,7 +49,7 @@ public class VinculadorTest {
         itemOp1 = new ItemOperacionEgreso(1,item1);
         itemsOperacion = new ArrayList<>();
         itemsOperacion.add(itemOp1);
-        e1 = new Egreso(itemsOperacion, null); // Proveedor no me interesa
+        e1 = new Egreso(itemsOperacion, null,"Egreso"); // Proveedor no me interesa
 
         ingresos = new ArrayList<>();
         egresos = new ArrayList<>();
@@ -141,7 +141,7 @@ public class VinculadorTest {
         itemsOperacion2 = new ArrayList<>();
         itemOp2 = new ItemOperacionEgreso(1,item2);
         itemsOperacion2.add(itemOp2);
-        e2 = new Egreso(itemsOperacion2,null);
+        e2 = new Egreso(itemsOperacion2,null,"Egreso");
 
         e1.setFecha(LocalDate.of(2020,05, 17));
         e2.setFecha(LocalDate.of(2020,04, 19));

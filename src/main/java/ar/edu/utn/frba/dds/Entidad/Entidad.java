@@ -51,8 +51,8 @@ public abstract class Entidad {
             mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
     }
 
-    public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor){
-        Egreso egreso = new Egreso(items,proveedor);
+    public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor,String nombre){
+        Egreso egreso = new Egreso(items,proveedor,nombre);
         this.egresos.add(egreso);
     }
 

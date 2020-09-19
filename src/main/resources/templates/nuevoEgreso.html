@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<title>GeSoc - Nuevo Egreso</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<link href="public/bootstrap.min.css" rel="stylesheet">
+<link href="public/css/main.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="public/bootstrap.min.js"></script>
+<script src="public/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css"/>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" href="/home">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" href="#">Egresos <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/ingreso">Ingresos</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/presupuesto">Presupuesto</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/vinculador">Vinculador</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/login">Logout</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<br>
+				<h1>GeSoc</h1>
+				<br>
+				<h2>Nuevo Egreso</h2>
+				<div class="row">
+					<form method="post" action="/egreso" class="col-sm-12">
+						<div class="form-group row">
+							<label for="nombre" class="col-sm-4 col-form-label">Nombre</label>
+							<div class="col-sm-8">
+								<input type="text"
+									   class="form-control" name="nombre" id="nombre"
+									   value="{{egreso.nombre}}"
+									   placeholder="Nombre" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="proveedor" class="col-sm-4 col-form-label">Proveedor</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="proveedor">
+									<option>Proveedor 1</option>
+									<option>Proveedor 2</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="entidad" class="col-sm-4 col-form-label">Entidad</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="entidad">
+									<option>Entidad 1</option>
+									<option>Entidad 2</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="items" class="col-sm-4 col-form-label">Items</label>
+							<div class="col-sm-8">
+								<a id="items" class="btn btn-outline-secondary" onclick="console.log('AGREGAR')">Agregar Items</a>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="medioDePago" class="col-sm-4 col-form-label">Medio de Pago</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="medioDePago">
+									<option>Medio 1</option>
+									<option>Medio 2</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="categorias" class="col-sm-4 col-form-label">Categorias</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="categorias" multiple="multiple">
+									<option value="categoria1">Categoria 1</option>
+									<option value="categoria2">Categoria 2</option>
+									<option value="categoria3">Categoria 3</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="fecha" class="col-sm-4 col-form-label">Fecha</label>
+							<div class="col-sm-8">
+								<input type="date"
+								   class="form-control" name="fecha" id="fecha"
+								   value="{{egreso.fecha}}"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="presupuestos" class="col-sm-4 col-form-label">Presupuestos</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="presupuestos" multiple="multiple">
+									<option value="presupuesto1">Presupuesto 1</option>
+									<option value="presupuesto2">Presupuesto 2</option>
+									<option value="presupuesto3">Presupuesto 3</option>
+								</select>
+							</div>
+						</div>
+						<a href="/egreso" class="btn btn-default">Cancelar</a>
+						<button type="submit" class="btn btn-default">Guardar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#categorias').multiselect();
+			$('#presupuestos').multiselect();
+		})
+		function borrarEgreso(codigo){
+			var confirmaBorrado = confirm("Desea borrar el egreso" + codigo);
+			if (confirmaBorrado == true) {
+				alert('borrado');
+			} else {
+				alert('no borrado');
+			}
+		}
+	</script>
+</body>
+</html>

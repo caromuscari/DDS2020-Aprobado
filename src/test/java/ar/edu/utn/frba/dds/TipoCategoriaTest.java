@@ -38,8 +38,8 @@ public class TipoCategoriaTest {
         itemsOperacion2.add(itemOperacionEgreso2);
         Proveedor proveedor = new Proveedor("Provedor 1", Long.parseLong("123"), "1234");
 
-        empresa.generarEgreso(itemsOperacion1, proveedor);
-        empresa.generarEgreso(itemsOperacion2, proveedor);
+        empresa.generarEgreso(itemsOperacion1, proveedor,"Egreso 1");
+        empresa.generarEgreso(itemsOperacion2, proveedor,"Egreso 2");
 
         //Creacion de la empresa
         List<Entidad> entidades = new ArrayList<>();

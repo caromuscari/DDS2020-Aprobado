@@ -20,11 +20,21 @@ public class Egreso {
     private List<Categoria> categorias;
     private LocalDate fecha;
     private Boolean vinculado;
+    private String nombre;
 
-    public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor) {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre) {
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
+        this.nombre = nombre;
         calcularPrecio();
         this.vinculado = false;
     }

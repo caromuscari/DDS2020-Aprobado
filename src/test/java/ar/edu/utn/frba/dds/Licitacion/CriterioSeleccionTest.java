@@ -32,7 +32,7 @@ public class CriterioSeleccionTest {
         items.add(itemOperacionEgreso);
         items.add(itemOperacionEgreso2);
 
-        e1 = new Egreso(items,new Proveedor("Jose", (long) 1739345,"kdsfkjnsdv"));
+        e1 = new Egreso(items,new Proveedor("Jose", (long) 1739345,"kdsfkjnsdv"),"Egreso");
 
 
         ItemPresupuesto itemP = new ItemPresupuesto(1234.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);

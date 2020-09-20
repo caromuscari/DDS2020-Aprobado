@@ -54,6 +54,10 @@ public class App
                 return null;
             }
         });
+        post("/logout", (request,response) -> {
+            request.session().invalidate();
+            return null;
+        });
         get("/home", App::paginaHome, engine);
         get("/egreso", App::paginaEgresos, engine);
         get("/nuevo_egreso", App::nuevoEgreso, engine);
@@ -190,7 +194,6 @@ public class App
     }
 
     public static ModelAndView paginaHome(Request request, Response response) {
-
         // Si no hay session creada por login, me redirige a la vista de Login
         if(request.session(false) == null) {
             return paginaPrueba(request,response);
@@ -212,28 +215,53 @@ public class App
     }
 
     public static ModelAndView nuevoEgreso(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "nuevoEgreso.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "nuevoEgreso.html");
+        }
     }
 
     public static ModelAndView modificarEgreso(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "modificarEgreso.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "modificarEgreso.html");
+        }
     }
 
     public static ModelAndView paginaIngresos(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "ingresos.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "ingresos.html");
+        }
     }
 
     public static ModelAndView paginaPresupuestos(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "presupuestos.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "presupuestos.html");
+        }
     }
 
     public static ModelAndView paginaVinculador(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "vinculador.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "vinculador.html");
+        }
     }
 
     public static boolean checkLogin(String usuario, String pass) throws NoSuchAlgorithmException {

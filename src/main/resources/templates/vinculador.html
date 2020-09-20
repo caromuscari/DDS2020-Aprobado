@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
-<title>GeSoc - Egresos</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
+	<title>GeSoc - Egresos</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
 
-<link href="public/bootstrap.min.css" rel="stylesheet">
-<link href="public/css/main.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-<script src="public/bootstrap.min.js"></script>
+	<link href="public/bootstrap.min.css" rel="stylesheet">
+	<link href="public/css/main.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script src="public/bootstrap.min.js"></script>
 
 </head>
+
 <body>
 	<div class="container">
 		<div class="row">
@@ -32,10 +34,11 @@
 								<a class="nav-link" href="/presupuesto">Presupuesto</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link active" href="#">Vinculador <span class="sr-only">(current)</span></a>
+								<a class="nav-link active" href="#">Vinculador <span
+										class="sr-only">(current)</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/login">Logout</a>
+								<a class="nav-link" href="/login" onclick="logout()">Logout</a>
 							</li>
 						</ul>
 					</div>
@@ -49,6 +52,18 @@
 	</div>
 
 	<script type="text/javascript">
+
+		function logout() {
+			$.ajax({
+				url: "/logout",
+				type: "POST",
+				success: function (result) {
+					location.replace("/login");
+				}
+			})
+		}
+
 	</script>
 </body>
+
 </html>

@@ -9,6 +9,7 @@
 <link href="public/bootstrap.min.css" rel="stylesheet">
 <link href="public/css/main.css" rel="stylesheet">
 <link href="public/css/home.css" rel="stylesheet">
+<link href="public/css/login.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 <script src="public/bootstrap.min.js"></script>
 
@@ -28,24 +29,61 @@
 		<div class="input-group-prepend">
 		  <span class="input-group-text" id="basic-addon1">Usuario</span>
 		</div>
-		<input type="text" class="form-control" placeholder="Ingrese su nombre de usuario.." aria-label="Username" aria-describedby="basic-addon1">
+		<input type="text" id="user" class="form-control" placeholder="Ingrese su nombre de usuario.." aria-label="Username" aria-describedby="basic-addon1">
 	  </div>
 
 	<div class="input-group mb-3 col-sm-5" id="campoPass">
 		<div class="input-group-prepend">
 		  <span class="input-group-text" id="basic-addon1">Contraseña</span>
 		</div>
-		<input type="text" class="form-control" placeholder="Ingrese su contraseña.." aria-label="Password" aria-describedby="basic-addon1">
+		<input type="password" id="pw" class="form-control" placeholder="Ingrese su contraseña.." aria-label="Password" aria-describedby="basic-addon1">
 	  </div>
 
+	  <br>
+	  <div class="alert alert-danger" id="msjError" style="position: fixed; right: 44%; display: none;" role="alert">
+
+	  </div>
+	  <br> 
+
 	<div id="botonIngresar">
-		<button type="button" class="btn btn-outline-primary" onclick="alert('En desarrollo')">Ingresar</button>
+		<button type="button" id="btnLogin" class="btn btn-outline-primary" onclick="login()">Ingresar</button>
 	</div>
 
 	<script type="text/javascript">
-		function login(user, pass){
-			
+		function login(){
+			if(document.getElementById("pw").value != "" && document.getElementById("user").value != ""){
+				document.getElementById("msjError").style.display = 'none';
+				var usuario = $("#user").val();
+				var pass = $("#pw").val();
+				
+				$.ajax({
+					url: '/autenticacion',
+					data: {usuario: usuario, pass: pass},
+					type: 'POST',
+					success: function(result){
+						document.getElementById("msjError").style.display = 'none';
+
+						/* Si me encuentro en otro path, me logueo y me redirigen a donde queria ir */
+						if(location.pathname != "/login")
+							location.replace(location.pathname);
+						else
+							location.replace("/home"); 
+							
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						document.getElementById("msjError").style.display = 'block';
+						$("#msjError").html("Credenciales incorrectas. Intente nuevamente.");
+					}
+				});
+			}
+			else{
+				$("#msjError").html("Campos imcompletos");
+				document.getElementById("msjError").style.display = 'block';
+			}
 		}
 	</script>
+
+	
+
 </body>
 </html>

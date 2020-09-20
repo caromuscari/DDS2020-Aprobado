@@ -5,6 +5,9 @@ import ar.edu.utn.frba.dds.Usuario.BuilderUsuario;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Usuario.Hash;
+import ar.edu.utn.frba.dds.Usuario.RepoUsuarios;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -18,7 +21,8 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class App
 {
-    public static int limiteIntentos = 2;
+    private static int limiteIntentos = 2;
+    private static RepoUsuarios repoUsuarios = new RepoUsuarios();
 
     public static void main( String[] args ) {
 
@@ -36,9 +40,20 @@ public class App
             staticFiles.location("/public");
         }
 
-        // Acceso: http://localhost:4567/home
+        // Acceso: http://localhost:4567/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
         get("/login", App::paginaPrueba, engine);
+        post("/autenticacion", (request, response) -> {
+            if (checkLogin(request.queryMap("usuario").value(), request.queryMap("pass").value())) {
+                request.session(true);
+                response.status(202);
+                return "Bienvenido " + request.queryMap("usuario").value() + "!";
+            }
+            else {
+                response.status(401);
+                return null;
+            }
+        });
         get("/home", App::paginaHome, engine);
         get("/egreso", App::paginaEgresos, engine);
         get("/ingreso", App::paginaIngresos, engine);
@@ -50,7 +65,6 @@ public class App
 
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
-        Map<String, Usuario> registrados = new HashMap<String, Usuario>();
 
         long inicio;
         long fin;
@@ -63,6 +77,7 @@ public class App
             int opcion;
             Usuario user;
             int intentosFallidos = 0;
+            Map<String, Usuario> users = repoUsuarios.getRegistrados();
 
             System.out.println("");
             System.out.println("\u001B[36m" + "Bienvenido a GeSoc!" + "\u001B[0m");
@@ -78,7 +93,7 @@ public class App
                 switch(opcion) {
                     case 1: {
                         // Registrar Operador
-                        System.out.println("Ingrese usuario: ");
+                        System.out. println("Ingrese usuario: ");
                         usuario = sn.next();
                         System.out.println("Ingrese contraseña: ");
                         pass = sn.next();
@@ -90,7 +105,7 @@ public class App
                         nuevoOperador.setPerfil(TipoPerfil.OPERADOR);
                         user = nuevoOperador.registrar();
 
-                        registrados.put(usuario,user);
+                        users.put(usuario,user);
                         System.out.println("Operador " + usuario + " registrado exitosamente");
                         break;
                     }
@@ -108,7 +123,7 @@ public class App
                         nuevoAdministador.setPerfil(TipoPerfil.ADMINISTRADOR);
                         user = nuevoAdministador.registrar();
 
-                        registrados.put(usuario,user);
+                        users.put(usuario,user);
                         System.out.println("Administrador " + usuario + " registrado exitosamente");
                         break;
                     case 3:
@@ -118,8 +133,8 @@ public class App
                         System.out.println("Ingrese contraseña: ");
                         pass = sn.next();
 
-                        if(registrados.get(usuario) != null) {
-                            user = registrados.get(usuario);
+                        if(users.get(usuario) != null) {
+                            user = users.get(usuario);
                             if(encriptador.hashear(pass).equals(user.getPassword()))
                             {
                                 System.out.println("\u001B[32m" + "Ha iniciado sesión. Bienvenido " + user.getUsuario() + "\u001B[0m");
@@ -130,9 +145,9 @@ public class App
                             }
                             else {
                                 System.out.println("\u001B[31m" + "Contraseña inválida." + "\u001B[0m");
-                                if(registrados.get(usuario).getCantidadIntentos() < limiteIntentos) {
+                                if(users.get(usuario).getCantidadIntentos() < limiteIntentos) {
                                     intentosFallidos++;
-                                    registrados.get(usuario).setCantidadIntentos(intentosFallidos);
+                                    users.get(usuario).setCantidadIntentos(intentosFallidos);
                                     System.out.println("Intentos fallidos: " + intentosFallidos + "/" + limiteIntentos);
                                 }
                                 else {
@@ -168,13 +183,30 @@ public class App
     }
 
     public static ModelAndView paginaPrueba(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "login.html");
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "login.html");
+    }
+
+    public static ModelAndView paginaHome(Request request, Response response) {
+
+        // Si no hay session creada por login, me redirige a la vista de Login
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else{
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "home.html");
+        }
     }
 
     public static ModelAndView paginaEgresos(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "egresos.html");
+        if(request.session(false) == null) {
+            return paginaPrueba(request,response);
+        }
+        else {
+            Map<String, Object> map = new HashMap<>();
+            return new ModelAndView(map, "egresos.html");
+        }
     }
 
     public static ModelAndView paginaIngresos(Request request, Response response) {
@@ -192,8 +224,8 @@ public class App
         return new ModelAndView(map, "vinculador.html");
     }
 
-    public static ModelAndView paginaHome(Request request, Response response) {
-        Map<String, Object> map = new HashMap<>();
-        return new ModelAndView(map, "home.html");
+    public static boolean checkLogin(String usuario, String pass) throws NoSuchAlgorithmException {
+        Usuario user = repoUsuarios.getRegistrados().get(usuario);
+        return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
     }
 }

@@ -56,6 +56,8 @@ public class App
         });
         get("/home", App::paginaHome, engine);
         get("/egreso", App::paginaEgresos, engine);
+        get("/nuevo_egreso", App::nuevoEgreso, engine);
+        get("/modificar_egreso", App::modificarEgreso, engine);
         get("/ingreso", App::paginaIngresos, engine);
         get("/presupuesto", App::paginaPresupuestos, engine);
         get("/vinculador", App::paginaVinculador, engine);
@@ -207,6 +209,16 @@ public class App
             Map<String, Object> map = new HashMap<>();
             return new ModelAndView(map, "egresos.html");
         }
+    }
+
+    public static ModelAndView nuevoEgreso(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "nuevoEgreso.html");
+    }
+
+    public static ModelAndView modificarEgreso(Request request, Response response) {
+        Map<String, Object> map = new HashMap<>();
+        return new ModelAndView(map, "modificarEgreso.html");
     }
 
     public static ModelAndView paginaIngresos(Request request, Response response) {

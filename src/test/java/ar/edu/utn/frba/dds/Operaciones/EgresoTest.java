@@ -38,7 +38,7 @@ public class EgresoTest {
         compras.add(ee2);
 
         Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
-        Egreso egreso = new Egreso(compras,prov);
+        Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
         Assert.assertTrue(egreso.verificarCantidadItems());
@@ -54,7 +54,7 @@ public class EgresoTest {
         compras.add(ee2);
 
         Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
-        Egreso egreso = new Egreso(compras,prov);
+        Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
         Assert.assertTrue(egreso.verificarEgreso());
@@ -71,7 +71,7 @@ public class EgresoTest {
         compras.add(ee2);
 
         Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
-        Egreso egreso = new Egreso(compras,prov);
+        Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
         Assert.assertFalse(egreso.verificarEgreso());
@@ -89,7 +89,7 @@ public class EgresoTest {
         compras.add(ee2);
 
         Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
-        Egreso egreso = new Egreso(compras,prov);
+        Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
         Assert.assertFalse(egreso.verificarCantidadItems());

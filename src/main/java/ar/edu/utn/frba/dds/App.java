@@ -1,6 +1,11 @@
 package ar.edu.utn.frba.dds;
 
-import ar.edu.utn.frba.dds.Entidad.Organizacion;
+import ar.edu.utn.frba.dds.Controladores.Egreso;
+import ar.edu.utn.frba.dds.Controladores.Login;
+import ar.edu.utn.frba.dds.Entidad.*;
+import ar.edu.utn.frba.dds.Licitacion.Licitacion;
+import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Usuario.BuilderUsuario;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -23,14 +28,41 @@ public class App
 {
     private static int limiteIntentos = 2;
     private static RepoUsuarios repoUsuarios = new RepoUsuarios();
+    private static Organizacion organizacion = new Organizacion();
+    private static List<MedioDePago> medioDePagos = new ArrayList<>();
+    private static List<Proveedor> proveedores = new ArrayList<>();
 
-    public static void main( String[] args ) {
+    public static Organizacion getOrganizacion() {
+        return organizacion;
+    }
+
+    public static void setOrganizacion(Organizacion organizacion) {
+        App.organizacion = organizacion;
+    }
+
+    public static List<MedioDePago> getMedioDePagos() {
+        return medioDePagos;
+    }
+
+    public static void setMedioDePagos(List<MedioDePago> medioDePagos) {
+        App.medioDePagos = medioDePagos;
+    }
+
+    public static List<Proveedor> getProveedores() {
+        return proveedores;
+    }
+
+    public static void setProveedores(List<Proveedor> proveedores) {
+        App.proveedores = proveedores;
+    }
+
+    public static void main(String[] args ) {
 
         // ===============================================================================
         // Server
 
         enableDebugScreen();
-        port(4567);
+        port(4568);
         boolean localhost = true;
         if (localhost) {
             String projectDir = System.getProperty("user.dir");
@@ -42,7 +74,9 @@ public class App
 
         // Acceso: http://localhost:4567/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
-        get("/login", App::paginaPrueba, engine);
+
+        //Login
+        get("/login", Login::paginaLogin, engine);
         post("/autenticacion", (request, response) -> {
             if (checkLogin(request.queryMap("usuario").value(), request.queryMap("pass").value())) {
                 request.session(true);
@@ -58,24 +92,35 @@ public class App
             request.session().invalidate();
             return null;
         });
+
+        //Home
         get("/home", App::paginaHome, engine);
-        get("/egreso", App::paginaEgresos, engine);
-        get("/nuevo_egreso", App::nuevoEgreso, engine);
-        get("/modificar_egreso", App::modificarEgreso, engine);
+
+        //Ingresos
         get("/ingreso", App::paginaIngresos, engine);
+
+        //Presupuestos
         get("/presupuesto", App::paginaPresupuestos, engine);
+
+        //Vinculador
         get("/vinculador", App::paginaVinculador, engine);
 
+        //Egresos
+        get("/egreso", Egreso::paginaEgresos, engine);
+        get("/nuevo_egreso", Egreso::paginaNuevoEgreso, engine);
+        get("/modificar_egreso", Egreso::paginaModificarEgreso, engine);
         // ===============================================================================
-        // Consola
-
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
 
-        long inicio;
-        long fin;
+        //Inicializar datos de prueba
+        inicializarProveedores();
+        inicializarMediosDePago();
+        inicializarOrganizacion();
 
         // Consola
+        long inicio;
+        long fin;
         try
         {
             String usuario;
@@ -188,15 +233,10 @@ public class App
         }
     }
 
-    public static ModelAndView paginaPrueba(Request request, Response response) {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "login.html");
-    }
-
     public static ModelAndView paginaHome(Request request, Response response) {
         // Si no hay session creada por login, me redirige a la vista de Login
         if(request.session(false) == null) {
-            return paginaPrueba(request,response);
+            return Login.paginaLogin(request,response);
         }
         else{
             Map<String, Object> map = new HashMap<>();
@@ -204,39 +244,10 @@ public class App
         }
     }
 
-    public static ModelAndView paginaEgresos(Request request, Response response) {
-        if(request.session(false) == null) {
-            return paginaPrueba(request,response);
-        }
-        else {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "egresos.html");
-        }
-    }
-
-    public static ModelAndView nuevoEgreso(Request request, Response response) {
-        if(request.session(false) == null) {
-            return paginaPrueba(request,response);
-        }
-        else {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "nuevoEgreso.html");
-        }
-    }
-
-    public static ModelAndView modificarEgreso(Request request, Response response) {
-        if(request.session(false) == null) {
-            return paginaPrueba(request,response);
-        }
-        else {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "modificarEgreso.html");
-        }
-    }
 
     public static ModelAndView paginaIngresos(Request request, Response response) {
         if(request.session(false) == null) {
-            return paginaPrueba(request,response);
+            return Login.paginaLogin(request,response);
         }
         else {
             Map<String, Object> map = new HashMap<>();
@@ -246,7 +257,7 @@ public class App
 
     public static ModelAndView paginaPresupuestos(Request request, Response response) {
         if(request.session(false) == null) {
-            return paginaPrueba(request,response);
+            return Login.paginaLogin(request,response);
         }
         else {
             Map<String, Object> map = new HashMap<>();
@@ -256,7 +267,7 @@ public class App
 
     public static ModelAndView paginaVinculador(Request request, Response response) {
         if(request.session(false) == null) {
-            return paginaPrueba(request,response);
+            return Login.paginaLogin(request,response);
         }
         else {
             Map<String, Object> map = new HashMap<>();
@@ -268,4 +279,45 @@ public class App
         Usuario user = repoUsuarios.getRegistrados().get(usuario);
         return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
     }
+
+    private static void inicializarOrganizacion(){
+        TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
+                5, 10, 50, "Agropecuario");
+        Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
+                1111, 1, 1000, 10000.0, agropecuario, 1000.0);
+        Empresa empresa2 = new Empresa("Empresa 2", "LME SRL", Long.parseLong("234567"),
+                1111, 1, 1000, 10000.0, agropecuario, 1000.0);
+        List<Entidad> entidades = new ArrayList<>();
+        entidades.add(empresa1);
+        entidades.add(empresa2);
+        organizacion.setEntidades(entidades);
+
+        ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
+        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
+
+        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
+        itemsOperacion1.add(itemOperacionEgreso);
+        List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
+        itemsOperacion2.add(itemOperacionEgreso2);
+
+        empresa1.generarEgreso(itemsOperacion1, proveedores.get(0),"Egreso 1");
+        empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
+    }
+
+    private static void inicializarMediosDePago(){
+        MedioDePago medio1 = new MedioDePago("Tarjeta credito",100L,TipoPago.CREDIT_CARD);
+        MedioDePago medio2 = new MedioDePago("Tarjeta debito",200L,TipoPago.CREDIT_CARD);
+        medioDePagos.add(medio1);
+        medioDePagos.add(medio2);
+    }
+
+    private static void inicializarProveedores(){
+        Proveedor proveedor1 = new Proveedor("Proveedor 1", 1L,"1234");
+        Proveedor proveedor2 = new Proveedor("Proveedor 2", 2L,"1234");
+        proveedores.add(proveedor1);
+        proveedores.add(proveedor2);
+    }
+
 }

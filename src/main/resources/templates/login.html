@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 
-<title>GeSoc - Home</title>
+<title>GeSoc</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 
@@ -51,17 +51,18 @@
 
 	<script type="text/javascript">
 		function login(){
-			if(document.getElementById("pw").value != "" && document.getElementById("user").value != ""){
-				document.getElementById("msjError").style.display = 'none';
-				var usuario = $("#user").val();
-				var pass = $("#pw").val();
+			var usuario = $("#user").val();
+			var pass = $("#pw").val();
+
+			if(pass != "" && usuario != ""){
+				$("#msjError").hide();
 				
 				$.ajax({
 					url: '/autenticacion',
 					data: {usuario: usuario, pass: pass},
 					type: 'POST',
 					success: function(result){
-						document.getElementById("msjError").style.display = 'none';
+						$("#msjError").hide();
 
 						/* Si me encuentro en otro path, me logueo y me redirigen a donde queria ir */
 						if(location.pathname != "/login")
@@ -71,14 +72,14 @@
 							
 					},
 					error: function(jqXHR, textStatus, errorThrown){
-						document.getElementById("msjError").style.display = 'block';
 						$("#msjError").html("Credenciales incorrectas");
+						$("#msjError").show();
 					}
 				});
 			}
 			else{
 				$("#msjError").html("Campos imcompletos");
-				document.getElementById("msjError").style.display = 'block';
+				$("#msjError").show();
 			}
 		}
 	</script>

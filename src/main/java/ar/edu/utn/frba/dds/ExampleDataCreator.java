@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioItemsOperacionEgreso;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,20 @@ public class ExampleDataCreator {
         empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
         RepositorioEntidades.getInstance().crearEntidad(empresa1);
         RepositorioEntidades.getInstance().crearEntidad(empresa2);
+
+        //Creo ingresos
+        Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.now());
+        Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.now());
+        List<Ingreso> ingresosEmpresa1 = new ArrayList<>();
+        ingresosEmpresa1.add(ingreso1);
+        ingresosEmpresa1.add(ingreso2);
+        empresa1.setIngresos(ingresosEmpresa1);
+
+        Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.now());
+        List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
+        ingresosEmpresa2.add(ingreso3);
+        empresa2.setIngresos(ingresosEmpresa2);
+
     }
 
     private static void inicializarMediosDePago(){

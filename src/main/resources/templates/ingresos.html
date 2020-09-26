@@ -50,8 +50,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Egreso</th>
-							<th>Proveedor</th>
+							<th>Ingreso</th>
 							<th>Entidad</th>
 							<th>Fecha</th>
 							<th>Monto</th>
@@ -59,15 +58,16 @@
 						</tr>
 					</thead>
 					<tbody>
+					{{#each ingresos}}
 						<tr>
-							<td>58001</td>
-							<td>LG</td>
-							<td>Acevedo SA</td>
-							<td>2/06/2018</td>
-							<td>150.000</td>
+							<td>{{ingreso.descripcion}}</td>
+							<td>{{entidad.nombre}}</td>
+							<td>{{ingreso.fecha}}</td>
+							<td>{{ingreso.montoTotal}}</td>
 							<td><a href="#" class="btn btn-outline-primary">Modificar</a>
 							</td>
 						</tr>
+					{{/each}}
 					</tbody>
 				</table>
 			</div>

@@ -43,10 +43,16 @@ public class App
         //Login
         get("/login", Login::paginaLogin, engine);
         post("/autenticacion", (request, response) -> {
-            if (checkLogin(request.queryMap("usuario").value(), request.queryMap("pass").value())) {
+
+            String user = request.queryMap("usuario").value();
+            String pass = request.queryMap("pass").value();
+
+            if (checkLogin(user, pass)) {
                 request.session(true);
+                request.session().attribute(user, user);
+                response.cookie("usuario",user);
                 response.status(202);
-                return "Bienvenido " + request.queryMap("usuario").value() + "!";
+                return "Bienvenido " + user + "!";
             }
             else {
                 response.status(401);
@@ -54,6 +60,7 @@ public class App
             }
         });
         post("/logout", (request,response) -> {
+            request.cookies().clear();
             request.session().invalidate();
             return null;
         });

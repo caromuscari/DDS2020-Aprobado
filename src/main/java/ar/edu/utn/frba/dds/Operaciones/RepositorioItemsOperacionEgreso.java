@@ -35,4 +35,8 @@ public class RepositorioItemsOperacionEgreso {
         }
         return null;
     }
+
+    public void eliminarItem(ItemOperacionEgreso item){
+        items.remove(item);
+    }
 }

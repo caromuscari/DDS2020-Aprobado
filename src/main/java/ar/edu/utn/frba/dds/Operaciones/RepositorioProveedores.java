@@ -35,4 +35,7 @@ public class RepositorioProveedores {
         }
         return null;
     }
+
+    public void eliminarProveedor(Proveedor proveedor){ proveedores.remove(proveedor); }
+
 }

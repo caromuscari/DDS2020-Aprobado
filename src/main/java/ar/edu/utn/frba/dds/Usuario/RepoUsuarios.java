@@ -27,4 +27,8 @@ public class RepoUsuarios {
     // Getters
     public Map<String, Usuario> getRegistrados() { return registrados; }
     public Hash getEncriptador() { return encriptador; }
+
+    public Usuario buscarUsuario(String nombre){
+        return registrados.get(nombre);
+    }
 }

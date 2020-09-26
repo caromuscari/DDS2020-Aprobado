@@ -35,4 +35,8 @@ public class RepositorioEgresos {
         }
         return null;
     }
+
+    public void eliminarEgreso(Egreso egreso){
+        egresos.remove(egreso);
+    }
 }

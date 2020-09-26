@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Controladores.Egreso;
+import ar.edu.utn.frba.dds.Controladores.LicitacionController;
 import ar.edu.utn.frba.dds.Controladores.Login;
 import ar.edu.utn.frba.dds.Entidad.*;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
+import ar.edu.utn.frba.dds.Licitacion.LicitacionRepo;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Usuario.BuilderUsuario;
@@ -28,33 +30,6 @@ public class App
 {
     private static int limiteIntentos = 2;
     private static RepoUsuarios repoUsuarios = new RepoUsuarios();
-    private static Organizacion organizacion = new Organizacion();
-    private static List<MedioDePago> medioDePagos = new ArrayList<>();
-    private static List<Proveedor> proveedores = new ArrayList<>();
-
-    public static Organizacion getOrganizacion() {
-        return organizacion;
-    }
-
-    public static void setOrganizacion(Organizacion organizacion) {
-        App.organizacion = organizacion;
-    }
-
-    public static List<MedioDePago> getMedioDePagos() {
-        return medioDePagos;
-    }
-
-    public static void setMedioDePagos(List<MedioDePago> medioDePagos) {
-        App.medioDePagos = medioDePagos;
-    }
-
-    public static List<Proveedor> getProveedores() {
-        return proveedores;
-    }
-
-    public static void setProveedores(List<Proveedor> proveedores) {
-        App.proveedores = proveedores;
-    }
 
     public static void main(String[] args ) {
 
@@ -112,6 +87,12 @@ public class App
         get("/modificar_egreso", Egreso::paginaModificarEgreso, engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
+
+        //Licitaciones
+        post("/licitacion", LicitacionController::crearLicitacion);
+        post("/licitacion/:id", LicitacionController::validarLicitacion);
+        get("/licitacion/:id", LicitacionController::mostrarMensajes);
+
         // ===============================================================================
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);

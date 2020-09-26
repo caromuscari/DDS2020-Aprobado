@@ -37,7 +37,7 @@ public class EgresoTest {
         compras.add(ee1);
         compras.add(ee2);
 
-        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
+        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov,"Presupuesto 1");
         Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
@@ -53,7 +53,7 @@ public class EgresoTest {
         compras.add(ee1);
         compras.add(ee2);
 
-        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
+        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov,"Presupuesto");
         Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
@@ -70,7 +70,7 @@ public class EgresoTest {
         compras.add(ee1);
         compras.add(ee2);
 
-        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
+        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov,"Presupuesto");
         Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 
@@ -88,7 +88,7 @@ public class EgresoTest {
         compras.add(ee1);
         compras.add(ee2);
 
-        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov);
+        Presupuesto presupuesto = new Presupuesto(documents,products,500.0, prov,"Presupuesto");
         Egreso egreso = new Egreso(compras,prov,"Egreso");
         egreso.setPresupuesto(presupuesto);
 

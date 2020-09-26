@@ -1,6 +1,10 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Entidad.Empresa;
+import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
+import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
+import ar.edu.utn.frba.dds.Licitacion.Licitacion;
+import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
@@ -9,6 +13,7 @@ import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExampleDataCreator {
@@ -75,6 +80,26 @@ public class ExampleDataCreator {
         ingresosEmpresa2.add(ingreso3);
         empresa2.setIngresos(ingresosEmpresa2);
 
+        //Creo licitaciones y presupuestos
+        Licitacion licitacion1 = new Licitacion("Licitacion 1",3);
+        Licitacion licitacion2 = new Licitacion("Licitacion 2",3);
+        ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+        ItemPresupuesto ip3 = new ItemPresupuesto(900.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
+        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
+        ItemOperacionPresupuesto iop3 = new ItemOperacionPresupuesto(3,ip3);
+        List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
+        items1.add(iop1);
+        items1.add(iop2);
+        List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
+        items2.add(iop3);
+        Presupuesto presupuesto1 = new Presupuesto(items1,RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Presupuesto 1");
+        Presupuesto presupuesto2 = new Presupuesto(items2,RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Presupuesto 2");
+        licitacion1.setPresupuestos(Arrays.asList(presupuesto1));
+        licitacion2.setPresupuestos(Arrays.asList(presupuesto2));
+        RepositorioEntidades.getInstance().obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
+        RepositorioEntidades.getInstance().obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
     }
 
     private static void inicializarMediosDePago(){

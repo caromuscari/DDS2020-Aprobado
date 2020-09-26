@@ -47,24 +47,58 @@
 				<h1>GeSoc</h1>
 				<br>
 				<h2>Presupuestos</h2>
-
+				<div class="float-right">
+					<input placeholder="buscar prespuesto" type="text" id="filtroCodigo" />
+				</div>
+				<table class="table">
+					<thead>
+					<tr>
+						<th>Presupuesto</th>
+						<th>Licitacion</th>
+						<th>Entidad</th>
+						<th>Proveedor</th>
+						<th>Monto</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					{{#each licitaciones}}
+					{{#each presupuestos}}
+					<tr>
+						<td>{{nombre}}</td>
+						<td>{{../nombre}}</td>
+						<td>{{../entidad.nombre}}</td>
+						<td>{{proveedor.nombre}}</td>
+						<td>{{precioTotal}}</td>
+						<td><a href="#" class="btn btn-outline-primary">Modificar</a></td>
+					</tr>
+					{{/each}}
+					{{/each}}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+		function borrarEgreso(codigo){
+			var confirmaBorrado = confirm("Desea borrar el ingreso" + codigo);
+			if (confirmaBorrado == true) {
+				alert('borrado');
+			} else {
+				alert('no borrado');
+			}
+		}
 
-		function logout() {
+		function logout(){
 			$.ajax({
 				url: "/logout",
 				type: "POST",
-				success: function (result) {
+				success: function(result){
 					location.replace("/login");
 				}
 			})
 		}
-
 	</script>
 </body>
-
 </html>

@@ -44,12 +44,12 @@ public class CriterioSeleccionTest {
         itemsP.add(itemOperacionP);
         itemsP.add(itemOperacionP2);
 
-        p1 = new Presupuesto(itemsP, new Proveedor("Jose", (long) 1739345,"kdsfkjnsdv"));
+        p1 = new Presupuesto(itemsP, new Proveedor("Jose", (long) 1739345,"kdsfkjnsdv"),"Presupuesto 1");
 
         itemOperacionP.setCantidad(2);
-        p2 = new Presupuesto(itemsP, new Proveedor("Carlos", (long) 1739349,"kdsfkjnsdv"));
+        p2 = new Presupuesto(itemsP, new Proveedor("Carlos", (long) 1739349,"kdsfkjnsdv"),"Presupuesto 2");
 
-        p3 = new Presupuesto(itemsP, new Proveedor("Carlos", (long) 1739349,"kdsfkjnsdv"));
+        p3 = new Presupuesto(itemsP, new Proveedor("Carlos", (long) 1739349,"kdsfkjnsdv"),"Presupuesto 3");
 
 
         licitacion.agregarPresupuesto(p1);

@@ -13,19 +13,22 @@ public class Presupuesto {
     private Double precioTotal;
     private Proveedor proveedor;
     private List<Categoria> categorias;
+    private String nombre;
 
-    public Presupuesto(List<DocumentoComercial> documentos, List<ItemOperacionPresupuesto> items, Double precioTotal, Proveedor proveedor) {
+    public Presupuesto(List<DocumentoComercial> documentos, List<ItemOperacionPresupuesto> items, Double precioTotal, Proveedor proveedor,String nombre) {
         this.documentos = documentos;
         this.items = items;
         this.precioTotal = precioTotal;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
+        this.nombre = nombre;
     }
 
-    public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor) {
+    public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor,String nombre) {
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
+        this.nombre = nombre;
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
@@ -64,5 +67,13 @@ public class Presupuesto {
         categorias.removeAll(itemsEgreso.stream().map(ItemOperacionEgreso::getItemEgreso).map(ItemEgreso::getCategoria).collect(Collectors.toList()));
         if (categorias.size() == 0) return true;
         else return false;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

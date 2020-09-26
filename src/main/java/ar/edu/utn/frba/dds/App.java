@@ -107,16 +107,17 @@ public class App
 
         //Egresos
         get("/egreso", Egreso::paginaEgresos, engine);
+        post("/egreso", Egreso::nuevoEgreso, engine);
         get("/nuevo_egreso", Egreso::paginaNuevoEgreso, engine);
         get("/modificar_egreso", Egreso::paginaModificarEgreso, engine);
+
+        get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
         // ===============================================================================
         Hash encriptador = new Hash();
         Scanner sn = new Scanner(System.in);
 
         //Inicializar datos de prueba
-        inicializarProveedores();
-        inicializarMediosDePago();
-        inicializarOrganizacion();
+        new ExampleDataCreator().createData();
 
         // Consola
         long inicio;
@@ -278,46 +279,6 @@ public class App
     public static boolean checkLogin(String usuario, String pass) throws NoSuchAlgorithmException {
         Usuario user = repoUsuarios.getRegistrados().get(usuario);
         return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
-    }
-
-    private static void inicializarOrganizacion(){
-        TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
-                5, 10, 50, "Agropecuario");
-        Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
-                1111, 1, 1000, 10000.0, agropecuario, 1000.0);
-        Empresa empresa2 = new Empresa("Empresa 2", "LME SRL", Long.parseLong("234567"),
-                1111, 1, 1000, 10000.0, agropecuario, 1000.0);
-        List<Entidad> entidades = new ArrayList<>();
-        entidades.add(empresa1);
-        entidades.add(empresa2);
-        organizacion.setEntidades(entidades);
-
-        ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
-        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
-
-        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
-        itemsOperacion1.add(itemOperacionEgreso);
-        List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
-        itemsOperacion2.add(itemOperacionEgreso2);
-
-        empresa1.generarEgreso(itemsOperacion1, proveedores.get(0),"Egreso 1");
-        empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
-    }
-
-    private static void inicializarMediosDePago(){
-        MedioDePago medio1 = new MedioDePago("Tarjeta credito",100L,TipoPago.CREDIT_CARD);
-        MedioDePago medio2 = new MedioDePago("Tarjeta debito",200L,TipoPago.CREDIT_CARD);
-        medioDePagos.add(medio1);
-        medioDePagos.add(medio2);
-    }
-
-    private static void inicializarProveedores(){
-        Proveedor proveedor1 = new Proveedor("Proveedor 1", 1L,"1234");
-        Proveedor proveedor2 = new Proveedor("Proveedor 2", 2L,"1234");
-        proveedores.add(proveedor1);
-        proveedores.add(proveedor2);
     }
 
 }

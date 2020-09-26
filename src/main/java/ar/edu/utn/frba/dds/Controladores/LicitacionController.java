@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
-import ar.edu.utn.frba.dds.Licitacion.LicitacionRepo;
+import ar.edu.utn.frba.dds.Repositorios.LicitacionRepo;
 import ar.edu.utn.frba.dds.Usuario.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.fasterxml.jackson.core.JsonProcessingException;

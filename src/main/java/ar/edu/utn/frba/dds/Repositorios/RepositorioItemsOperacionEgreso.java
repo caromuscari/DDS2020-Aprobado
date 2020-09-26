@@ -1,4 +1,7 @@
-package ar.edu.utn.frba.dds.Operaciones;
+package ar.edu.utn.frba.dds.Repositorios;
+
+import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
+import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 
 import java.util.ArrayList;
 import java.util.List;

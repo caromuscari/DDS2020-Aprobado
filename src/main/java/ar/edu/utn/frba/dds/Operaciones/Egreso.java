@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public class Egreso {
         this.nombre = nombre;
         calcularPrecio();
         this.vinculado = false;
+        this.fecha = LocalDate.now();
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }

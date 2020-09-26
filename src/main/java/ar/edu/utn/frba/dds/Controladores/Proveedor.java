@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.Controladores;
 
-import ar.edu.utn.frba.dds.Operaciones.RepositorioItemsOperacionEgreso;
-import ar.edu.utn.frba.dds.Operaciones.RepositorioProveedores;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Request;
 import spark.Response;
-
-import java.util.List;
 
 public class Proveedor {
 

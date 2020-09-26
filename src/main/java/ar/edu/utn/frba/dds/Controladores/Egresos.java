@@ -1,7 +1,13 @@
 package ar.edu.utn.frba.dds.Controladores;
 
+import ar.edu.utn.frba.dds.DTO.EgresoDTO;
+import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioEgresos;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioItemsOperacionEgreso;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -11,14 +17,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Egreso {
+public class Egresos {
 
     public static ModelAndView paginaEgresos(Request request, Response response) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request,response);
         }
         else {
+            List<EgresoDTO> egresos = new ArrayList<>();
+            List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+            entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso,entidad))));
             Map<String, Object> map = new HashMap<>();
+            map.put("egresos",egresos);
             return new ModelAndView(map, "egresos.html");
         }
     }

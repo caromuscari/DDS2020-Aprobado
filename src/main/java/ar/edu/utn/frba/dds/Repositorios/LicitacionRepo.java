@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.Licitacion;
+package ar.edu.utn.frba.dds.Repositorios;
 
 import java.util.List;
 import java.util.Optional;

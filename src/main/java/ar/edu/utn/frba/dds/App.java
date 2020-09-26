@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds;
 
-import ar.edu.utn.frba.dds.Controladores.Egreso;
+import ar.edu.utn.frba.dds.Controladores.Egresos;
+import ar.edu.utn.frba.dds.Controladores.Ingresos;
 import ar.edu.utn.frba.dds.Controladores.LicitacionController;
 import ar.edu.utn.frba.dds.Controladores.Login;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -71,7 +72,7 @@ public class App
         get("/home", App::paginaHome, engine);
 
         //Ingresos
-        get("/ingreso", App::paginaIngresos, engine);
+        get("/ingreso", Ingresos::paginaIngresos, engine);
 
         //Presupuestos
         get("/presupuesto", App::paginaPresupuestos, engine);
@@ -80,10 +81,10 @@ public class App
         get("/vinculador", App::paginaVinculador, engine);
 
         //Egresos
-        get("/egreso", Egreso::paginaEgresos, engine);
-        post("/egreso", Egreso::nuevoEgreso, engine);
-        get("/nuevo_egreso", Egreso::paginaNuevoEgreso, engine);
-        get("/modificar_egreso", Egreso::paginaModificarEgreso, engine);
+        get("/egreso", Egresos::paginaEgresos, engine);
+        post("/egreso", Egresos::nuevoEgreso, engine);
+        get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
+        get("/modificar_egreso", Egresos::paginaModificarEgreso, engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
 
@@ -111,16 +112,6 @@ public class App
         }
     }
 
-
-    public static ModelAndView paginaIngresos(Request request, Response response) {
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
-        }
-        else {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "ingresos.html");
-        }
-    }
 
     public static ModelAndView paginaPresupuestos(Request request, Response response) {
         if(request.session(false) == null) {

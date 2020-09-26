@@ -60,16 +60,18 @@
 						</tr>
 					</thead>
 					<tbody>
+					{{#each egresos}}
 						<tr>
-							<td>58001</td>
-							<td>LG</td>
-							<td>Acevedo SA</td>
-							<td>2/06/2018</td>
-							<td>150.000</td>
+							<td>{{egreso.nombre}}</td>
+							<td>{{egreso.proveedor.nombre}}</td>
+							<td>{{entidad.nombre}}</td>
+							<td>{{egreso.fecha}}</td>
+							<td>{{egreso.precioTotal}}</td>
 							<td><a href="/modificar_egreso" class="btn btn-outline-primary">Modificar</a>
 								<button class="btn btn-outline-primary" onclick="borrarEgreso('1');">Eliminar</button>
 							</td>
 						</tr>
+					{{/each}}
 					</tbody>
 				</table>
 			</div>

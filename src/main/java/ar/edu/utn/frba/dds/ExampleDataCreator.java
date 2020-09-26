@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Entidad.Empresa;
-import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioItemsOperacionEgreso;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +45,6 @@ public class ExampleDataCreator {
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);
         Empresa empresa2 = new Empresa("Empresa 2", "LME SRL", Long.parseLong("234567"),
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);
-        List<Entidad> entidades = new ArrayList<>();
-        entidades.add(empresa1);
-        entidades.add(empresa2);
-        //organizacion.setEntidades(entidades);
 
         ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
@@ -58,8 +56,10 @@ public class ExampleDataCreator {
         List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
         itemsOperacion2.add(itemOperacionEgreso2);
 
-        //empresa1.generarEgreso(itemsOperacion1, proveedores.get(0),"Egreso 1");
-        //empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
+        empresa1.generarEgreso(itemsOperacion1, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 1");
+        empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
+        RepositorioEntidades.getInstance().crearEntidad(empresa1);
+        RepositorioEntidades.getInstance().crearEntidad(empresa2);
     }
 
     private static void inicializarMediosDePago(){

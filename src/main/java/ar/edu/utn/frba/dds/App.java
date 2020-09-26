@@ -1,13 +1,9 @@
 package ar.edu.utn.frba.dds;
 
-import ar.edu.utn.frba.dds.Controladores.Egreso;
+import ar.edu.utn.frba.dds.Controladores.Egresos;
 import ar.edu.utn.frba.dds.Controladores.LicitacionController;
 import ar.edu.utn.frba.dds.Controladores.Login;
 import ar.edu.utn.frba.dds.Entidad.*;
-import ar.edu.utn.frba.dds.Licitacion.Licitacion;
-import ar.edu.utn.frba.dds.Licitacion.LicitacionRepo;
-import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
-import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Usuario.BuilderUsuario;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -81,10 +77,10 @@ public class App
         get("/vinculador", App::paginaVinculador, engine);
 
         //Egresos
-        get("/egreso", Egreso::paginaEgresos, engine);
-        post("/egreso", Egreso::nuevoEgreso, engine);
-        get("/nuevo_egreso", Egreso::paginaNuevoEgreso, engine);
-        get("/modificar_egreso", Egreso::paginaModificarEgreso, engine);
+        get("/egreso", Egresos::paginaEgresos, engine);
+        post("/egreso", Egresos::nuevoEgreso, engine);
+        get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
+        get("/modificar_egreso", Egresos::paginaModificarEgreso, engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
 

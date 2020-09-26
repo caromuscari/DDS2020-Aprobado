@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
 import ar.edu.utn.frba.dds.Repositorios.LicitacionRepo;
-import ar.edu.utn.frba.dds.Usuario.RepoUsuarios;
+import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LicitacionController {
-    private static RepoUsuarios repo = new RepoUsuarios();
+    private static RepoUsuarios repo = RepoUsuarios.getInstance();
 
     public static Object crearLicitacion(Request request, Response response) {
         String jsonLicitacion = request.body();

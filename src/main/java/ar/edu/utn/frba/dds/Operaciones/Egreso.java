@@ -5,13 +5,11 @@ import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Egreso {
+    private int id;
     private List<DocumentoComercial> documentos;
     private List<ItemOperacionEgreso> items;
     private MedioDePago medioDePago;
@@ -32,6 +30,7 @@ public class Egreso {
     }
 
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre) {
+        this.id = new Random().nextInt(1000);
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
@@ -67,6 +66,9 @@ public class Egreso {
 
     public Boolean getVinculado() { return vinculado; }
     public void setVinculado(Boolean vinculado) { this.vinculado = vinculado; }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     //Metodos
     public void registrarMedioDePago(MedioDePago medioDePago) {

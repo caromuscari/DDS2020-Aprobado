@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TipoCategoriaTest {
 
-    private Organizacion organizacion = new Organizacion();
+    private Organizacion organizacion = new Organizacion("organizacion 1", "descripcion");
     private TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
             5, 10, 50, "Agropecuario");
     private Empresa empresa = new Empresa("La mejor empresa", "LME SRL", Long.parseLong("11123456789"),

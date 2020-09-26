@@ -56,7 +56,7 @@ public class PasswordValidatorTest {
         builderUsuario.setUsuario("pepito");
         builderUsuario.setPassword("Pepito1234");
         builderUsuario.setPerfil(TipoPerfil.OPERADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario u = builderUsuario.registrar();
         Assert.assertFalse(u.getPassword().equals("Pepito1234")); // La pass hasheada no es igual a la recien ingresada
 
@@ -69,7 +69,7 @@ public class PasswordValidatorTest {
         builderUsuario.setUsuario("pepito");
         builderUsuario.setPassword("Pepito1234");
         builderUsuario.setPerfil(TipoPerfil.OPERADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario user = builderUsuario.registrar();
         Assert.assertTrue(user.modificarPassword("Pepito1235"));
     }
@@ -81,7 +81,7 @@ public class PasswordValidatorTest {
         builderUsuario.setUsuario("pepito");
         builderUsuario.setPassword("Pepito1234");
         builderUsuario.setPerfil(TipoPerfil.OPERADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario user = builderUsuario.registrar();
         user.modificarPassword("Pepito1235");
         Assert.assertFalse(user.modificarPassword("Pepito1234"));

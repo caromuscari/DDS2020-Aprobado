@@ -26,8 +26,8 @@ public class BandejaDeMensajesTest {
     @Before
     public void init(){
         notificador = new NotificadorValidador();
-        usuario = new Usuario("Carlos", "Diseño2020", TipoPerfil.OPERADOR,new Organizacion());
-        usuario2 = new Usuario("Roberto","Diseño2020",TipoPerfil.ADMINISTRADOR,new Organizacion());
+        usuario = new Usuario("Carlos", "Diseño2020", TipoPerfil.OPERADOR,new Organizacion("organizacion 1", "descripcion"));
+        usuario2 = new Usuario("Roberto","Diseño2020",TipoPerfil.ADMINISTRADOR,new Organizacion("organizacion 1", "descripcion"));
         resultados = new ArrayList<>();
     }
 

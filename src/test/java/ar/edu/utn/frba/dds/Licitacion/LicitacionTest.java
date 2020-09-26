@@ -21,7 +21,7 @@ public class LicitacionTest {
     @Before
     public void init(){
         licitacion = new Licitacion("Licitacion1", 3);
-        usuario = new Usuario("Carlos", "Diseño2020", TipoPerfil.OPERADOR,new Organizacion());
+        usuario = new Usuario("Carlos", "Diseño2020", TipoPerfil.OPERADOR,new Organizacion("organizacion 1", "descripcion"));
 
         ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         ItemEgreso itemEgreso2 = new ItemEgreso("5678", "item 2", 50.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);

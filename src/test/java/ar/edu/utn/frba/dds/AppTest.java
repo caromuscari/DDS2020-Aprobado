@@ -25,7 +25,7 @@ public class AppTest
         builderUsuario.setUsuario("Enrique");
         builderUsuario.setPassword("Diseño2020");
         builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario user = builderUsuario.registrar();
         registrados.put(user.getUsuario(),user);
 
@@ -41,7 +41,7 @@ public class AppTest
         builderUsuario.setUsuario("Enrique");
         builderUsuario.setPassword("diseño2020");               // Contraseña sin mayusculas
         builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario user = builderUsuario.registrar();
         registrados.put(user.getUsuario(),user);
     }
@@ -56,7 +56,7 @@ public class AppTest
         builderUsuario.setUsuario("Enrique");
         builderUsuario.setPassword("Diseño2020");
         builderUsuario.setPerfil(TipoPerfil.ADMINISTRADOR);
-        builderUsuario.setOrganizacion(new Organizacion());
+        builderUsuario.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         Usuario user = builderUsuario.registrar();
         registrados.put(user.getUsuario(),user);
 
@@ -64,7 +64,7 @@ public class AppTest
         builderUsuario1.setUsuario("Alberto");
         builderUsuario1.setPassword("Diseño2021");
         builderUsuario1.setPerfil(TipoPerfil.OPERADOR);
-        builderUsuario1.setOrganizacion(new Organizacion());
+        builderUsuario1.setOrganizacion(new Organizacion("organizacion 1", "descripcion"));
         user = builderUsuario1.registrar();
         registrados.put(user.getUsuario(),user);
 

@@ -43,4 +43,13 @@ public class RepositorioEgresos {
     public void eliminarEgreso(Egreso egreso){
         egresos.remove(egreso);
     }
+
+    public Egreso obtenerEgresoPorId(String id) {
+        for (Egreso egreso : egresos) {
+            if (Integer.parseInt(id) == egreso.getId()) {
+                return egreso;
+            }
+        }
+        return null;
+    }
 }

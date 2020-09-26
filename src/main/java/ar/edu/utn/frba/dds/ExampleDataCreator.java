@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioItemsOperacionEgreso;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioMedioDePago;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
 
 import java.time.LocalDate;
@@ -103,12 +104,8 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarMediosDePago(){
-        //todo agregar repo de medios de pago?
-        /*
-        MedioDePago medio1 = new MedioDePago("Tarjeta credito",100L,TipoPago.CREDIT_CARD);
-        MedioDePago medio2 = new MedioDePago("Tarjeta debito",200L,TipoPago.CREDIT_CARD);
-        medioDePagos.add(medio1);
-        medioDePagos.add(medio2);*/
+        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta credito",100L,TipoPago.CREDIT_CARD);
+        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta debito",200L,TipoPago.CREDIT_CARD);
     }
 
     private static void inicializarProveedores(){

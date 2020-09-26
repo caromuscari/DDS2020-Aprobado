@@ -23,7 +23,7 @@ public class OrganizacionTest {
 
     @Test
     public void egresosTest() {
-        Organizacion organizacion = new Organizacion();
+        Organizacion organizacion = new Organizacion("organizacion 1", "descripcion");
 
         Empresa empresa = new Empresa("La mejor empresa", "LME SRL", Long.parseLong("11123456789"),
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);

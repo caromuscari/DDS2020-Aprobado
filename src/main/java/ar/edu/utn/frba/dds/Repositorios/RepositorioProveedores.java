@@ -31,7 +31,7 @@ public class RepositorioProveedores {
 
     public Proveedor obtenerProveedorPorNombre(String nombre) {
         for (Proveedor proveedor : proveedores) {
-            if (nombre.equals(proveedor.getNombre())) {
+            if (proveedor.getNombre().matches(nombre)) {
                 return proveedor;
             }
         }

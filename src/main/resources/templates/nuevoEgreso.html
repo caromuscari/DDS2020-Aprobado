@@ -25,7 +25,7 @@
 								<a class="nav-link" href="/home">Home</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link active" href="#">Egresos <span class="sr-only">(current)</span></a>
+								<a class="nav-link active" href="/egreso">Egresos <span class="sr-only">(current)</span></a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="/ingreso">Ingresos</a>
@@ -47,31 +47,34 @@
 				<br>
 				<h2>Nuevo Egreso</h2>
 				<div class="row">
-					<form method="post" action="/egreso" class="col-sm-12">
+					<form method="post" action="/egreso" class="col-sm-12" id="crearEgreso">
 						<div class="form-group row">
 							<label for="nombre" class="col-sm-4 col-form-label">Nombre</label>
 							<div class="col-sm-8">
 								<input type="text"
 									   class="form-control" name="nombre" id="nombre"
-									   value="{{egreso.nombre}}"
 									   placeholder="Nombre" />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="proveedor" class="col-sm-4 col-form-label">Proveedor</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="proveedor">
-									<option>Proveedor 1</option>
-									<option>Proveedor 2</option>
+								<select class="form-control" id="proveedor" name="proveedor">
+									<option value="none" selected disabled hidden>Selecionar una opcion</option>
+									{{#each proveedores}}
+									<option>{{nombre}}</option>
+									{{/each}}
 								</select>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="entidad" class="col-sm-4 col-form-label">Entidad</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="entidad">
-									<option>Entidad 1</option>
-									<option>Entidad 2</option>
+								<select class="form-control" id="entidad" name="entidad">
+									<option value="none" selected disabled hidden>Selecionar una opcion</option>
+									{{#each entidades}}
+									<option>{{nombre}}</option>
+									{{/each}}
 								</select>
 							</div>
 						</div>
@@ -84,16 +87,18 @@
 						<div class="form-group row">
 							<label for="medioDePago" class="col-sm-4 col-form-label">Medio de Pago</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="medioDePago">
-									<option>Medio 1</option>
-									<option>Medio 2</option>
+								<select class="form-control" id="medioDePago" name="medioDePago">
+									<option value="none" selected disabled hidden>Selecionar una opcion</option>
+									{{#each mediosDePago}}
+									<option>{{identificador}}</option>
+									{{/each}}
 								</select>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="categorias" class="col-sm-4 col-form-label">Categorias</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="categorias" multiple="multiple">
+								<select class="form-control" id="categorias" name="categorias" multiple="multiple">
 									<option value="categoria1">Categoria 1</option>
 									<option value="categoria2">Categoria 2</option>
 									<option value="categoria3">Categoria 3</option>
@@ -104,14 +109,13 @@
 							<label for="fecha" class="col-sm-4 col-form-label">Fecha</label>
 							<div class="col-sm-8">
 								<input type="date"
-								   class="form-control" name="fecha" id="fecha"
-								   value="{{egreso.fecha}}"/>
+								   class="form-control" name="fecha" id="fecha"/>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="presupuestos" class="col-sm-4 col-form-label">Presupuestos</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="presupuestos" multiple="multiple">
+								<select class="form-control" id="presupuestos" name="presupuestos" multiple="multiple">
 									<option value="presupuesto1">Presupuesto 1</option>
 									<option value="presupuesto2">Presupuesto 2</option>
 									<option value="presupuesto3">Presupuesto 3</option>

@@ -16,7 +16,9 @@ public class Organizacion {
     private List<Entidad> entidades;
     private List<CriterioCategoria> criterios;
 
-    public Organizacion() {
+    public Organizacion(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
         this.entidades = new ArrayList<>();
         this.criterios = new ArrayList<>();
     }

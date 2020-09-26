@@ -1,9 +1,10 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Controladores.*;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Usuario.Hash;
-import ar.edu.utn.frba.dds.Usuario.RepoUsuarios;
+import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -19,7 +20,7 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class App
 {
-    private static RepoUsuarios repoUsuarios = new RepoUsuarios();
+    private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
 
     public static void main(String[] args ) {
 
@@ -41,6 +42,7 @@ public class App
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
 
         //Login
+        get("/", (request,response) -> {response.redirect("/home"); return null;},engine);
         get("/login", Login::paginaLogin, engine);
         post("/autenticacion", (request, response) -> {
 
@@ -49,7 +51,7 @@ public class App
 
             if (checkLogin(user, pass)) {
                 request.session(true);
-                request.session().attribute(user, user);
+                request.session().attribute("usuario", user);
                 response.cookie("usuario",user);
                 response.status(202);
                 return "Bienvenido " + user + "!";
@@ -79,9 +81,10 @@ public class App
 
         //Egresos
         get("/egreso", Egresos::paginaEgresos, engine);
-        post("/egreso", Egresos::nuevoEgreso, engine);
+        post("/egreso", Egresos::guardarEgreso, engine);
         get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
-        get("/modificar_egreso", Egresos::paginaModificarEgreso, engine);
+        get("/egreso/:id", Egresos::paginaModificarEgreso, engine);
+        post("/egreso/:id", Egresos::guardarEgreso, engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
 
@@ -96,6 +99,7 @@ public class App
 
         //Inicializar datos de prueba
         new ExampleDataCreator().createData();
+        repoUsuarios.getRegistrados().get("gesoc").getOrganizacion().setEntidades(RepositorioEntidades.getInstance().obtenerEntidades());
     }
 
     public static ModelAndView paginaHome(Request request, Response response) {
@@ -104,7 +108,9 @@ public class App
             return Login.paginaLogin(request,response);
         }
         else{
+            Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
             Map<String, Object> map = new HashMap<>();
+            map.put("organizacion", usuario.getOrganizacion());
             return new ModelAndView(map, "home.html");
         }
     }

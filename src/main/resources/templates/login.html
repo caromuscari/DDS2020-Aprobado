@@ -62,6 +62,7 @@
 					data: {usuario: usuario, pass: pass},
 					type: 'POST',
 					success: function(result){
+						sessionStorage.setItem("usuario",usuario); // Lo guardo por las dudas
 						$("#msjError").hide();
 
 						/* Si me encuentro en otro path, me logueo y me redirigen a donde queria ir */

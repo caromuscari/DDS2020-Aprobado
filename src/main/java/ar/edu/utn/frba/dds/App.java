@@ -94,8 +94,6 @@ public class App
         get("/licitacion/:id", LicitacionController::mostrarMensajes);
 
         // ===============================================================================
-        Hash encriptador = new Hash();
-        Scanner sn = new Scanner(System.in);
 
         //Inicializar datos de prueba
         new ExampleDataCreator().createData();

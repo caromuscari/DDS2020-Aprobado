@@ -2,11 +2,11 @@
 <html lang="es">
 
 <head>
-
 	<title>GeSoc - Vinculador</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="UTF-8">
 
+	<script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 	<link href="public/bootstrap.min.css" rel="stylesheet">
 	<link href="public/css/main.css" rel="stylesheet">
 
@@ -36,7 +36,7 @@
 										class="sr-only">(current)</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/login" onclick="logout()">Logout</a>
+								<a class="nav-link" href="" onclick="logout()">Logout</a>
 							</li>
 						</ul>
 					</div>
@@ -45,11 +45,49 @@
 				<h1>GeSoc</h1>
 				<br>
 				<h2>Vinculador</h2>
+				<br>
+				<div class="form-row">
+					<select class="form-control col-lg-3" id="opciones">
+						<option selected disabled>Elige un criterio..</option>
+						<option value="primerEgreso">Primero Egreso</option>
+						<option value="primeroIngreso">Primero Ingreso</option>
+						<option value="fecha">Fecha</option>
+						<option value="mix">Mix</option>
+					</select>
+
+					<select class="form-control col-lg-3" id="ordenes" style="display: none; position: relative; left: 3%;">
+						<option selected disabled>Elige el orden..</option>
+						<option value="asc">Ascendente</option>
+						<option value="desc">Descendente</option>
+					</select>
+
+					<select class="form-control col-lg-4" id="ordenMixEgreso" style="display: none; position: relative; left: 3%;">
+						<option selected disabled>Elige el orden de los egresos..</option>
+						<option value="asc-asc">Ascendente</option>
+						<option value="desc-asc">Descendente</option>
+					</select>
+					<select class="form-control col-lg-4" id="ordenMixIngreso" style="display: none; position: relative; left: 5%;">
+						<option selected disabled>Elige el orden de los ingresos..</option>
+						<option value="asc-asc">Ascendente</option>
+						<option value="desc-asc">Descendente</option>
+					</select>
+
+
+					<input class="fcol-lg-2" type="date" id="fechaInicio" name="trip-start" value="2014-12-14" style="display: none; position: relative; left: 3%;">
+					<input class="col-lg-2" type="date" id="fechaFin" name="trip-start" value="2019-04-07" style="display: none; position: relative; left: 5%;">
+				</div>
+
+				<div>
+					<br><br>
+					<button type="button" class="btn btn-outline-info" onclick="alert('En desarrollo')">Vincular</button>
+				</div>
+
 			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+
 
 		function logout() {
 			$.ajax({
@@ -61,11 +99,45 @@
 			})
 		}
 
+		function diaActual(){
+			var time = new Date();
+			return time.getDate;
+		}
+
+		// JS de los criterios
+		$(document).ready(function () {
+			$("#opciones").change(function () {
+				var seleccionado = $(this).children("option:selected").val();
+				if (seleccionado == "fecha") {
+					$("#ordenes").hide();
+					$("#ordenMixEgreso").hide();
+					$("#ordenMixIngreso").hide();
+					$("#fechaInicio").show();
+					$("#fechaFin").show();
+				}
+				else if (seleccionado == "mix") {
+					$("#ordenes").hide();
+					$("#fechaInicio").hide();
+					$("#fechaFin").hide();
+					$("#ordenMixEgreso").show();
+					$("#ordenMixIngreso").show();
+				}
+				else {
+					$("#ordenMixEgreso").hide();
+					$("#ordenMixIngreso").hide();
+					$("#fechaInicio").hide();
+					$("#fechaFin").hide();
+					$("#ordenes").show();
+				}
+			})
+		})
+
 	</script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-	<script src="public/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
-	<script src="public/bootstrap.min.js"></script>
+	<script language="JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+		integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+		crossorigin="anonymous"></script>
+	<script language="JavaScript" src="public/bootstrap.min.js"></script>
 </body>
 
 </html>

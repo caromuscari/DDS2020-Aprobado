@@ -3,6 +3,9 @@ package ar.edu.utn.frba.dds.Vinculador;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
 
 import java.util.List;
 import java.util.stream.Collectors;

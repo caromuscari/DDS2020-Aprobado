@@ -59,8 +59,8 @@
 				
 				$.ajax({
 					url: '/autenticacion',
-					data: {usuario: usuario, pass: pass},
 					type: 'POST',
+					data: {usuario: usuario, pass: pass},
 					success: function(result){
 						sessionStorage.setItem("usuario",usuario); // Lo guardo por las dudas
 						$("#msjError").hide();

@@ -7,6 +7,8 @@
 	<meta charset="UTF-8">
 
 	<script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script language="JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	<script language="JavaScript" src="public/bootstrap.min.js"></script>
 	<link href="public/bootstrap.min.css" rel="stylesheet">
 	<link href="public/css/main.css" rel="stylesheet">
 
@@ -79,7 +81,7 @@
 
 				<div>
 					<br><br>
-					<button type="button" class="btn btn-outline-info" onclick="alert('En desarrollo')">Vincular</button>
+					<button type="button" class="btn btn-outline-info" onclick="vincular()">Vincular</button>
 				</div>
 
 			</div>
@@ -99,9 +101,41 @@
 			})
 		}
 
-		function diaActual(){
-			var time = new Date();
-			return time.getDate;
+		function descargarArchivo(){
+
+		}
+
+		function vincular(){
+			var seleccionado = $("#opciones").children("option:selected").val();
+			let parametros = [];
+			if(seleccionado == "fecha"){
+				var fecInicio = $("#fechaInicio").val();
+				var fecFin = $("#fechaFin").val();
+				parametros.push(fecInicio);
+				parametros.push(fecFin);
+			}
+			else if(seleccionado == "mix"){
+				var ordenEgreso = $("#ordenMixEgreso").val();
+				var ordenIngreso = $("#ordenMixIngreso").val();
+				parametros.push(ordenEgreso);
+				parametros.parametros(ordenIngreso);
+			}
+			else{
+				var orden = $("#ordenes").val();
+				parametros.push(orden);
+			}
+
+			$.ajax({
+				url: '/vincular',
+				type: 'POST',
+				data: {seleccionado: seleccionado, parametros: parametros},
+				success: function(result){
+					alert(result);
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus + " " + errorThrown);
+				}
+			});
 		}
 
 		// JS de los criterios
@@ -133,11 +167,6 @@
 		})
 
 	</script>
-
-	<script language="JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-		integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-		crossorigin="anonymous"></script>
-	<script language="JavaScript" src="public/bootstrap.min.js"></script>
 </body>
 
 </html>

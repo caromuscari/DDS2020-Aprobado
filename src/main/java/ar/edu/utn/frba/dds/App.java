@@ -11,6 +11,7 @@ import java.util.*;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
+
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -18,11 +19,10 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 
 
-public class App
-{
+public class App {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
 
-    public static void main(String[] args ) {
+    public static void main(String[] args) {
 
         // ===============================================================================
         // Server
@@ -42,32 +42,12 @@ public class App
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
 
         //Login
-        get("/", (request,response) -> {response.redirect("/home"); return null;},engine);
         get("/login", Login::paginaLogin, engine);
-        post("/autenticacion", (request, response) -> {
-
-            String user = request.queryMap("usuario").value();
-            String pass = request.queryMap("pass").value();
-
-            if (checkLogin(user, pass)) {
-                request.session(true);
-                request.session().attribute("usuario", user);
-                response.cookie("usuario",user);
-                response.status(202);
-                return "Bienvenido " + user + "!";
-            }
-            else {
-                response.status(401);
-                return null;
-            }
-        });
-        post("/logout", (request,response) -> {
-            request.cookies().clear();
-            request.session().invalidate();
-            return null;
-        });
+        post("/autenticacion", Login::autenticar);
+        post("/logout", Login::logout);
 
         //Home
+        get("/", App::redireccion, engine);
         get("/home", App::paginaHome, engine);
 
         //Ingresos
@@ -77,7 +57,8 @@ public class App
         get("/presupuesto", Presupuestos::paginaPresupuestos, engine);
 
         //Vinculador
-        get("/vinculador", App::paginaVinculador, engine);
+        get("/vinculador", Vinculador::paginaVinculador, engine);
+        post("/vincular", Vinculador::vincular);
 
         //Egresos
         get("/egreso", Egresos::paginaEgresos, engine);
@@ -102,10 +83,9 @@ public class App
 
     public static ModelAndView paginaHome(Request request, Response response) {
         // Si no hay session creada por login, me redirige a la vista de Login
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
-        }
-        else{
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
             Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
             Map<String, Object> map = new HashMap<>();
             map.put("organizacion", usuario.getOrganizacion());
@@ -113,20 +93,8 @@ public class App
         }
     }
 
-
-    public static ModelAndView paginaVinculador(Request request, Response response) {
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
-        }
-        else {
-            Map<String, Object> map = new HashMap<>();
-            return new ModelAndView(map, "vinculador.html");
-        }
+    public static ModelAndView redireccion(Request request, Response response){
+        response.redirect("/home");
+        return null;
     }
-
-    public static boolean checkLogin(String usuario, String pass) throws NoSuchAlgorithmException {
-        Usuario user = repoUsuarios.getRegistrados().get(usuario);
-        return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
-    }
-
 }

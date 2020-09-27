@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.Controladores.*;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
-import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +10,8 @@ import java.util.*;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
+
+import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -90,8 +91,8 @@ public class App
 
         //Licitaciones
         post("/licitacion", LicitacionController::crearLicitacion);
-        post("/licitacion/:id", LicitacionController::validarLicitacion);
-        get("/licitacion/:id", LicitacionController::mostrarMensajes);
+        post("/validarLicitacion", LicitacionController::validarLicitacion);
+        get("/licitacion", LicitacionController::mostrarMensajes);
 
         // ===============================================================================
 

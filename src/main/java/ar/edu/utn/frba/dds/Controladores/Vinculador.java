@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Vinculador.PrimeroEgreso;
-import org.json.JSONObject;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -26,6 +25,7 @@ public class Vinculador {
     public static String vincular(Request request, Response response) {
         String seleccionado = request.queryMap("seleccionado").value();
 
+        /*
         if(seleccionado == "fecha"){
         }
         else if(seleccionado == "mix"){
@@ -34,5 +34,7 @@ public class Vinculador {
         else {
             return seleccionado;
         }
+         */
+        return seleccionado;
     }
 }

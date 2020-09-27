@@ -25,7 +25,7 @@ public class Mensaje {
 
     public String obtenerMensaje(){
         //String mensaje = String.format("Resultados de la licitacion {0}", resultados.get(0).getLicitacion().getNombre());
-        String msjResultados = this.resultados.stream().map(r -> r.obtenerMensaje()).collect(Collectors.joining());
-        return msjResultados;
+        List<String> msjResultados = this.resultados.stream().map(r -> r.obtenerMensaje()).collect(Collectors.toList());
+        return msjResultados.toString();
     }
 }

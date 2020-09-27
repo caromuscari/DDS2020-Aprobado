@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
+import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -42,5 +43,9 @@ public class RepoUsuarios {
 
     public Usuario buscarUsuario(String nombre){
         return registrados.get(nombre);
+    }
+
+    public void agregarUsuario(Usuario usuario) {
+        registrados.put(usuario.getUsuario(),usuario);
     }
 }

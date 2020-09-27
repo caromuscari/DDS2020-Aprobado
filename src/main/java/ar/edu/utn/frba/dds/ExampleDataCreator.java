@@ -1,16 +1,19 @@
 package ar.edu.utn.frba.dds;
 
+import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
+import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
+import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioItemsOperacionEgreso;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioMedioDePago;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioProveedores;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
+import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
+import ar.edu.utn.frba.dds.Usuario.Usuario;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ public class ExampleDataCreator {
         inicializarProveedores();
         inicializarMediosDePago();
         inicializarOrganizacion();
+        inicializarUsuarios();
 
         /*ItemPresupuesto p1 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
         ItemPresupuesto p2 = new ItemPresupuesto(300.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
@@ -40,8 +44,6 @@ public class ExampleDataCreator {
         RepositorioItemsOperacionEgreso.getInstance().crearItem(5, e2);
 
         List<ItemOperacionEgreso> compras = new ArrayList<>();
-
-        //Usuario usuario = RepositorioUsuarios.getInstance().createUsuario(new Usuario("Julian", null, TipoUsuario.PREMIUM, "password"));
 
     }
 
@@ -101,6 +103,8 @@ public class ExampleDataCreator {
         licitacion2.setPresupuestos(Arrays.asList(presupuesto2));
         RepositorioEntidades.getInstance().obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
         RepositorioEntidades.getInstance().obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
+        LicitacionRepo.getInstance().add(licitacion1);
+        LicitacionRepo.getInstance().add(licitacion2);
     }
 
     private static void inicializarMediosDePago(){
@@ -112,5 +116,49 @@ public class ExampleDataCreator {
         RepositorioProveedores.getInstance().crearProveedor("Proveedor 1", 1L, "1234");
         RepositorioProveedores.getInstance().crearProveedor("Proveedor 2", 2L, "1234");
         RepositorioProveedores.getInstance().crearProveedor("Alejandro", 21314l, "666");
+    }
+
+    private static void inicializarUsuarios(){
+
+        List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
+        List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
+
+        ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
+        ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
+        ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
+
+        resultadosValidacion1.add(ResultadoValidacion1);
+        resultadosValidacion1.add(ResultadoValidacion2);
+        resultadosValidacion1.add(ResultadoValidacion3);
+
+        resultadosValidacion2.add(ResultadoValidacion2);
+        resultadosValidacion2.add(ResultadoValidacion3);
+
+        Mensaje mensaje1 = new Mensaje(resultadosValidacion1);
+        Mensaje mensaje2 = new Mensaje(resultadosValidacion1);
+        Mensaje mensaje3 = new Mensaje(resultadosValidacion2);
+
+        List<Mensaje> listaMensajes1 = new ArrayList<>();
+        List<Mensaje> listaMensajes2 = new ArrayList<>();
+
+        listaMensajes1.add(mensaje1);
+        listaMensajes1.add(mensaje2);
+        listaMensajes1.add(mensaje3);
+
+        listaMensajes2.add(mensaje1);
+        listaMensajes2.add(mensaje2);
+
+        Usuario usuario1 = new Usuario("pepe", "pepe", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de medias","hacemos medias"));
+        Usuario usuario2 = new Usuario("carlitos", "carlitos", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de helados","hacemos helados"));
+        Usuario usuario3 = new Usuario("ana", "ana", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de palas","hacemos palas"));
+
+        usuario1.setBandejaDeMensajes(listaMensajes1);
+        usuario2.setBandejaDeMensajes(listaMensajes2);
+        usuario3.setBandejaDeMensajes(listaMensajes2);
+
+        RepoUsuarios.getInstance().agregarUsuario(usuario1);
+        RepoUsuarios.getInstance().agregarUsuario(usuario2);
+        RepoUsuarios.getInstance().agregarUsuario(usuario3);
+
     }
 }

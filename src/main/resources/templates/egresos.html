@@ -45,10 +45,10 @@
 				<br>
 				<h2>Egresos</h2>
 				<div class="float-right">
-					<input placeholder="buscar egreso" type="text" id="filtroCodigo" />
+					<input type="text" placeholder="buscar egreso" type="text" id="filtroCodigo"onkeyup="filter(this)"/>
 					<a href="/nuevo_egreso" class="btn btn-outline-primary">Crear Egreso</a>
 				</div>
-				<table class="table">
+				<table id="tablaEgresos" >
 					<thead>
 						<tr>
 							<th>Egreso</th>
@@ -62,11 +62,11 @@
 					<tbody>
 					{{#each egresos}}
 						<tr>
-							<td>{{egreso.nombre}}</td>
-							<td>{{egreso.proveedor.nombre}}</td>
-							<td>{{entidad.nombre}}</td>
-							<td>{{egreso.fecha}}</td>
-							<td>{{egreso.precioTotal}}</td>
+							<td id="egresoNombre">{{egreso.nombre}}</td>
+							<td id="egresoProveedor">{{egreso.proveedor.nombre}}</td>
+							<td id="egresoEntidad">{{entidad.nombre}}</td>
+							<td id="egresoFecha">{{egreso.fecha}}</td>
+							<td id="egresoPrecio">{{egreso.precioTotal}}</td>
 							<td><a href="/egreso/{{egreso.id}}" class="btn btn-outline-primary">Modificar</a>
 								<button class="btn btn-outline-primary" onclick="borrarEgreso('1');">Eliminar</button>
 							</td>
@@ -96,6 +96,25 @@
 					location.replace("/login");
 				}
 			})
+		}
+
+		function filter(element) {
+			var value = $(element).val();
+			$('#tablaEgresos > tbody  > tr').each(tr => {
+				var contains = false;
+				tr.each(td => {
+					if (td.text().search(value) > -1) {
+						contains = true;
+					}else{
+						contains = false;
+					}
+				});
+				if (contains) {
+					$(this).show();
+				}else{
+					$(this).hide();
+				}
+			});
 		}
 	</script>
 </body>

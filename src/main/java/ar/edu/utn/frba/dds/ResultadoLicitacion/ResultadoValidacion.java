@@ -31,7 +31,7 @@ public class ResultadoValidacion {
     public void setLicitacion(Licitacion licitacion) { this.licitacion = licitacion; }
 
     public String obtenerMensaje() {
-        if (estado.equals(EstadoValidacion.ERROR)){
+        if (EstadoValidacion.ERROR.equals(estado)){
             return error.obtenerMensaje();
         }
         else return "La validacion se realizo correctamente";

@@ -94,9 +94,6 @@
 						onclick="vincular()">Vincular</button>
 				</div>
 
-				<div class="alert alert-danger" id="msjError" style="position: fixed; right: 44%; display: none;"
-					role="alert">Error, faltan parámetros</div>
-
 			</div>
 		</div>
 	</div>
@@ -116,18 +113,13 @@
 
 		function vincular() {
 
-			$("#msjError").hide();
 			var seleccionado = $("#opciones").children("option:selected").val();
-			var entidad = $("#entidades").children("option:selected").val();
+			var entidad = $("#entidades").children("option:selected").html();
 			var fechaInicio = $("#fechaInicio").val();
 			var fechaFin = $("#fechaFin").val();
-
 			var orden;
 
-			if (seleccionado == "fecha") {
-
-			}
-			else if (seleccionado == "mix") {
+			if (seleccionado == "mix") {
 				orden = $("#ordenesMix").val();
 			}
 			else {
@@ -137,12 +129,13 @@
 			$.ajax({
 				url: '/vincular',
 				type: 'POST',
-				data: { seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },
-				success: function (data) {
-					//console.log(data);
+				data: {seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },
+				success: function(data) {
+					console.log(data);
 					descargarArchivo(data, entidad, seleccionado);
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("LPM");
 					console.log(textStatus + " " + errorThrown);
 				}
 			});

@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
+import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class RepositorioEntidades {
             instance = new RepositorioEntidades();
         }
         return instance;
+
     }
 
     public void crearEntidad(Entidad entidad) {
@@ -50,5 +53,9 @@ public class RepositorioEntidades {
 
     public Entidad obtenerEntidadDeEgreso(Egreso egreso){
         return entidades.stream().filter(e -> e.getEgresos().contains(egreso)).findFirst().get();
+    }
+
+    public Entidad obtenerEntidadPorNombre(String nombreEntidad){
+        return entidades.stream().filter(e -> e.getNombre().equals(nombreEntidad)).findFirst().get();
     }
 }

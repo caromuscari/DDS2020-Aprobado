@@ -55,8 +55,8 @@ public class App {
         get("/presupuesto", Presupuestos::paginaPresupuestos, engine);
 
         //Vinculador
-        get("/vinculador", Vinculador::paginaVinculador, engine);
-        post("/vincular", Vinculador::vincular);
+        get("/vinculador", VinculadorController::paginaVinculador, engine);
+        post("/vincular", VinculadorController::vincular);
 
         //Egresos
         get("/egreso", Egresos::paginaEgresos, engine);

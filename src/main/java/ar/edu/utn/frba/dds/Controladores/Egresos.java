@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Controladores;
 
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Repositorios.*;
@@ -7,6 +8,7 @@ import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.sun.codemodel.internal.JCommentPart;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Egresos {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
@@ -47,6 +50,7 @@ public class Egresos {
             map.put("proveedores", proveedores.obtenerProveedores());
             map.put("mediosDePago", medios.obtenerMediosDePago());
             map.put("entidades", entidades);
+            map.put("categorias", usuario.getOrganizacion().getCriterios());
             return new ModelAndView(map, "nuevoEgreso.html");
         }
     }
@@ -63,6 +67,11 @@ public class Egresos {
             map.put("proveedores", proveedores.obtenerProveedores());
             map.put("mediosDePago", medios.obtenerMediosDePago());
             map.put("entidades", usuario.getOrganizacion().getEntidades());
+            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("nombreEntidad",RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
+            map.put("categoriasEgreso",getCategoriasEgreso(egreso));
+            map.put("itemsProveedor", egreso.getProveedor().getItems());
+            map.put("itemsEgreso",getItemsEgreso(egreso));
             return new ModelAndView(map, "modificarEgreso.html");
         }
     }
@@ -78,6 +87,7 @@ public class Egresos {
         String nombreEntidad = request.queryParams("entidad");
         String nombreEgreso = request.queryParams("nombre");
         String fechaEgreso = request.queryParams("fecha");
+        String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
         System.out.print(request.body());
@@ -92,8 +102,6 @@ public class Egresos {
                 }
             }*/
         }
-
-
         Proveedor proveedor = null;
         if (nombreProveedor != null) proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
 
@@ -116,11 +124,44 @@ public class Egresos {
             Entidad entidad = usuario.getOrganizacion().getEntidades().stream().filter(e -> e.getNombre().matches(nombreEntidad)).findFirst().get();
             entidad.getEgresos().add(egreso);
         }
-        //falta categorias
+
+        List<Categoria> categorias = new ArrayList<>();
+        if(nombreCategorias != null) {
+            List<Categoria> total = usuario.getOrganizacion().getCriterios().stream()
+                    .map(c -> c.getCategorias()).flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            for (String cat : nombreCategorias) {
+                categorias.add(total.stream()
+                        .filter(c -> c.getNombre().matches(cat))
+                        .findFirst().get());
+            }
+        }
+        egreso.setCategorias(categorias);
         //falta documentos
         //falta presupuesto
 
         response.redirect("/egreso");
         return null;
     }
+
+    public static List<String> getCategoriasEgreso(Egreso egreso){
+        List<String> categorias = new ArrayList<>();
+        String comilla = "\"";
+
+        egreso.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
+
+        return categorias;
+    }
+
+
+    private static List<String> getItemsEgreso(Egreso egreso) {
+        List<String> items = new ArrayList<>();
+        String comilla = "\"";
+
+        egreso.getItems().forEach(c -> items.add(comilla + c.getItemEgreso().getDescripcion() + comilla));
+
+        return items;
+    }
+
 }

@@ -8,7 +8,6 @@ public class MedioDePago {
     public Long getNumero() {
         return numero;
     }
-
     public void setNumero(Long numero) {
         this.numero = numero;
     }
@@ -16,7 +15,6 @@ public class MedioDePago {
     public TipoPago getTipo() {
         return tipo;
     }
-
     public void setTipo(TipoPago tipo) {
         this.tipo = tipo;
     }
@@ -24,7 +22,6 @@ public class MedioDePago {
     public String getIdentificador() {
         return identificador;
     }
-
     public void setIdentificador(String identificador) {
         this.identificador = identificador;
     }

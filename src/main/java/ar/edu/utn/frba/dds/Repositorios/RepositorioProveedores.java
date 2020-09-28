@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
+import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ public class RepositorioProveedores {
         return instance;
     }
 
-    public Proveedor crearProveedor(String nombre, Long identificador, String direccionPostal) {
+    public Proveedor crearProveedor(String nombre, Long identificador, String direccionPostal, ItemEgreso item) {
         Proveedor proveedor = new Proveedor(nombre, identificador, direccionPostal);
+        proveedor.getItems().add(item);
         proveedores.add(proveedor);
         return proveedor;
     }

@@ -60,7 +60,7 @@
 						<div class="form-group row">
 							<label for="proveedor" class="col-sm-4 col-form-label">Proveedor</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="proveedor" name="proveedor">
+								<select class="form-control" id="proveedor" name="proveedor" onchange="cambiarItems();">
 									{{#each proveedores}}
 									<option value="{{nombre}}">{{nombre}}</option>
 									{{/each}}
@@ -70,7 +70,7 @@
 									var hijos = proveedor.children
 									var i;
 									for (i = 0; i < hijos.length; i++) {
-  										if(hijos[i].value == {{egreso.proveedor}}) {
+  										if(hijos[i].value == "{{egreso.proveedor.nombre}}") {
     										hijos[i].selected = true;
     										break;
   										}
@@ -87,11 +87,11 @@
 									{{/each}}
 								</select>
 								<script>
-									var proveedor = document.getElementById("entidad");
-									var hijos = proveedor.children
+									var entidad = document.getElementById("entidad");
+									var hijos = entidad.children
 									var i;
 									for (i = 0; i < hijos.length; i++) {
-  										if(hijos[i].value == {{egreso.entidad}}) {
+  										if(hijos[i].value == "{{nombreEntidad}}") {
     										hijos[i].selected = true;
     										break;
   										}
@@ -102,7 +102,11 @@
 						<div class="form-group row">
 							<label for="items" class="col-sm-4 col-form-label">Items</label>
 							<div class="col-sm-8">
-								<a id="items" class="btn btn-outline-secondary" onclick="console.log('AGREGAR')">Agregar Items</a>
+								<select class="form-control" id="items" name="items" multiple>
+									{{#each itemsProveedor}}
+										<option value="{{descripcion}}">{{descripcion}}</option>
+									{{/each}}
+								</select>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -114,11 +118,11 @@
 									{{/each}}
 								</select>
 								<script>
-									var proveedor = document.getElementById("medioDePago");
-									var hijos = proveedor.children
+									var medio = document.getElementById("medioDePago");
+									var hijos = medio.children
 									var i;
 									for (i = 0; i < hijos.length; i++) {
-  										if(hijos[i].value == {{egreso.medioDePago}}) {
+  										if(hijos[i].value == "{{egreso.medioDePago.identificador}}") {
     										hijos[i].selected = true;
     										break;
   										}
@@ -130,10 +134,16 @@
 							<label for="categorias" class="col-sm-4 col-form-label">Categorias</label>
 							<div class="col-sm-8">
 								<select class="form-control" id="categorias" name="categorias" multiple="multiple">
-									<option value="categoria1">Categoria 1</option>
-									<option value="categoria2">Categoria 2</option>
-									<option value="categoria3">Categoria 3</option>
+									{{#each categorias}}
+										<optgroup label="{{nombre}}"></optgroup>
+										{{#each categorias}}
+										<option value="{{nombre}}">{{nombre}}</option>
+										{{/each}}
+									{{/each}}
 								</select>
+								<script>
+
+								</script>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -166,6 +176,7 @@
 		$(document).ready(function() {
 			$('#categorias').multiselect();
 			$('#presupuestos').multiselect();
+			$('#items').multiselect();
 		})
 		function borrarEgreso(codigo){
 			var confirmaBorrado = confirm("Desea borrar el egreso" + codigo);
@@ -184,6 +195,89 @@
 				}
 			})
 		}
+
+//Cambiar items segun el proveedor
+		var proveedores = new Array();
+		{{#each proveedores}}
+			var nombres = new Array();
+			nombres.push("{{{nombre}}}");
+			{{#each items}}
+				nombres.push("{{{descripcion}}}");
+			{{/each}}
+			proveedores.push(nombres);
+		{{/each}}
+
+		function cambiarItems(){
+			var selected = document.getElementById("proveedor").value;
+			var items = document.getElementById("items");
+			var lista = items.parentElement.children[1].children[1];
+			items.querySelectorAll('*').forEach(n => n.remove());
+			lista.querySelectorAll('*').forEach(n => n.remove());
+			var proveedor = proveedores.find((x) => x[0] === selected);
+			var i;
+
+			for(i = 1; i < proveedor.length; i++){
+			//creacion de option tag en select tag
+				var option = items.appendChild(document.createElement("option"));
+				option.value = proveedor[i];
+				option.text = proveedor[i];
+
+			//creacion de links para la vista
+				var li = lista.appendChild(document.createElement("li"));
+				var a = li.appendChild(document.createElement("a"));
+				a.tabIndex = i-1;
+				var label = a.appendChild(document.createElement("label"));
+				label.class = "checkbox";
+				label.title = proveedor[i];
+				var input = label.appendChild(document.createElement("input"));
+				input.type = "checkbox";
+				input.value = proveedor[i];
+				label.appendChild(document.createTextNode(' '+proveedor[i]));
+			}
+		}
+
+//Categorias seleccionadas
+		var categEgreso = {{{categoriasEgreso}}}
+		if(categEgreso.length === 0){
+			var listaInput = [...(document.querySelectorAll('input'))];
+			var i;
+
+			for(i = 0; i < categEgreso.length; i++){
+				var selected = listaInput.find(x=>x.value === categEgreso[i]);
+				selected.checked = true;
+				var liClass = selected.parentElement.parentElement.parentElement;
+				liClass.className = "active";
+			}
+
+			//var categorias = document.getElementById("categorias");
+			//var boton = categorias.parentElement.children[1].children[0];
+			var boton = document.querySelectorAll('button')[1];
+			boton.title = categEgreso.join();
+			boton.children[0].innerText = categEgreso.join();
+		}
+
+
+//Items seleccionados
+		var itemsEgreso = {{{itemsEgreso}}}
+		if(itemsEgreso.length === 0){
+			var listaInput = [...(document.querySelectorAll('input'))];
+			var i;
+
+			for(i = 0; i < itemsEgreso.length; i++){
+				var selected = listaInput.find(x=>x.value === itemsEgreso[i]);
+				selected.checked = true;
+				var liClass = selected.parentElement.parentElement.parentElement;
+				liClass.className = "active";
+			}
+
+			//var categorias = document.getElementById("items");
+			//var boton = categorias.parentElement.children[1].children[0];
+			var boton = document.querySelectorAll('button')[0];
+			boton.title = categEgreso.join();
+			boton.children[0].innerText = categEgreso.join();
+		}
+
+
 	</script>
 </body>
 </html>

@@ -59,10 +59,10 @@
 						<div class="form-group row">
 							<label for="proveedor" class="col-sm-4 col-form-label">Proveedor</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="proveedor" name="proveedor">
+								<select class="form-control" id="proveedor" name="proveedor" onchange="cambiarItems();">
 									<option value="none" selected disabled hidden>Selecionar una opcion</option>
 									{{#each proveedores}}
-									<option>{{nombre}}</option>
+										<option>{{nombre}}</option>
 									{{/each}}
 								</select>
 							</div>
@@ -73,7 +73,7 @@
 								<select class="form-control" id="entidad" name="entidad">
 									<option value="none" selected disabled hidden>Selecionar una opcion</option>
 									{{#each entidades}}
-									<option>{{nombre}}</option>
+										<option>{{nombre}}</option>
 									{{/each}}
 								</select>
 							</div>
@@ -81,7 +81,8 @@
 						<div class="form-group row">
 							<label for="items" class="col-sm-4 col-form-label">Items</label>
 							<div class="col-sm-8">
-								<a id="items" class="btn btn-outline-secondary" onclick="console.log('AGREGAR')">Agregar Items</a>
+								<select class="form-control" id="items" name="items" multiple>
+								</select>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -90,7 +91,7 @@
 								<select class="form-control" id="medioDePago" name="medioDePago">
 									<option value="none" selected disabled hidden>Selecionar una opcion</option>
 									{{#each mediosDePago}}
-									<option>{{identificador}}</option>
+										<option>{{identificador}}</option>
 									{{/each}}
 								</select>
 							</div>
@@ -99,9 +100,12 @@
 							<label for="categorias" class="col-sm-4 col-form-label">Categorias</label>
 							<div class="col-sm-8">
 								<select class="form-control" id="categorias" name="categorias" multiple="multiple">
-									<option value="categoria1">Categoria 1</option>
-									<option value="categoria2">Categoria 2</option>
-									<option value="categoria3">Categoria 3</option>
+									{{#each categorias}}
+										<optgroup label="{{nombre}}"/>
+										{{#each categorias}}
+											<option value="{{nombre}}">{{nombre}}</option>
+										{{/each}}
+									{{/each}}
 								</select>
 							</div>
 						</div>
@@ -134,6 +138,7 @@
 		$(document).ready(function() {
 			$('#categorias').multiselect();
 			$('#presupuestos').multiselect();
+			$('#items').multiselect();
 		})
 		function borrarEgreso(codigo){
 			var confirmaBorrado = confirm("Desea borrar el egreso" + codigo);
@@ -152,6 +157,46 @@
 					location.replace("/login");
 				}
 			})
+		}
+
+//Cambiar items segun el proveedor
+		var proveedores = new Array();
+		{{#each proveedores}}
+			var nombres = new Array();
+			nombres.push("{{{nombre}}}");
+			{{#each items}}
+				nombres.push("{{{descripcion}}}");
+			{{/each}}
+			proveedores.push(nombres);
+		{{/each}}
+
+		function cambiarItems(){
+			var selected = document.getElementById("proveedor").value;
+			var items = document.getElementById("items");
+			var lista = items.parentElement.children[1].children[1];
+			items.querySelectorAll('*').forEach(n => n.remove());
+			lista.querySelectorAll('*').forEach(n => n.remove());
+			var proveedor = proveedores.find((x) => x[0] === selected);
+			var i;
+
+			for(i = 1; i < proveedor.length; i++){
+			//creacion de option tag en select tag
+				var option = items.appendChild(document.createElement("option"));
+				option.value = proveedor[i];
+				option.text = proveedor[i];
+
+			//creacion de links para la vista
+				var li = lista.appendChild(document.createElement("li"));
+				var a = li.appendChild(document.createElement("a"));
+				a.tabIndex = i-1;
+				var label = a.appendChild(document.createElement("label"));
+				label.class = "checkbox";
+				label.title = proveedor[i];
+				var input = label.appendChild(document.createElement("input"));
+				input.type = "checkbox";
+				input.value = proveedor[i];
+				label.appendChild(document.createTextNode(' '+proveedor[i]));
+			}
 		}
 
 	</script>

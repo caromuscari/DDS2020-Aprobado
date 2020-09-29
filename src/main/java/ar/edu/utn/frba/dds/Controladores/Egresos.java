@@ -69,8 +69,6 @@ public class Egresos {
             map.put("categorias", usuario.getOrganizacion().getCriterios());
             map.put("nombreEntidad",RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
             map.put("categoriasEgreso",getCategoriasEgreso(egreso));
-            map.put("itemsProveedor", egreso.getProveedor().getItems());
-            map.put("itemsEgreso",getItemsEgreso(egreso));
             return new ModelAndView(map, "modificarEgreso.html");
         }
     }
@@ -103,22 +101,20 @@ public class Egresos {
         String nombreEgreso = request.queryParams("nombre");
         String fechaEgreso = request.queryParams("fecha");
         String[] nombreCategorias = request.queryParamsValues("categorias");
+        String nombreMedioDePago = request.queryParams("medioDePago");
         String id = request.params(":id");
 
-        System.out.print(request.body());
+        Proveedor proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
 
+        String cantItem = null;
         List<ItemOperacionEgreso> items = new ArrayList<>();
-        String itemsId = request.queryParams("items");
-        if(itemsId != null) {
-/*            for (String id : itemsId) {
-                ItemOperacionEgreso itemOperacionEgreso = RepositorioItemsOperacionEgreso.getInstance().obtenerItemsPorId(Long.parseLong(id));
-                if (itemOperacionEgreso != null) {
-                    items.add(itemOperacionEgreso);
-                }
-            }*/
+        for (ItemEgreso item : proveedor.getItems()) {
+            cantItem = request.queryParams(item.getDescripcion());
+            if (cantItem != null) {
+                ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(Integer.parseInt(cantItem), item);
+                items.add(itemOperacionEgreso);
+            }
         }
-        Proveedor proveedor = null;
-        if (nombreProveedor != null) proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
 
         ar.edu.utn.frba.dds.Operaciones.Egreso egreso = null;
 
@@ -153,8 +149,9 @@ public class Egresos {
             }
         }
         egreso.setCategorias(categorias);
-        //falta documentos
-        //falta presupuesto
+
+        MedioDePago medio = RepositorioMedioDePago.getInstance().obtenerItemsPorId(nombreMedioDePago);
+        egreso.setMedioDePago(medio);
 
         response.redirect("/egreso");
         return null;
@@ -167,16 +164,6 @@ public class Egresos {
         egreso.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
 
         return categorias;
-    }
-
-
-    private static List<String> getItemsEgreso(Egreso egreso) {
-        List<String> items = new ArrayList<>();
-        String comilla = "\"";
-
-        egreso.getItems().forEach(c -> items.add(comilla + c.getItemEgreso().getDescripcion() + comilla));
-
-        return items;
     }
 
 }

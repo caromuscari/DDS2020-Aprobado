@@ -80,9 +80,14 @@
 						</div>
 						<div class="form-group row">
 							<label for="items" class="col-sm-4 col-form-label">Items</label>
-							<div class="col-sm-8">
-								<select class="form-control" id="items" name="items" multiple>
-								</select>
+							<div class="col-sm-8" >
+								<a id="items" class="btn btn-outline-secondary" onclick="popupItems();">Agregar Items</a>
+								<div id="divItems" class="form-popup" >
+									<div>
+
+									</div>
+									<a id="cerrarItems" class="btn btn-outline-secondary" onclick="cerrarPopup();">Cerrar</a>
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -116,16 +121,6 @@
 								   class="form-control" name="fecha" id="fecha"/>
 							</div>
 						</div>
-						<div class="form-group row">
-							<label for="presupuestos" class="col-sm-4 col-form-label">Presupuestos</label>
-							<div class="col-sm-8">
-								<select class="form-control" id="presupuestos" name="presupuestos" multiple="multiple">
-									<option value="presupuesto1">Presupuesto 1</option>
-									<option value="presupuesto2">Presupuesto 2</option>
-									<option value="presupuesto3">Presupuesto 3</option>
-								</select>
-							</div>
-						</div>
 						<a href="/egreso" class="btn btn-default">Cancelar</a>
 						<button type="submit" class="btn btn-default">Guardar</button>
 					</form>
@@ -138,7 +133,6 @@
 		$(document).ready(function() {
 			$('#categorias').multiselect();
 			$('#presupuestos').multiselect();
-			$('#items').multiselect();
 		})
 		function borrarEgreso(codigo){
 			var confirmaBorrado = confirm("Desea borrar el egreso" + codigo);
@@ -172,31 +166,38 @@
 
 		function cambiarItems(){
 			var selected = document.getElementById("proveedor").value;
-			var items = document.getElementById("items");
-			var lista = items.parentElement.children[1].children[1];
-			items.querySelectorAll('*').forEach(n => n.remove());
-			lista.querySelectorAll('*').forEach(n => n.remove());
+			var divItems = document.getElementById("divItems");
+			var listaItems = divItems.children[0];
+			listaItems.querySelectorAll('*').forEach(n => n.remove());
 			var proveedor = proveedores.find((x) => x[0] === selected);
 			var i;
 
 			for(i = 1; i < proveedor.length; i++){
 			//creacion de option tag en select tag
-				var option = items.appendChild(document.createElement("option"));
-				option.value = proveedor[i];
-				option.text = proveedor[i];
+				var div = listaItems.appendChild(document.createElement("div"));
+				var labelItem = div.appendChild(document.createElement("label"));
+				var inputItem = div.appendChild(document.createElement("input"));
 
-			//creacion de links para la vista
-				var li = lista.appendChild(document.createElement("li"));
-				var a = li.appendChild(document.createElement("a"));
-				a.tabIndex = i-1;
-				var label = a.appendChild(document.createElement("label"));
-				label.class = "checkbox";
-				label.title = proveedor[i];
-				var input = label.appendChild(document.createElement("input"));
-				input.type = "checkbox";
-				input.value = proveedor[i];
-				label.appendChild(document.createTextNode(' '+proveedor[i]));
+				labelItem.for = proveedor[i];
+				labelItem.textContent = proveedor[i];
+				inputItem.type = "number";
+				inputItem.id = proveedor[i];
+				inputItem.name = proveedor[i];
+				inputItem.min = 0;
+				inputItem.value = 0;
+
 			}
+		}
+
+		function popupItems(){
+			var divItems = document.getElementById("divItems").children[0];
+			if(divItems.children.length > 0){
+				document.getElementById("divItems").style.display = "block";
+			}
+		}
+
+		function cerrarPopup(){
+			document.getElementById("divItems").style.display = "none";
 		}
 
 	</script>

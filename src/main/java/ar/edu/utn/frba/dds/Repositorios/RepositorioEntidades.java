@@ -4,7 +4,9 @@ import ar.edu.utn.frba.dds.Controladores.Egresos;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
+import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
+import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +65,23 @@ public class RepositorioEntidades {
 
     public Entidad obtenerEntidadPorNombre(String nombreEntidad){
         return entidades.stream().filter(e -> e.getNombre().equals(nombreEntidad)).findFirst().get();
+    }
+
+    public Ingreso obtenerIngresoPorId(String id) {
+        for (Ingreso ingreso : entidades.stream().map(e -> e.getIngresos()).flatMap(List::stream).collect(Collectors.toList())) {
+            if (Integer.parseInt(id) == ingreso.getId()) {
+                return ingreso;
+            }
+        }
+        return null;
+    }
+
+    public Presupuesto obtenerPresupuestoPorId(String id) {
+        for (Presupuesto presupuesto : entidades.stream().map(e -> e.getLicitaciones()).flatMap(List::stream).map(l -> l.getPresupuestos()).flatMap(List::stream).collect(Collectors.toList())) {
+            if (Integer.parseInt(id) == presupuesto.getId()) {
+                return presupuesto;
+            }
+        }
+        return null;
     }
 }

@@ -113,9 +113,9 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarProveedores(){
-        RepositorioProveedores.getInstance().crearProveedor("Proveedor 1", 1L, "1234",  new ItemEgreso("3482","item1",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().crearProveedor("Proveedor 2", 2L, "1234", new ItemEgreso("8359","item2",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().crearProveedor("Alejandro", 21314l, "666", new ItemEgreso("3473","item3",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        RepositorioProveedores.getInstance().crearProveedor("Proveedor 1", 1L, "1234",  new ItemEgreso("3482","item 1",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        RepositorioProveedores.getInstance().crearProveedor("Proveedor 2", 2L, "1234", new ItemEgreso("8359","item 2",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        RepositorioProveedores.getInstance().crearProveedor("Alejandro", 21314l, "666", new ItemEgreso("3473","item 3",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
     }
 
     private static void inicializarUsuarios(){

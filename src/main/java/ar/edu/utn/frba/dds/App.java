@@ -50,9 +50,13 @@ public class App {
 
         //Ingresos
         get("/ingreso", Ingresos::paginaIngresos, engine);
+        get("/ingreso/:id", Ingresos::modificarIngreso, engine);
+        post("/ingreso/:id", Ingresos::guardarIngreso, engine);
 
         //Presupuestos
         get("/presupuesto", Presupuestos::paginaPresupuestos, engine);
+        get("/presupuesto/:id", Presupuestos::modificarPresupuesto, engine);
+        post("/presupuesto/:id", Presupuestos::guardarPresupuesto, engine);
 
         //Vinculador
         get("/vinculador", VinculadorController::paginaVinculador, engine);

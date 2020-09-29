@@ -73,6 +73,9 @@ public class App {
         post("/validarLicitacion", LicitacionController::validarLicitacion);
         get("/licitacion", LicitacionController::mostrarMensajes);
 
+
+        get("/egreso/filtrar/", Egresos::filtrarPorCategoria, engine);
+        get("/ingreso/filtrar/", Ingresos::filtrarPorCategoria, engine);
         // ===============================================================================
 
         //Inicializar datos de prueba

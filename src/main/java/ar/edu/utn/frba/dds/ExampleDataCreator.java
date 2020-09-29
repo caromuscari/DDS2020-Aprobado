@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
@@ -27,6 +28,7 @@ public class ExampleDataCreator {
         inicializarMediosDePago();
         inicializarOrganizacion();
         inicializarUsuarios();
+        inicializarCategorias();
 
         /*ItemPresupuesto p1 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
         ItemPresupuesto p2 = new ItemPresupuesto(300.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
@@ -161,4 +163,26 @@ public class ExampleDataCreator {
         RepoUsuarios.getInstance().agregarUsuario(usuario3);
 
     }
+
+    private void inicializarCategorias(){
+        List<Categoria> listaCategorias = new ArrayList<>();
+        Categoria categoria1 = new Categoria("pedales");
+        Categoria categoria2 = new Categoria("alfombras");
+        Categoria categoria3 = new Categoria("fiestas");
+        Categoria categoria4 = new Categoria("plantas");
+        Categoria categoria5 = new Categoria("macetas");
+        Categoria categoria6 = new Categoria("tazas");
+        Categoria categoria7 = new Categoria("cucharas");
+
+        listaCategorias.add(categoria1);
+        listaCategorias.add(categoria2);
+        listaCategorias.add(categoria3);
+        listaCategorias.add(categoria4);
+        listaCategorias.add(categoria5);
+        listaCategorias.add(categoria6);
+        listaCategorias.add(categoria7);
+
+        RepositorioCategorias.getInstance().setCategorias(listaCategorias);
+    }
+
 }

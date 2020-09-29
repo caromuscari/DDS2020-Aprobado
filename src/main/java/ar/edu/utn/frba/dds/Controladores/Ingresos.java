@@ -1,8 +1,11 @@
 package ar.edu.utn.frba.dds.Controladores;
 
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.IngresoDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Operaciones.Egreso;
+import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEgresos;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Ingresos {
 
@@ -32,5 +36,14 @@ public class Ingresos {
             map.put("ingresos",ingresos);
             return new ModelAndView(map, "ingresos.html");
         }
+    }
+
+    public static ModelAndView filtrarPorCategoria (Request request, Response response){
+        String categoria = request.queryParams("categoria");
+        List<EgresoDTO> ingresos = new ArrayList<>();
+        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+        Map<String, Object> map = new HashMap<>();
+        map.put("ingresos",ingresos);
+        return new ModelAndView(map, "ingresos.html");
     }
 }

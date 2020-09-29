@@ -8,10 +8,12 @@ import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.security.cert.CollectionCertStoreParameters;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,11 +31,13 @@ public class Egresos {
             return Login.paginaLogin(request,response);
         }
         else {
+            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             List<EgresoDTO> egresos = new ArrayList<>();
             List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso,entidad))));
             Map<String, Object> map = new HashMap<>();
             map.put("egresos",egresos);
+            map.put("categorias",categorias);
             return new ModelAndView(map, "egresos.html");
         }
     }
@@ -177,6 +181,33 @@ public class Egresos {
         egreso.getItems().forEach(c -> items.add(comilla + c.getItemEgreso().getDescripcion() + comilla));
 
         return items;
+    }
+
+    public static ModelAndView filtrarPorCategoria (Request request, Response response){
+        String categoria = request.queryParams("categoria");
+        List<EgresoDTO> egresos = new ArrayList<>();
+        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+        entidades.forEach(entidad -> {
+                entidad.getEgresos().stream()
+                            .filter(egreso -> filtrar(egreso, categoria))
+                            .map(egreso -> new EgresoDTO(egreso, entidad))
+                            .collect(Collectors.toCollection(() -> egresos));
+                }
+            );
+        Map<String, Object> map = new HashMap<>();
+        map.put("egresos",egresos);
+        return new ModelAndView(map, "egresos.html");
+    }
+
+    private static boolean filtrar(Egreso egreso, String categoria){
+        return egreso.getCategorias().stream()
+                                       .filter(c -> c.getNombre().equals(categoria) || Egresos.tieneCategoria(c,categoria))
+                                        .count()>0;
+    }
+
+    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria){
+        Categoria categoriaHija = new Categoria(nombreCategoria);
+        return categoria.contieneCategoriaHija(categoriaHija);
     }
 
 }

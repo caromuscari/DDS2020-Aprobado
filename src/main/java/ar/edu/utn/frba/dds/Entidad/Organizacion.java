@@ -54,4 +54,6 @@ public class Organizacion {
     public void asociarCriterio(CriterioCategoria criterioCategoria){
         this.criterios.add(criterioCategoria);
     }
+
+
 }

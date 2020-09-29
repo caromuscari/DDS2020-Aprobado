@@ -53,6 +53,16 @@ public abstract class Entidad {
 
     public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor,String nombre){
         Egreso egreso = new Egreso(items,proveedor,nombre);
+        List<Categoria> listaCategorias = new ArrayList<>();
+        Categoria categoria1 = new Categoria("pedales");
+        Categoria categoria2 = new Categoria("alfombras");
+        Categoria categoria3 = new Categoria("fiestas");
+
+        listaCategorias.add(categoria1);
+        listaCategorias.add(categoria2);
+        listaCategorias.add(categoria3);
+
+        egreso.setCategorias(listaCategorias);
         this.egresos.add(egreso);
     }
 

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
+import ar.edu.utn.frba.dds.Controladores.Egresos;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
@@ -42,6 +43,11 @@ public class RepositorioEntidades {
         }
         return null;
     }
+
+    public void borrarEgreso(String id) {
+        entidades.forEach(entidad -> entidad.getEgresos().removeIf(egreso -> Integer.parseInt(id) == egreso.getId()));
+    }
+
     public Egreso obtenerEgresoPorNombre(String nombre) {
         for (Egreso egreso : entidades.stream().map(e -> e.getEgresos()).flatMap(List::stream).collect(Collectors.toList())) {
             if (nombre.equals(egreso.getNombre())) {

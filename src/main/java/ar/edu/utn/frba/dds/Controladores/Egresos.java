@@ -75,6 +75,22 @@ public class Egresos {
         }
     }
 
+    public static ModelAndView borrarEgreso(Request request, Response response) {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        }
+
+        Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
+        String id = request.params(":id");
+        RepositorioEntidades.getInstance().borrarEgreso(request.params(":id"));
+        List<EgresoDTO> egresos = new ArrayList<>();
+        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+        entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso,entidad))));
+        Map<String, Object> map = new HashMap<>();
+        map.put("egresos",egresos);
+        return new ModelAndView(map, "egresos.html");
+    }
+
     public static ModelAndView guardarEgreso(Request request, Response response) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request, response);

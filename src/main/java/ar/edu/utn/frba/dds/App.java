@@ -64,6 +64,7 @@ public class App {
         get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
         get("/egreso/:id", Egresos::paginaModificarEgreso, engine);
         post("/egreso/:id", Egresos::guardarEgreso, engine);
+        delete("/egreso/:id", Egresos::borrarEgreso, engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
 

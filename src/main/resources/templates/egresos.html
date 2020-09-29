@@ -8,7 +8,7 @@
 
 <link href="public/bootstrap.min.css" rel="stylesheet">
 <link href="public/css/main.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
 <script src="public/bootstrap.min.js"></script>
 
 </head>
@@ -45,10 +45,10 @@
 				<br>
 				<h2>Egresos</h2>
 				<div class="float-right">
-					<input type="text" placeholder="buscar egreso" type="text" id="filtroCodigo"onkeyup="filter(this)"/>
+					<input type="text" placeholder="buscar egreso" type="text" id="myInput" onkeyup="myFunction()"/>
 					<a href="/nuevo_egreso" class="btn btn-outline-primary">Crear Egreso</a>
 				</div>
-				<table id="tablaEgresos" >
+				<table id="myTable" class="table">
 					<thead>
 						<tr>
 							<th>Egreso</th>
@@ -68,7 +68,7 @@
 							<td id="egresoFecha">{{egreso.fecha}}</td>
 							<td id="egresoPrecio">{{egreso.precioTotal}}</td>
 							<td><a href="/egreso/{{egreso.id}}" class="btn btn-outline-primary">Modificar</a>
-								<button class="btn btn-outline-primary" onclick="borrarEgreso('1');">Eliminar</button>
+								<button class="btn btn-outline-primary" onclick="borrarEgreso('{{egreso.nombre}}','{{egreso.id}}')">Eliminar</button>
 							</td>
 						</tr>
 					{{/each}}
@@ -79,12 +79,16 @@
 	</div>
 
 	<script type="text/javascript">
-		function borrarEgreso(codigo){
-			var confirmaBorrado = confirm("Desea borrar el egreso" + codigo);
+		function borrarEgreso(codigo,id){
+			var confirmaBorrado = confirm("Desea borrar el egreso " + codigo);
 			if (confirmaBorrado == true) {
-				alert('borrado');
-			} else {
-				alert('no borrado');
+				$.ajax({
+					url: "/egreso/"+id,
+					type: "DELETE",
+					success: function(result){
+						location.replace("/egreso");
+					}
+				})
 			}
 		}
 
@@ -98,24 +102,25 @@
 			})
 		}
 
-		function filter(element) {
-			var value = $(element).val();
-			$('#tablaEgresos > tbody  > tr').each(tr => {
-				var contains = false;
-				tr.each(td => {
-					if (td.text().search(value) > -1) {
-						contains = true;
-					}else{
-						contains = false;
+		function myFunction() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("myTable");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[0];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
 					}
-				});
-				if (contains) {
-					$(this).show();
-				}else{
-					$(this).hide();
 				}
-			});
+			}
 		}
+
 	</script>
 </body>
 </html>

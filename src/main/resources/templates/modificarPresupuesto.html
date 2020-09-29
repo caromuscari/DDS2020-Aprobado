@@ -75,25 +75,13 @@
 <script type="text/javascript">
 		$(document).ready(function() {
 			$('#categorias').multiselect();
-
-
-			//Categorias seleccionadas
-			var categPresupuesto = {{{categoriasPresupuestos}}}
+            var categPresupuesto = {{{categoriasPresupuestos}}}
+            var i;
 			if(categPresupuesto.length > 0){
-				var listaInput = [...(document.querySelectorAll('input'))];
-				var i;
-
-				for(i = 0; i < categPresupuesto.length; i++){
-					var selected = listaInput.find(x=>x.value === categPresupuesto[i]);
-					selected.checked = true;
-					var liClass = selected.parentElement.parentElement.parentElement;
-					liClass.className = "active";
-				}
-
-				var boton = document.getElementById("categorias").parentElement.children[1].children[0];
-				boton.title = categPresupuesto.join();
-				boton.children[0].innerText = categPresupuesto.join();
-			}
+                for (i = 0; i < categPresupuesto.length; i++) {
+                    $('#categorias').multiselect('select', categPresupuesto[i]);
+                }
+            }
 		})
 
 		function logout(){

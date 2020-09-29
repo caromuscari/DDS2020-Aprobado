@@ -167,28 +167,15 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#categorias').multiselect();
-
-
-			//Categorias seleccionadas
 			var categEgreso = {{{categoriasEgreso}}}
+            var i;
 			if(categEgreso.length > 0){
-				var listaInput = [...(document.querySelectorAll('input'))];
-				var i;
-
-				for(i = 0; i < categEgreso.length; i++){
-					var selected = listaInput.find(x=>x.value === categEgreso[i]);
-					selected.checked = true;
-					var liClass = selected.parentElement.parentElement.parentElement;
-					liClass.className = "active";
-				}
-
-				var boton = document.getElementById("categorias").parentElement.children[1].children[0];
-				boton.title = categEgreso.join();
-				boton.children[0].innerText = categEgreso.join();
-			}
+                for (i = 0; i < categEgreso.length; i++) {
+                    $('#categorias').multiselect('select', categEgreso[i]);
+                }
+            }
 
 			cambiarItems();
-
 
 			//Items que ya tiene el egreso
 			var itemsEgreso = new Array();
@@ -204,7 +191,6 @@
 				var inputItem = document.getElementById(itemsEgreso[i][0]);
 				inputItem.value = itemsEgreso[i][1];
 			}
-
 		})
 
 		function borrarEgreso(codigo){

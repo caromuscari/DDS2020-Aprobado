@@ -12,6 +12,9 @@ public class Proveedor {
     private List<ItemEgreso> items;
     private List<Categoria> categorias;
 
+    public Proveedor() {
+    }
+
     public Proveedor(String nombre, Long identificador, String direccionPostal) {
         this.nombre = nombre;
         this.identificador = identificador;

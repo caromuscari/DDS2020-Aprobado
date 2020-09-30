@@ -9,6 +9,9 @@ public class PresupuestoDTO {
     private String nombre;
     private int id;
 
+    public PresupuestoDTO() {
+    }
+
     public PresupuestoDTO(Presupuesto presupuesto) {
         this.precioTotal = presupuesto.getPrecioTotal();
         this.proveedor = presupuesto.getProveedor();

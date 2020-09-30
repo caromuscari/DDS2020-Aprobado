@@ -67,6 +67,8 @@ public class App {
         post("/egreso", Egresos::guardarEgreso, engine);
         get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
         get("/egreso/:id", Egresos::paginaModificarEgreso, engine);
+        get("/egreso/:id/presupuesto", Egresos::paginaAgregarPresupuesto, engine);
+        post("/egreso/:id/presupuesto", Egresos::agregarPresupuesto, engine);
         post("/egreso/:id", Egresos::guardarEgreso, engine);
         delete("/egreso/:id", Egresos::borrarEgreso, engine);
 

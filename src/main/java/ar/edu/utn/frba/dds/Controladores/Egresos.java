@@ -2,23 +2,25 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
+import ar.edu.utn.frba.dds.DTO.PresupuestoDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
 import java.security.cert.CollectionCertStoreParameters;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Egresos {
@@ -27,14 +29,13 @@ public class Egresos {
     private static RepositorioMedioDePago medios = RepositorioMedioDePago.getInstance();
 
     public static ModelAndView paginaEgresos(Request request, Response response) {
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
-        }
-        else {
-            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
             List<EgresoDTO> egresos = new ArrayList<>();
             List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
-            entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso,entidad))));
+            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
+            entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
             map.put("egresos",egresos);
             map.put("categorias",categorias);
@@ -43,10 +44,9 @@ public class Egresos {
     }
 
     public static ModelAndView paginaNuevoEgreso(Request request, Response response) {
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
-        }
-        else {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
             Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
             Map<String, Object> map = new HashMap<>();
             List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
@@ -58,23 +58,53 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView paginaModificarEgreso(Request request, Response response) {
-        if(request.session(false) == null) {
-            return Login.paginaLogin(request,response);
+    public static ModelAndView paginaAgregarPresupuesto(Request request, Response response) {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            Egreso egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params("id"));
+            map.put("egreso", egreso);
+            return new ModelAndView(map, "nuevoPresupuestoEnEgreso.html");
         }
-        else {
+    }
+
+    public static ModelAndView agregarPresupuesto(Request request, Response response) {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
+            try {
+                String presupuesto = request.queryParams("presupuesto");
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+                JsonNode jsonNode = mapper.readTree(presupuesto);
+                PresupuestoDTO presupuestoDTO = mapper.convertValue(jsonNode, PresupuestoDTO.class);
+
+                ar.edu.utn.frba.dds.Operaciones.Egreso egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params("id"));
+                egreso.setPresupuesto(new Presupuesto(new ArrayList<>(), presupuestoDTO.getProveedor(), presupuestoDTO.getNombre()));
+            } catch (Exception e) {
+
+            }
+
+            response.redirect("/egreso");
+            return null;
+        }
+    }
+
+    public static ModelAndView paginaModificarEgreso(Request request, Response response) {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
             Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
             ar.edu.utn.frba.dds.Operaciones.Egreso egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
-            map.put("egreso",egreso);
+            map.put("egreso", egreso);
             map.put("proveedores", proveedores.obtenerProveedores());
             map.put("mediosDePago", medios.obtenerMediosDePago());
             map.put("entidades", usuario.getOrganizacion().getEntidades());
             map.put("categorias", usuario.getOrganizacion().getCriterios());
-            map.put("nombreEntidad",RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
-            map.put("categoriasEgreso",getCategoriasEgreso(egreso));
-            map.put("itemsProveedor", egreso.getProveedor().getItems());
-            map.put("itemsEgreso",getItemsEgreso(egreso));
+            map.put("nombreEntidad", RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
+            map.put("categoriasEgreso", getCategoriasEgreso(egreso));
             return new ModelAndView(map, "modificarEgreso.html");
         }
     }
@@ -89,14 +119,14 @@ public class Egresos {
         RepositorioEntidades.getInstance().borrarEgreso(request.params(":id"));
         List<EgresoDTO> egresos = new ArrayList<>();
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
-        entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso,entidad))));
+        entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
         Map<String, Object> map = new HashMap<>();
-        map.put("egresos",egresos);
+        map.put("egresos", egresos);
         return new ModelAndView(map, "egresos.html");
     }
 
     public static ModelAndView guardarEgreso(Request request, Response response) {
-        if(request.session(false) == null) {
+        if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }
 
@@ -107,29 +137,26 @@ public class Egresos {
         String nombreEgreso = request.queryParams("nombre");
         String fechaEgreso = request.queryParams("fecha");
         String[] nombreCategorias = request.queryParamsValues("categorias");
+        String nombreMedioDePago = request.queryParams("medioDePago");
         String id = request.params(":id");
 
-        System.out.print(request.body());
+        Proveedor proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
 
+        String cantItem = null;
         List<ItemOperacionEgreso> items = new ArrayList<>();
-        String itemsId = request.queryParams("items");
-        if(itemsId != null) {
-/*            for (String id : itemsId) {
-                ItemOperacionEgreso itemOperacionEgreso = RepositorioItemsOperacionEgreso.getInstance().obtenerItemsPorId(Long.parseLong(id));
-                if (itemOperacionEgreso != null) {
-                    items.add(itemOperacionEgreso);
-                }
-            }*/
+        for (ItemEgreso item : proveedor.getItems()) {
+            cantItem = request.queryParams(item.getDescripcion());
+            if (cantItem != null) {
+                ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(Integer.parseInt(cantItem), item);
+                items.add(itemOperacionEgreso);
+            }
         }
-        Proveedor proveedor = null;
-        if (nombreProveedor != null) proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
 
         ar.edu.utn.frba.dds.Operaciones.Egreso egreso = null;
 
-        if(id == null){
+        if (id == null) {
             egreso = RepositorioEgresos.getInstance().crearEgreso(items, proveedor, nombreEgreso);
-        }
-        else {
+        } else {
             egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params(":id"));
             egreso.setNombre(nombreEgreso);
             egreso.setProveedor(proveedor);
@@ -139,13 +166,13 @@ public class Egresos {
         }
 
         egreso.setFecha(LocalDate.parse(fechaEgreso));
-        if(nombreEntidad != null) {
+        if (nombreEntidad != null) {
             Entidad entidad = usuario.getOrganizacion().getEntidades().stream().filter(e -> e.getNombre().matches(nombreEntidad)).findFirst().get();
             entidad.getEgresos().add(egreso);
         }
 
         List<Categoria> categorias = new ArrayList<>();
-        if(nombreCategorias != null) {
+        if (nombreCategorias != null) {
             List<Categoria> total = usuario.getOrganizacion().getCriterios().stream()
                     .map(c -> c.getCategorias()).flatMap(List::stream)
                     .collect(Collectors.toList());
@@ -157,14 +184,15 @@ public class Egresos {
             }
         }
         egreso.setCategorias(categorias);
-        //falta documentos
-        //falta presupuesto
+
+        MedioDePago medio = RepositorioMedioDePago.getInstance().obtenerItemsPorId(nombreMedioDePago);
+        egreso.setMedioDePago(medio);
 
         response.redirect("/egreso");
         return null;
     }
 
-    public static List<String> getCategoriasEgreso(Egreso egreso){
+    public static List<String> getCategoriasEgreso(Egreso egreso) {
         List<String> categorias = new ArrayList<>();
         String comilla = "\"";
 
@@ -172,7 +200,6 @@ public class Egresos {
 
         return categorias;
     }
-
 
     private static List<String> getItemsEgreso(Egreso egreso) {
         List<String> items = new ArrayList<>();
@@ -209,5 +236,4 @@ public class Egresos {
         Categoria categoriaHija = new Categoria(nombreCategoria);
         return categoria.contieneCategoriaHija(categoriaHija);
     }
-
 }

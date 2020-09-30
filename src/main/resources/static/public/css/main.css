@@ -1,5 +1,6 @@
 body{
     background-color: aliceblue;
+    margin-bottom: 50px;
 }
 
 h1 {
@@ -12,4 +13,33 @@ h1 {
 h3{
     text-align: center;
     text-decoration: dashed;
+}
+
+.form-popup {
+    display: none;
+    right: 15px;
+    padding: 8px;
+    border: 3px solid #bde7f7;
+    margin-top: 8px;
+}
+
+.form-popup input {
+    margin-left: 10px;
+    width: 45px;
+}
+
+.form-popup a, .form-popup div {
+  padding: 8px;
+}
+
+.form-popup label {
+    width: 250px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+h4 {
+    margin-bottom: 20px;
 }

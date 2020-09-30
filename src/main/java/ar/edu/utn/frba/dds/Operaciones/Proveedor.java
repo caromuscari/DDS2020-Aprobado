@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,10 @@ public class Proveedor {
     private Long identificador;
     private String direccionPostal;
     private List<ItemEgreso> items;
+    private List<Categoria> categorias;
+
+    public Proveedor() {
+    }
 
     public Proveedor(String nombre, Long identificador, String direccionPostal) {
         this.nombre = nombre;
@@ -27,4 +33,7 @@ public class Proveedor {
 
     public List<ItemEgreso> getItems() { return items; }
     public void setItems(List<ItemEgreso> items) { this.items = items; }
+
+    public List<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
 }

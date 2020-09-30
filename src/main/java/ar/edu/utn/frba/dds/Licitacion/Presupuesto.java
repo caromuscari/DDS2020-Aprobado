@@ -5,9 +5,11 @@ import ar.edu.utn.frba.dds.Operaciones.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Presupuesto {
+    private int id;
     private List<DocumentoComercial> documentos;
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
@@ -22,13 +24,16 @@ public class Presupuesto {
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
         this.nombre = nombre;
+        this.id = new Random().nextInt(1000);
     }
 
     public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor,String nombre) {
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
+        this.items = new ArrayList<>();
         this.nombre = nombre;
+        this.id = new Random().nextInt(1000);
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
@@ -45,6 +50,9 @@ public class Presupuesto {
 
     public List<Categoria> getCategorias() { return categorias; }
     public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     //Metodos
     public void asociarCategoria(Categoria categoria){

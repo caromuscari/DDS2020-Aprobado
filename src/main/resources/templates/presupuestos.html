@@ -31,7 +31,7 @@
 								<a class="nav-link" href="/ingreso">Ingresos</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link active" href="#">Presupuesto <span
+								<a class="nav-link active" href="/presupuesto">Presupuesto <span
 										class="sr-only">(current)</span></a>
 							</li>
 							<li class="nav-item">
@@ -70,7 +70,7 @@
 						<td>{{../entidad.nombre}}</td>
 						<td>{{proveedor.nombre}}</td>
 						<td>{{precioTotal}}</td>
-						<td><a href="#" class="btn btn-outline-primary">Modificar</a></td>
+						<td><a href="/presupuesto/{{id}}" class="btn btn-outline-primary">Modificar</a></td>
 					</tr>
 					{{/each}}
 					{{/each}}
@@ -81,15 +81,6 @@
 	</div>
 
 	<script type="text/javascript">
-		function borrarEgreso(codigo){
-			var confirmaBorrado = confirm("Desea borrar el ingreso" + codigo);
-			if (confirmaBorrado == true) {
-				alert('borrado');
-			} else {
-				alert('no borrado');
-			}
-		}
-
 		function logout(){
 			$.ajax({
 				url: "/logout",

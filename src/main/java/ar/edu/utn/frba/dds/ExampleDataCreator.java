@@ -72,8 +72,22 @@ public class ExampleDataCreator {
         RepositorioEntidades.getInstance().crearEntidad(empresa1);
         RepositorioEntidades.getInstance().crearEntidad(empresa2);
 
+        //creo categoria
+        List<Categoria> listaCategorias = new ArrayList<>();
+        Categoria categoria1 = new Categoria("pedales");
+        Categoria categoria2 = new Categoria("alfombras");
+        Categoria categoria3 = new Categoria("fiestas");
+
+        listaCategorias.add(categoria1);
+        listaCategorias.add(categoria2);
+        listaCategorias.add(categoria3);
+
+
         //Creo ingresos
         Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.now());
+
+        ingreso1.setCategorias(listaCategorias);
+
         Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.now());
         List<Ingreso> ingresosEmpresa1 = new ArrayList<>();
         ingresosEmpresa1.add(ingreso1);
@@ -84,6 +98,10 @@ public class ExampleDataCreator {
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
         empresa2.setIngresos(ingresosEmpresa2);
+
+
+
+
 
         //Creo licitaciones y presupuestos
         Licitacion licitacion1 = new Licitacion("Licitacion 1",3);
@@ -107,6 +125,7 @@ public class ExampleDataCreator {
         RepositorioEntidades.getInstance().obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
         LicitacionRepo.getInstance().add(licitacion1);
         LicitacionRepo.getInstance().add(licitacion2);
+
     }
 
     private static void inicializarMediosDePago(){

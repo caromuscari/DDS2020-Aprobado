@@ -60,7 +60,7 @@
 					</thead>
 					<tbody>
 					{{#each ingresos}}
-						<tr>
+						<tr id="{{ingreso.id}}">
 							<td>{{ingreso.descripcion}}</td>
 							<td>{{entidad.nombre}}</td>
 							<td>{{ingreso.fecha}}</td>
@@ -76,9 +76,8 @@
 		<div class="sidenav">
 			<a>filtrar por categoria</a>
 			<select class="form-control" id="filtroCategoria" name="filtroCategoria" >
-				<option value="asfasf" selected>asfasfa</option>
 				{{#each categorias}}
-				<option value="{{nombre}}">{{nombre}}</option>
+				<option value="{{nombre}}" selected>{{nombre}}</option>
 				{{/each}}
 			</select>
 			<button class="btn btn-outline-primary" onclick="filtrarIngreso()">Filtrar</button>
@@ -118,7 +117,6 @@
 		function filtrarIngreso(){
 			selectedElement = document.getElementById("filtroCategoria");
 			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
-
 			$.ajax({
 				url: "/ingreso/filtrar/",
 				data: {
@@ -126,10 +124,21 @@
 				},
 				type: "GET",
 				success: function(result){
-					location.replace("/ingreso");
+					json = JSON.parse(result);
+					ids = json.map(e => e.ingreso.id.toString())
+					table = document.getElementById("myTable");
+					tr = table.getElementsByTagName("tr");
+					for (i = 1; i < tr.length ; i++) {
+						if (ids.includes(tr[i].id)) {
+							tr[i].style.display = "";
+						} else {
+							tr[i].style.display = "none";
+						}
+					}
 				}
 			})
 		}
+
 	</script>
 </body>
 </html>

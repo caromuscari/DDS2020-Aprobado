@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.google.gson.Gson;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,6 +19,8 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.cert.CollectionCertStoreParameters;
 import java.time.LocalDate;
 import java.util.*;
@@ -210,7 +213,7 @@ public class Egresos {
         return items;
     }
 
-    public static ModelAndView filtrarPorCategoria (Request request, Response response){
+    public static String filtrarPorCategoria (Request request, Response response){
         String categoria = request.queryParams("categoria");
         List<EgresoDTO> egresos = new ArrayList<>();
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
@@ -221,9 +224,7 @@ public class Egresos {
                             .collect(Collectors.toCollection(() -> egresos));
                 }
             );
-        Map<String, Object> map = new HashMap<>();
-        map.put("egresos",egresos);
-        return new ModelAndView(map, "egresos.html");
+        return toJson(egresos);
     }
 
     private static boolean filtrar(Egreso egreso, String categoria){
@@ -235,5 +236,11 @@ public class Egresos {
     private static boolean tieneCategoria(Categoria categoria, String nombreCategoria){
         Categoria categoriaHija = new Categoria(nombreCategoria);
         return categoria.contieneCategoriaHija(categoriaHija);
+    }
+
+    private static String toJson(List<EgresoDTO> listaEgresos){
+        Gson gson = new Gson();
+        String mensajeJson = gson.toJson(listaEgresos);
+        return mensajeJson;
     }
 }

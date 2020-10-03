@@ -63,7 +63,7 @@
 					</thead>
 					<tbody>
 					{{#each egresos}}
-						<tr>
+						<tr id="{{egreso.id}}">
 							<td id="egresoNombre">{{egreso.nombre}}</td>
 							<td id="egresoProveedor">{{egreso.proveedor.nombre}}</td>
 							<td id="egresoEntidad">{{entidad.nombre}}</td>
@@ -84,9 +84,8 @@
 		<div class="sidenav">
 				<a>filtrar por categoria</a>
 				<select class="form-control" id="filtroCategoria" name="filtroCategoria" >
-					<option value="asfasf" selected>asfasfa</option>
 					{{#each categorias}}
-					<option value="{{nombre}}">{{nombre}}</option>
+					<option value="{{nombre}}" selected>{{nombre}}</option>
 					{{/each}}
 				</select>
 				<button class="btn btn-outline-primary" onclick="filtrarEgreso()">Filtrar</button>
@@ -142,15 +141,26 @@
 			selectedElement = document.getElementById("filtroCategoria");
 			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
 			$.ajax({
-				url: "/ingreso/filtrar/",
+				url: "/egreso/filtrar/",
 				data: {
 					categoria: filtro
 				},
 				type: "GET",
 				success: function(result){
-					location.replace("/egreso");
+					json = JSON.parse(result);
+					ids = json.map(e => e.egreso.id.toString())
+					table = document.getElementById("myTable");
+					tr = table.getElementsByTagName("tr");
+					for (i = 1; i < tr.length ; i++) {
+						if (ids.includes(tr[i].id)) {
+							tr[i].style.display = "";
+						} else {
+							tr[i].style.display = "none";
+						}
+					}
 				}
-			})		}
+			})
+		}
 
 	</script>
 </body>

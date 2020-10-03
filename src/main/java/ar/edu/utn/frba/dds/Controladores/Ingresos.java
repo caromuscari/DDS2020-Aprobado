@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -30,20 +31,12 @@ public class Ingresos {
             List<IngresoDTO> ingresos = new ArrayList<>();
             List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
             entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
+            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             Map<String, Object> map = new HashMap<>();
             map.put("ingresos",ingresos);
+            map.put("categorias",categorias);
             return new ModelAndView(map, "ingresos.html");
         }
-    }
-
-    public static ModelAndView filtrarPorCategoria (Request request, Response response) {
-        String categoria = request.queryParams("categoria");
-        List<EgresoDTO> ingresos = new ArrayList<>();
-        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
-        Map<String, Object> map = new HashMap<>();
-        map.put("ingresos", ingresos);
-        return new ModelAndView(map, "ingresos.html");
-
     }
 
     public static ModelAndView modificarIngreso(Request request, Response response) {
@@ -96,5 +89,36 @@ public class Ingresos {
         String comilla = "\"";
         ingreso.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
         return categorias;
+    }
+
+    public static String filtrarPorCategoria (Request request, Response response){
+        String categoria = request.queryParams("categoria");
+        List<IngresoDTO> ingresos = new ArrayList<>();
+        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+        entidades.forEach(entidad -> {
+                    entidad.getIngresos().stream()
+                            .filter(ingreso -> filtrar(ingreso, categoria))
+                            .map(ingreso -> new IngresoDTO(ingreso, entidad))
+                            .collect(Collectors.toCollection(() -> ingresos));
+                }
+        );
+        return toJson(ingresos);
+    }
+
+    private static boolean filtrar(Ingreso ingreso, String categoria){
+        return ingreso.getCategorias().stream()
+                .filter(i -> i.getNombre().equals(categoria) || Ingresos.tieneCategoria(i,categoria))
+                .count()>0;
+    }
+
+    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria){
+        Categoria categoriaHija = new Categoria(nombreCategoria);
+        return categoria.contieneCategoriaHija(categoriaHija);
+    }
+
+    private static String toJson(List<IngresoDTO> listaIngresos){
+        Gson gson = new Gson();
+        String mensajeJson = gson.toJson(listaIngresos);
+        return mensajeJson;
     }
 }

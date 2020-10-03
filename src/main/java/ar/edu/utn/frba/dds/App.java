@@ -79,9 +79,10 @@ public class App {
         post("/validarLicitacion", LicitacionController::validarLicitacion);
         get("/licitacion", LicitacionController::mostrarMensajes);
 
+        //Filtros
+        get("/egreso/filtrar/", Egresos::filtrarPorCategoria);
+        get("/ingreso/filtrar/", Ingresos::filtrarPorCategoria);
 
-        get("/egreso/filtrar/", Egresos::filtrarPorCategoria, engine);
-        get("/ingreso/filtrar/", Ingresos::filtrarPorCategoria, engine);
         // ===============================================================================
 
         //Inicializar datos de prueba

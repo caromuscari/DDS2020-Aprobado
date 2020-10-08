@@ -17,6 +17,7 @@ import spark.Response;
 import java.io.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.util.*;
 
@@ -56,25 +57,24 @@ public class VinculadorController {
         diasAntes = Period.between(LocalDate.parse(fechaInicio), LocalDate.now()).getDays();
         diasDespues = Period.between(LocalDate.parse(fechaFin), LocalDate.now()).getDays();
 
+        condicionFecha.setDiasAntes(diasAntes);
+        condicionFecha.setDiasDespues(diasDespues);
+        condiciones.add(condicionFecha);
 
             if (seleccionado.equals("fecha")) {
                 Fecha procFecha = new Fecha();
-
-                condicionFecha.setDiasAntes(diasAntes);
-                condicionFecha.setDiasDespues(diasDespues);
-                condiciones.add(condicionFecha);
                 procFecha.setCondiciones(condiciones);
-
                 resultadoVinculacion = procFecha.vincular(entidad);
+                resultadoVinculacion.setUser(request.session().attribute("usuario"));
+                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
+
             } else if (seleccionado.equals("mix")) {
                 Mix procMix = mixSegunOrdenes(orden);
-
-                condicionFecha.setDiasAntes(diasAntes);
-                condicionFecha.setDiasDespues(diasDespues);
-                condiciones.add(condicionFecha);
                 procMix.setCondiciones(condiciones);
-
                 resultadoVinculacion = procMix.vincular(entidad);
+                resultadoVinculacion.setUser(request.session().attribute("usuario"));
+                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
+
             } else if (seleccionado.equals("primeroEgreso")) {
                 PrimeroEgreso procEgreso = null;
                 if (orden.equals("asc")) {
@@ -82,13 +82,11 @@ public class VinculadorController {
                 } else {
                     procEgreso = new PrimeroEgreso(TipoOrden.ORDENDESCENDENTE);
                 }
-
-                condicionFecha.setDiasAntes(diasAntes);
-                condicionFecha.setDiasDespues(diasDespues);
-                condiciones.add(condicionFecha);
                 procEgreso.setCondiciones(condiciones);
-
                 resultadoVinculacion = procEgreso.vincular(entidad);
+                resultadoVinculacion.setUser(request.session().attribute("usuario"));
+                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
+
             } else {
                 PrimeroIngreso procIngreso = null;
                 if (orden.equals("asc")) {
@@ -96,13 +94,10 @@ public class VinculadorController {
                 } else {
                     procIngreso = new PrimeroIngreso(TipoOrden.ORDENDESCENDENTE);
                 }
-
-                condicionFecha.setDiasAntes(diasAntes);
-                condicionFecha.setDiasDespues(diasDespues);
-                condiciones.add(condicionFecha);
                 procIngreso.setCondiciones(condiciones);
-
                 resultadoVinculacion = procIngreso.vincular(entidad);
+                resultadoVinculacion.setUser(request.session().attribute("usuario"));
+                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
             }
 
         // Creo el JSON

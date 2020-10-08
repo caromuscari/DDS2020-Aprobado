@@ -8,14 +8,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ResultadoVinculacion {
-    private Entidad entidad;
+    private String usuario;
+    private String fechaVinculacion; // Dia de vinculacion (para el json)
+    private String horaVinculacion; // Hora de la vinculacion
     private LocalDate fecha;
+    private Entidad entidad;
     private List<Ingreso> ingresosNoCompletos;
     private List<Egreso> egresosNoVinculados;
 
     public ResultadoVinculacion(Entidad entidad, LocalDate fecha, List<Ingreso> ingresosNoCompletos, List<Egreso> egresosNoVinculados) {
-        this.entidad = entidad;
         this.fecha = fecha;
+        this.fechaVinculacion = fecha.toString();
+        this.entidad = entidad;
         this.ingresosNoCompletos = ingresosNoCompletos;
         this.egresosNoVinculados = egresosNoVinculados;
     }
@@ -31,4 +35,10 @@ public class ResultadoVinculacion {
 
     public List<Egreso> getEgresosNoVinculados() { return egresosNoVinculados; }
     public void setEgresosNoVinculados(List<Egreso> egresosNoVinculados) { this.egresosNoVinculados = egresosNoVinculados; }
+
+    public String getUser() { return usuario; }
+    public void setUser(String usuario) { this.usuario = usuario; }
+
+    public String getHoraVinculacion() { return horaVinculacion; }
+    public void setHoraVinculacion(String horaVinculacion) { this.horaVinculacion = horaVinculacion; }
 }

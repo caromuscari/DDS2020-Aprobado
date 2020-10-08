@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;

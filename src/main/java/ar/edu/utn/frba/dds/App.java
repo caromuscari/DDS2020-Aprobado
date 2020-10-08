@@ -87,7 +87,6 @@ public class App {
 
         //Inicializar datos de prueba
         new ExampleDataCreator().createData();
-        repoUsuarios.getRegistrados().get("gesoc").getOrganizacion().setEntidades(RepositorioEntidades.getInstance().obtenerEntidades());
     }
 
     public static ModelAndView paginaHome(Request request, Response response) {

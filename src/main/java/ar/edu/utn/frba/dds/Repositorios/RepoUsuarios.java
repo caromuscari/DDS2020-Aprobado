@@ -21,18 +21,14 @@ public class RepoUsuarios {
     public static RepoUsuarios instance = null;
 
     public RepoUsuarios(){
-        registrados = new HashMap<>();
         encriptador = new Hash();
+        registrados = new HashMap<>();
 
-        Usuario user = null;
-        try{
-            Organizacion organizacion = new Organizacion("organizacion 1", "descripcion");
-            crearCategorias(organizacion);
-            user = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, organizacion);
-        }
-        catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+        /* crearCategorías hay que moverlo de acá, yo deje el usuario gesoc de prueba pero lo mude al
+        *  ExampleDataCreator
+        */
 
-        registrados.put("gesoc",user);
+        //crearCategorias(organizacion);
     }
 
     public static RepoUsuarios getInstance() {

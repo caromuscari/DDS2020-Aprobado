@@ -13,9 +13,11 @@ import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
+import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class ExampleDataCreator {
 
-    public void createData() {
+    public void createData(){
         inicializarProveedores();
         inicializarMediosDePago();
         inicializarOrganizacion();
@@ -140,6 +142,7 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarUsuarios(){
+        Hash encriptador = new Hash();
 
         List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
@@ -169,18 +172,30 @@ public class ExampleDataCreator {
         listaMensajes2.add(mensaje1);
         listaMensajes2.add(mensaje2);
 
-        Usuario usuario1 = new Usuario("pepe", "pepe", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de medias","hacemos medias"));
-        Usuario usuario2 = new Usuario("carlitos", "carlitos", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de helados","hacemos helados"));
-        Usuario usuario3 = new Usuario("ana", "ana", TipoPerfil.ADMINISTRADOR, new Organizacion("fabrica de palas","hacemos palas"));
+        Usuario usuario1;
+        Usuario usuario2;
+        Usuario usuario3;
+        Usuario usuario4;
 
-        usuario1.setBandejaDeMensajes(listaMensajes1);
-        usuario2.setBandejaDeMensajes(listaMensajes2);
-        usuario3.setBandejaDeMensajes(listaMensajes2);
+        try {
+            usuario1 = new Usuario("pepe", encriptador.hashear("pepe"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de medias","Hacemos medias"));
+            usuario2 = new Usuario("carlitos", encriptador.hashear("carlitos"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de helados","Hacemos helados"));
+            usuario3 = new Usuario("ana", encriptador.hashear("ana"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de palas","Hacemos palas"));
+            usuario4 = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, new Organizacion("Organizacion 1", "Descripcion"));
 
-        RepoUsuarios.getInstance().agregarUsuario(usuario1);
-        RepoUsuarios.getInstance().agregarUsuario(usuario2);
-        RepoUsuarios.getInstance().agregarUsuario(usuario3);
+            usuario1.setBandejaDeMensajes(listaMensajes1);
+            usuario2.setBandejaDeMensajes(listaMensajes2);
+            usuario3.setBandejaDeMensajes(listaMensajes2);
+            usuario4.setBandejaDeMensajes(listaMensajes1);
 
+            RepoUsuarios.getInstance().agregarUsuario(usuario1);
+            RepoUsuarios.getInstance().agregarUsuario(usuario2);
+            RepoUsuarios.getInstance().agregarUsuario(usuario3);
+            RepoUsuarios.getInstance().agregarUsuario(usuario4);
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     private void inicializarCategorias(){

@@ -84,7 +84,7 @@
 				<select class="form-control col-lg-3" id="entidades" style="position: relative; right: 0.4%;" value="">
 					<option selected disabled>Elija una entidad..</option>
 					{{#each entidades}}
-					<option value="nombre">{{nombre}}</option>
+					<option>{{nombre}}</option>
 					{{/each}}
 				</select>
 
@@ -100,7 +100,6 @@
 
 	<script type="text/javascript">
 
-
 		function logout() {
 			$.ajax({
 				url: "/logout",
@@ -113,11 +112,13 @@
 
 		function vincular() {
 
-			var seleccionado = $("#opciones").children("option:selected").val();
-			var entidad = $("#entidades").children("option:selected").html();
+			var seleccionado = $("#opciones").val();
+			var entidad = $("#entidades").val();
 			var fechaInicio = $("#fechaInicio").val();
 			var fechaFin = $("#fechaFin").val();
 			var orden;
+
+			/////////////////////////////////////////////////////////
 
 			if (seleccionado == "mix") {
 				orden = $("#ordenesMix").val();
@@ -126,25 +127,28 @@
 				orden = $("#ordenes").val();
 			}
 
-			$.ajax({
-				url: '/vincular',
-				type: 'POST',
-				data: {seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },
-				success: function(data) {
-					console.log(data);
-					descargarArchivo(data, entidad, seleccionado);
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log("LPM");
-					console.log(textStatus + " " + errorThrown);
-				}
-			});
+			if (seleccionado != null && entidad != null && orden != null) {
+				$.ajax({
+					url: '/vincular',
+					type: 'POST',
+					data: { seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },
+					success: function (data) {
+						descargarArchivo(data, entidad, seleccionado);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.log(textStatus + " " + errorThrown);
+					}
+				});
+			}
+			else {
+				alert("Hay campos sin seleccionar, verifique nuevamente")
+			}
 		}
 
 		function descargarArchivo(data, nombreEntidad, tipoCriterio) {
 
 			// Creo link
-			var blob = new Blob([data], {type:"octec/stream"});
+			var blob = new Blob([data], { type: "octec/stream" });
 			var url = window.URL.createObjectURL(blob);
 
 			var link = document.createElement('a');
@@ -155,6 +159,8 @@
 
 		// JS de la aparicion de los criterios
 		$(document).ready(function () {
+
+
 			$("#opciones").change(function () {
 				$("#fechaInicio").show();
 				$("#fechaFin").show();

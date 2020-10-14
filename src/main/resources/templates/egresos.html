@@ -71,6 +71,7 @@
 							<td id="egresoPrecio">{{egreso.precioTotal}}</td>
 							<td id="presupuestoEgreso">{{egreso.presupuesto.nombre}}</td>
 							<td>
+								<a href="/detalle_egreso/{{egreso.id}}" class="btn btn-outline-primary">Detalle</a>
 								<a href="/egreso/{{egreso.id}}" class="btn btn-outline-primary">Modificar</a>
 								<a href="/egreso/{{egreso.id}}/presupuesto" class="btn btn-outline-primary">Agregar Presupuesto</a>
 								<button class="btn btn-outline-primary" onclick="borrarEgreso('{{egreso.nombre}}','{{egreso.id}}')">Eliminar</button>

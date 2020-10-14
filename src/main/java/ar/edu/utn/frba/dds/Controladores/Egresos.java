@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -57,6 +58,22 @@ public class Egresos {
             map.put("entidades", entidades);
             map.put("categorias", usuario.getOrganizacion().getCriterios());
             return new ModelAndView(map, "nuevoEgreso.html");
+        }
+    }
+
+    public static ModelAndView paginaDetalleEgreso(Request request, Response response) {
+        if (request.session(false) == null) {
+            return Login.paginaLogin(request, response);
+        } else {
+            Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
+            ar.edu.utn.frba.dds.Operaciones.Egreso egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params(":id"));
+            Map<String, Object> map = new HashMap<>();
+            map.put("egreso", egreso);
+            map.put("nombreEntidad", RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
+            map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
+            if(egreso.getPresupuesto() != null)
+            map.put("categoriasPresupuesto", getCategoriasArray(egreso.getPresupuesto().getCategorias()));
+            return new ModelAndView(map, "detalleEgreso.html");
         }
     }
 
@@ -106,7 +123,7 @@ public class Egresos {
             map.put("entidades", usuario.getOrganizacion().getEntidades());
             map.put("categorias", usuario.getOrganizacion().getCriterios());
             map.put("nombreEntidad", RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
-            map.put("categoriasEgreso", getCategoriasEgreso(egreso));
+            map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
             return new ModelAndView(map, "modificarEgreso.html");
         }
     }
@@ -194,22 +211,13 @@ public class Egresos {
         return null;
     }
 
-    public static List<String> getCategoriasEgreso(Egreso egreso) {
+    public static List<String> getCategoriasArray(List<Categoria> categoriasList) {
         List<String> categorias = new ArrayList<>();
         String comilla = "\"";
 
-        egreso.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
+        categoriasList.forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
 
         return categorias;
-    }
-
-    private static List<String> getItemsEgreso(Egreso egreso) {
-        List<String> items = new ArrayList<>();
-        String comilla = "\"";
-
-        egreso.getItems().forEach(c -> items.add(comilla + c.getItemEgreso().getDescripcion() + comilla));
-
-        return items;
     }
 
     public static String filtrarPorCategoria (Request request, Response response){
@@ -242,4 +250,5 @@ public class Egresos {
         String mensajeJson = gson.toJson(listaEgresos);
         return mensajeJson;
     }
+
 }

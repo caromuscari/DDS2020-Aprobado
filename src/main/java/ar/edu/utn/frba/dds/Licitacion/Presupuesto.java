@@ -54,6 +54,13 @@ public class Presupuesto {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     //Metodos
     public void asociarCategoria(Categoria categoria){
         this.categorias.add(categoria);
@@ -75,13 +82,5 @@ public class Presupuesto {
         categorias.removeAll(itemsEgreso.stream().map(ItemOperacionEgreso::getItemEgreso).map(ItemEgreso::getCategoria).collect(Collectors.toList()));
         if (categorias.size() == 0) return true;
         else return false;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 }

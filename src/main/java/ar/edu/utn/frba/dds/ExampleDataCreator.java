@@ -56,7 +56,7 @@ public class ExampleDataCreator {
                 5, 10, 50, "Agropecuario");
         Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);
-        Empresa empresa2 = new Empresa("Empresa 2", "LME SRL", Long.parseLong("234567"),
+        Empresa empresa2 = new Empresa("Empresa 2", "MercadoLibre SRL", Long.parseLong("234567"),
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);
 
         ItemEgreso itemEgreso = new ItemEgreso("1234", "item 1", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
@@ -71,6 +71,8 @@ public class ExampleDataCreator {
 
         empresa1.generarEgreso(itemsOperacion1, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 1");
         empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
+        empresa2.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 3");
+
         RepositorioEntidades.getInstance().crearEntidad(empresa1);
         RepositorioEntidades.getInstance().crearEntidad(empresa2);
 
@@ -101,8 +103,10 @@ public class ExampleDataCreator {
         ingresosEmpresa2.add(ingreso3);
         empresa2.setIngresos(ingresosEmpresa2);
 
-
-
+        Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020,02,20));
+        List<Ingreso> ingresosEmpresa3 = new ArrayList<>();
+        ingresosEmpresa3.add(ingreso4);
+        empresa2.setIngresos(ingresosEmpresa3);
 
 
         //Creo licitaciones y presupuestos

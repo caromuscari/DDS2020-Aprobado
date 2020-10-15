@@ -3,12 +3,9 @@ package ar.edu.utn.frba.dds.Repositorios;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
-import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Usuario.Hash;
-import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

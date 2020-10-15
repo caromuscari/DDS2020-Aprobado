@@ -26,6 +26,7 @@ public class PrimeroIngreso extends Vinculador{
         List<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
         List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
         Iterator<Ingreso> ingresos = ingrOrdenados.iterator();
+        List <Ingreso> ingresosVinculados = new ArrayList<>();
 
         for(int i = 0; i<egrOrdenados.size(); i++) {
             Egreso egreso = egrOrdenados.get(i);
@@ -33,9 +34,10 @@ public class PrimeroIngreso extends Vinculador{
             Ingreso ingreso = ingresos.next();
             if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())){
                 ingreso.asociarEgreso(egreso);
+                ingresosVinculados.add(ingreso);
             }
         }
-        return new ResultadoVinculacion(entidad, LocalDate.now(), ingresosNoCompletos(entidad.getIngresos()), egresosNoVinculados(entidad.getEgresos()));
+        return new ResultadoVinculacion(entidad, LocalDate.now(), ingresosNoCompletos(entidad.getIngresos()), egresosNoVinculados(entidad.getEgresos()), ingresosVinculados);
     }
 
     private List<Ingreso> ordenarIngresos(List<Ingreso> ingresos) {

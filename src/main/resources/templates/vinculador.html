@@ -116,19 +116,19 @@
 			var entidad = $("#entidades").val();
 			var fechaInicio = $("#fechaInicio").val();
 			var fechaFin = $("#fechaFin").val();
-			var orden;
+			var orden = "";
 
 			/////////////////////////////////////////////////////////
 
 			if (seleccionado == "mix") {
 				orden = $("#ordenesMix").val();
 			}
-			else {
+			else if(seleccionado != "fecha"){
 				orden = $("#ordenes").val();
 			}
 
 			if (seleccionado != null && entidad != null && orden != null) {
-				$.ajax({
+				$.ajax({		
 					url: '/vincular',
 					type: 'POST',
 					data: { seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },

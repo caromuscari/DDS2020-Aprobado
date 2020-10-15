@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.Vinculador;
 
 import ar.edu.utn.frba.dds.Entidad.Empresa;
-import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import org.junit.Assert;
@@ -56,8 +55,8 @@ public class VinculadorTest {
 
         //Vinculador y condiciones
         condicionFecha = new CondicionFecha();
-        condicionFecha.setDiasDespues(15);
-        condicionFecha.setDiasAntes(15);
+        condicionFecha.setFinPeriodo(LocalDate.parse("2020-04-15"));
+        condicionFecha.setInicioPeriodo(LocalDate.parse("2020-05-15"));
         condiciones = new ArrayList<>();
         condiciones.add(condicionFecha);
 

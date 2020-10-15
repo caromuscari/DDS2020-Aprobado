@@ -7,18 +7,13 @@ import ar.edu.utn.frba.dds.Vinculador.*;
 import ar.edu.utn.frba.dds.Vinculador.PrimeroEgreso;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
+
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
-import java.io.*;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
 import java.util.*;
 
 public class VinculadorController {
@@ -43,8 +38,6 @@ public class VinculadorController {
         //Inicializaciones
         condiciones = new ArrayList<>();
         CondicionFecha condicionFecha = new CondicionFecha();
-        Integer diasAntes;
-        Integer diasDespues;
         ResultadoVinculacion resultadoVinculacion;
         String seleccionado = request.queryMap("seleccionado").value();
         String orden = request.queryMap("orden").value();
@@ -52,28 +45,22 @@ public class VinculadorController {
         Entidad entidad = repoEntidades.obtenerEntidadPorNombre(ent);
 
         // Periodo de aceptabilidad de ingresos
-        String fechaInicio = request.queryMap("fechaInicio").value();
-        String fechaFin = request.queryMap("fechaFin").value();
-        diasAntes = Period.between(LocalDate.parse(fechaInicio), LocalDate.now()).getDays();
-        diasDespues = Period.between(LocalDate.parse(fechaFin), LocalDate.now()).getDays();
+        LocalDate fechaInicio = LocalDate.parse(request.queryMap("fechaInicio").value());
+        LocalDate fechaFin = LocalDate.parse(request.queryMap("fechaFin").value());
 
-        condicionFecha.setDiasAntes(diasAntes);
-        condicionFecha.setDiasDespues(diasDespues);
+        condicionFecha.setInicioPeriodo(fechaInicio);
+        condicionFecha.setFinPeriodo(fechaFin);
         condiciones.add(condicionFecha);
 
             if (seleccionado.equals("fecha")) {
                 Fecha procFecha = new Fecha();
                 procFecha.setCondiciones(condiciones);
                 resultadoVinculacion = procFecha.vincular(entidad);
-                resultadoVinculacion.setUser(request.session().attribute("usuario"));
-                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
 
             } else if (seleccionado.equals("mix")) {
                 Mix procMix = mixSegunOrdenes(orden);
                 procMix.setCondiciones(condiciones);
                 resultadoVinculacion = procMix.vincular(entidad);
-                resultadoVinculacion.setUser(request.session().attribute("usuario"));
-                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
 
             } else if (seleccionado.equals("primeroEgreso")) {
                 PrimeroEgreso procEgreso = null;
@@ -84,8 +71,6 @@ public class VinculadorController {
                 }
                 procEgreso.setCondiciones(condiciones);
                 resultadoVinculacion = procEgreso.vincular(entidad);
-                resultadoVinculacion.setUser(request.session().attribute("usuario"));
-                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
 
             } else {
                 PrimeroIngreso procIngreso = null;
@@ -96,9 +81,10 @@ public class VinculadorController {
                 }
                 procIngreso.setCondiciones(condiciones);
                 resultadoVinculacion = procIngreso.vincular(entidad);
-                resultadoVinculacion.setUser(request.session().attribute("usuario"));
-                resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
             }
+
+        resultadoVinculacion.setUser(request.session().attribute("usuario"));
+        resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
 
         // Creo el JSON
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

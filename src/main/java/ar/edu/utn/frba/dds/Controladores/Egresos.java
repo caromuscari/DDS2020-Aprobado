@@ -11,13 +11,17 @@ import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.google.gson.Gson;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.servlet.MultipartConfigElement;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,8 +40,8 @@ public class Egresos {
             List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
-            map.put("egresos",egresos);
-            map.put("categorias",categorias);
+            map.put("egresos", egresos);
+            map.put("categorias", categorias);
             return new ModelAndView(map, "egresos.html");
         }
     }
@@ -67,8 +71,8 @@ public class Egresos {
             map.put("egreso", egreso);
             map.put("nombreEntidad", RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
             map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
-            if(egreso.getPresupuesto() != null)
-            map.put("categoriasPresupuesto", getCategoriasArray(egreso.getPresupuesto().getCategorias()));
+            if (egreso.getPresupuesto() != null)
+                map.put("categoriasPresupuesto", getCategoriasArray(egreso.getPresupuesto().getCategorias()));
             return new ModelAndView(map, "detalleEgreso.html");
         }
     }
@@ -88,17 +92,28 @@ public class Egresos {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
+            Path tempFile;
+            File uploadDir = new File("upload");
+            uploadDir.mkdir();
             try {
-                String presupuesto = request.queryParams("presupuesto");
+                tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
+
+                request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+                InputStream input = request.raw().getPart("uploaded_file").getInputStream();
+                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+
                 ObjectMapper mapper = new ObjectMapper();
-                mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-                JsonNode jsonNode = mapper.readTree(presupuesto);
-                PresupuestoDTO presupuestoDTO = mapper.convertValue(jsonNode, PresupuestoDTO.class);
+                PresupuestoDTO presupuestoDTO = mapper.readValue(tempFile.toFile(), PresupuestoDTO.class);
 
                 ar.edu.utn.frba.dds.Operaciones.Egreso egreso = RepositorioEntidades.getInstance().obtenerEgresoPorId(request.params("id"));
                 egreso.setPresupuesto(new Presupuesto(new ArrayList<>(), presupuestoDTO.getProveedor(), presupuestoDTO.getNombre()));
+
+                Files.deleteIfExists(tempFile);
             } catch (Exception e) {
 
+            } finally {
+                uploadDir.delete();
             }
 
             response.redirect("/egreso");
@@ -216,32 +231,32 @@ public class Egresos {
         return categorias;
     }
 
-    public static String filtrarPorCategoria (Request request, Response response){
+    public static String filtrarPorCategoria(Request request, Response response) {
         String categoria = request.queryParams("categoria");
         List<EgresoDTO> egresos = new ArrayList<>();
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
         entidades.forEach(entidad -> {
-                entidad.getEgresos().stream()
+                    entidad.getEgresos().stream()
                             .filter(egreso -> filtrar(egreso, categoria))
                             .map(egreso -> new EgresoDTO(egreso, entidad))
                             .collect(Collectors.toCollection(() -> egresos));
                 }
-            );
+        );
         return toJson(egresos);
     }
 
-    private static boolean filtrar(Egreso egreso, String categoria){
+    private static boolean filtrar(Egreso egreso, String categoria) {
         return egreso.getCategorias().stream()
-                                       .filter(c -> c.getNombre().equals(categoria) || Egresos.tieneCategoria(c,categoria))
-                                        .count()>0;
+                .filter(c -> c.getNombre().equals(categoria) || Egresos.tieneCategoria(c, categoria))
+                .count() > 0;
     }
 
-    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria){
+    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria) {
         Categoria categoriaHija = new Categoria(nombreCategoria);
         return categoria.contieneCategoriaHija(categoriaHija);
     }
 
-    private static String toJson(List<EgresoDTO> listaEgresos){
+    private static String toJson(List<EgresoDTO> listaEgresos) {
         Gson gson = new Gson();
         String mensajeJson = gson.toJson(listaEgresos);
         return mensajeJson;

@@ -1,0 +1,11 @@
+#campoUser{
+    position: relative; left: 30% ;
+}
+
+#campoPass{
+    position: relative; left: 30% ;
+}
+
+#botonIngresar{
+    position: absolute; right: 29.5%;
+}

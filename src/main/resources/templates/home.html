@@ -9,6 +9,7 @@
 
 	<link href="public/bootstrap.min.css" rel="stylesheet">
 	<link href="public/css/main.css" rel="stylesheet">
+	<link href="public/css/home.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 	<script src="public/bootstrap.min.js"></script>
 
@@ -44,10 +45,16 @@
 				</nav>
 				<br>
 				<h1>GeSoc</h1>
+
+				<br><br>
+				<p id="info">Información de la organizacion</p>
 				<br>
-				<h2>{{organizacion.nombre}}</h2>
-				<br>
-				<p>{{organizacion.descripcion}}</p>
+
+				<div class="datos">
+					<h2 class="display-4" id="orgNombre">{{organizacion.nombre}}</h2>
+					<br>
+					<p id="orgDesc">{{organizacion.descripcion}}</p>
+				</div>
 			</div>
 		</div>
 	</div>

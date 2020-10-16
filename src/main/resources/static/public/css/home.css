@@ -1,11 +1,21 @@
-#campoUser{
-    position: relative; left: 30% ;
+#orgNombre{
+    text-align: center;
 }
 
-#campoPass{
-    position: relative; left: 30% ;
+#orgDesc{
+    text-align: center; 
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-#botonIngresar{
-    position: absolute; right: 29.5%;
+.datos{
+    background-color: lavender;
+    border-radius: 15px 15px 15px 15px;
+    width: 50%;
+    position: relative; left: 25%;
+}
+
+#info{
+    font-size: 25px;
+    text-align: center;
+    font-style: oblique;
 }

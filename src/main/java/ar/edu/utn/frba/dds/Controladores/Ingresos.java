@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Controladores;
 
+import ar.edu.utn.frba.dds.App;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.IngresoDTO;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Ingresos {
 
@@ -33,8 +35,13 @@ public class Ingresos {
             entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
             List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             Map<String, Object> map = new HashMap<>();
-            map.put("ingresos",ingresos);
+            int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
+            int elementoInicial = (pagina-1)* App.getPageSize();
+            int elementoFinal = ((pagina*App.getPageSize()) < ingresos.size()) ? (pagina*App.getPageSize()) : ingresos.size();
+            map.put("ingresos",ingresos.subList(elementoInicial,elementoFinal));
             map.put("categorias",categorias);
+            List<Integer> range = IntStream.rangeClosed(1, ((ingresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
+            map.put("pages",range);
             return new ModelAndView(map, "ingresos.html");
         }
     }

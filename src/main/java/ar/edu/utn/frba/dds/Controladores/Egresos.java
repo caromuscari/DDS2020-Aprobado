@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Controladores;
 
+import ar.edu.utn.frba.dds.App;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.PresupuestoDTO;
@@ -25,6 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Egresos {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
@@ -40,8 +42,13 @@ public class Egresos {
             List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
-            map.put("egresos", egresos);
+            int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
+            int elementoInicial = (pagina-1)* App.getPageSize();
+            int elementoFinal = ((pagina*App.getPageSize()) < egresos.size()) ? (pagina*App.getPageSize()) : egresos.size();
+            map.put("egresos",  egresos.subList(elementoInicial,elementoFinal));
             map.put("categorias", categorias);
+            List<Integer> range = IntStream.rangeClosed(1, ((egresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
+            map.put("pages",range);
             return new ModelAndView(map, "egresos.html");
         }
     }

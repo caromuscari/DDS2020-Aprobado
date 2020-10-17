@@ -80,6 +80,13 @@
 					{{/each}}
 					</tbody>
 				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						{{#each pages}}
+							<li class="page-item"><a class="page-link" href="/egreso?page={{.}}">{{.}}</a></li>
+						{{/each}}
+					</ul>
+				</nav>
 			</div>
 		</div>
 		<div class="sidenav">

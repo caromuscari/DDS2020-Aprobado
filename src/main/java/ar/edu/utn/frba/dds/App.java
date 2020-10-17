@@ -20,6 +20,8 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 public class App {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
 
+    private static int pageSize = 2;
+
     public static void main(String[] args) {
 
         // ===============================================================================
@@ -105,5 +107,13 @@ public class App {
     public static ModelAndView redireccion(Request request, Response response){
         response.redirect("/home");
         return null;
+    }
+
+    public static int getPageSize() {
+        return pageSize;
+    }
+
+    public static void setPageSize(int pageSize) {
+        App.pageSize = pageSize;
     }
 }

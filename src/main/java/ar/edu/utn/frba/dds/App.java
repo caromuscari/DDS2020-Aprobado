@@ -10,6 +10,7 @@ import java.util.*;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
+import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -21,6 +22,7 @@ public class App {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
 
     private static int pageSize = 2;
+    private static Gson gson = new Gson();
 
     public static void main(String[] args) {
 
@@ -80,8 +82,7 @@ public class App {
         //Licitaciones
         post("/licitacion", LicitacionController::crearLicitacion);
         post("/validarLicitacion", LicitacionController::validarLicitacion);
-        get("/licitacion", LicitacionController::mostrarMensajes);
-
+        get("/licitacion", (request, response) -> LicitacionController.mostrarMensajes(request,response), gson::toJson);
         //Filtros
         get("/egreso/filtrar/", Egresos::filtrarPorCategoria);
         get("/ingreso/filtrar/", Ingresos::filtrarPorCategoria);

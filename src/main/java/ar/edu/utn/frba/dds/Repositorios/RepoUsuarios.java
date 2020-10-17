@@ -21,11 +21,6 @@ public class RepoUsuarios {
         encriptador = new Hash();
         registrados = new HashMap<>();
 
-        /* crearCategorías hay que moverlo de acá, yo deje el usuario gesoc de prueba pero lo mude al
-        *  ExampleDataCreator
-        */
-
-        //crearCategorias(organizacion);
     }
 
     public static RepoUsuarios getInstance() {
@@ -47,25 +42,4 @@ public class RepoUsuarios {
         registrados.put(usuario.getUsuario(),usuario);
     }
 
-    public void crearCategorias(Organizacion org){
-        Categoria america = new Categoria("America");
-        Categoria asia = new Categoria("Asia");
-
-        List<Categoria> categoriasPaises = new ArrayList<>();
-        Categoria argentina = new Categoria("Argentina");
-        categoriasPaises.add(argentina);
-        categoriasPaises.add(new Categoria("Peru"));
-
-        List<Categoria> categoriasContinente = new ArrayList<>();
-        categoriasContinente.add(america);
-        categoriasContinente.add(asia);
-
-        CriterioCategoria criterioContinente = new CriterioCategoria("Continente", categoriasContinente);
-        CriterioCategoria criterioPais = new CriterioCategoria("Pais", categoriasPaises);
-
-        america.setCriterioHijo(criterioPais);
-
-        org.asociarCriterio(criterioContinente);
-        org.asociarCriterio(criterioPais);
-    }
 }

@@ -55,5 +55,9 @@ public class Organizacion {
         this.criterios.add(criterioCategoria);
     }
 
+    public Categoria obtenerCategoria(String nombre){
+        List<Categoria> totalCategorias = this.criterios.stream().map(c -> c.getTotalCategorias()).flatMap(List::stream).collect(Collectors.toList());
 
+        return totalCategorias.stream().filter(c -> c.getNombre().matches(nombre)).findFirst().get();
+    }
 }

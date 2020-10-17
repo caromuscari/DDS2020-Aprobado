@@ -64,7 +64,7 @@ public class Egresos {
             map.put("proveedores", proveedores.obtenerProveedores());
             map.put("mediosDePago", medios.obtenerMediosDePago());
             map.put("entidades", entidades);
-            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             return new ModelAndView(map, "nuevoEgreso.html");
         }
     }
@@ -140,7 +140,7 @@ public class Egresos {
             map.put("proveedores", proveedores.obtenerProveedores());
             map.put("mediosDePago", medios.obtenerMediosDePago());
             map.put("entidades", usuario.getOrganizacion().getEntidades());
-            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             map.put("nombreEntidad", RepositorioEntidades.getInstance().obtenerEntidadDeEgreso(egreso).getNombre());
             map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
             return new ModelAndView(map, "modificarEgreso.html");
@@ -175,7 +175,9 @@ public class Egresos {
         String nombreEgreso = request.queryParams("nombre");
         String fechaEgreso = request.queryParams("fecha");
         String[] nombreCategorias = request.queryParamsValues("categorias");
+        String descrMedioDePago = request.queryParams("descrMedioDePago");
         String nombreMedioDePago = request.queryParams("medioDePago");
+        String numeroMedioDePago = request.queryParams("numeroMedioDePago");
         String id = request.params(":id");
 
         Proveedor proveedor = RepositorioProveedores.getInstance().obtenerProveedorPorNombre(nombreProveedor);
@@ -211,19 +213,14 @@ public class Egresos {
 
         List<Categoria> categorias = new ArrayList<>();
         if (nombreCategorias != null) {
-            List<Categoria> total = usuario.getOrganizacion().getCriterios().stream()
-                    .map(c -> c.getCategorias()).flatMap(List::stream)
-                    .collect(Collectors.toList());
-
             for (String cat : nombreCategorias) {
-                categorias.add(total.stream()
-                        .filter(c -> c.getNombre().matches(cat))
-                        .findFirst().get());
+                categorias.add(usuario.getOrganizacion().obtenerCategoria(cat));
             }
         }
+
         egreso.setCategorias(categorias);
 
-        MedioDePago medio = RepositorioMedioDePago.getInstance().obtenerItemsPorId(nombreMedioDePago);
+        MedioDePago medio = new MedioDePago(descrMedioDePago,Long.parseLong(numeroMedioDePago), TipoPago.valueOf(nombreMedioDePago));
         egreso.setMedioDePago(medio);
 
         response.redirect("/egreso");

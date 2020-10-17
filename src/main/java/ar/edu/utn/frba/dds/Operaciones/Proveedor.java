@@ -36,4 +36,8 @@ public class Proveedor {
 
     public List<Categoria> getCategorias() { return categorias; }
     public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
+
+    public void addItem(ItemEgreso item){
+        this.items.add(item);
+    }
 }

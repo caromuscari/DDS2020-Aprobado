@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.Categorizacion;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,5 +38,13 @@ public class Categoria {
     @Override
     public int hashCode() {
         return Objects.hash(nombre, criterioHijo);
+    }
+
+    public List<Categoria> getCategoriasHijas(){
+        List<Categoria> categorias = new ArrayList<>();
+        if (this.criterioHijo != null){
+            categorias = this.criterioHijo.getTotalCategorias();
+        }
+        return categorias;
     }
 }

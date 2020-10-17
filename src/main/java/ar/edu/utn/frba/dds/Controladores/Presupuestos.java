@@ -10,10 +10,12 @@ import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ public class Presupuestos {
             ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = RepositorioEntidades.getInstance().obtenerPresupuestoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
-            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             map.put("categoriasPresupuestos",getCategoriasPresupuestos(presupuesto));
             return new ModelAndView(map, "modificarPresupuesto.html");
         }

@@ -52,14 +52,9 @@
                     <h4>{{presupuesto.nombre}}</h4>
                     <div class="form-group row">
                         <label for="categorias" class="col-sm-4 col-form-label">Categorias</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-8" id="divCategorias">
                             <select class="form-control" id="categorias" name="categorias" multiple="multiple">
-                                {{#each categorias}}
-                                    <optgroup label="{{nombre}}"></optgroup>
-                                    {{#each categorias}}
-                                        <option value="{{nombre}}">{{nombre}}</option>
-                                    {{/each}}
-                                {{/each}}
+
                             </select>
                         </div>
                     </div>
@@ -74,7 +69,10 @@
 
 <script type="text/javascript">
 		$(document).ready(function() {
+			cargarCategorias();
 			$('#categorias').multiselect();
+			estiloCategoriasHijas();
+
             var categPresupuesto = {{{categoriasPresupuestos}}}
             var i;
 			if(categPresupuesto.length > 0){
@@ -92,6 +90,70 @@
 					location.replace("/login");
 				}
 			})
+		}
+
+		function cargarCategorias(){
+			var select = document.getElementById("categorias");
+			var categ = {{{categorias}}};
+			var hijos;
+			var i, j;
+			for(i = 0; i < categ.length; i++){
+				var optgroup = select.appendChild(document.createElement("optgroup"));
+				optgroup.label = categ[i].nombre;
+
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length; j++){
+					var option = select.appendChild(document.createElement("option"));
+					option.value = listaHijos[j].nombre;
+					option.textContent = listaHijos[j].nombre;
+
+					if(listaHijos[j].criterioHijo){
+						loopCategorias(select,listaHijos[j].criterioHijo.categorias);
+					}
+				}
+			}
+		}
+
+		function loopCategorias(select, hijos){
+			var i;
+			for(i = 0; i < hijos.length; i++){
+				var option = select.appendChild(document.createElement("option"));
+				option.value = hijos[i].nombre;
+				option.textContent = hijos[i].nombre;
+
+				if(hijos[i].criterioHijo){
+					loopCategorias(select,hijos[i].criterioHijo.categorias);
+				}
+			}
+		}
+
+		function estiloCategoriasHijas(){
+			var ul = document.getElementById("divCategorias").querySelector("ul");
+			ul.style.minWidth = "20rem";
+			var labels = [...document.getElementById("divCategorias").querySelectorAll("label")];
+			var categ = {{{categorias}}};
+			var hijos;
+			var i, j;
+			for(i = 0; i < categ.length; i++){
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length; j++){
+					if(listaHijos[j].criterioHijo){
+						estiloCategorias(labels,listaHijos[j].criterioHijo.categorias,1);
+					}
+				}
+			}
+		}
+
+		function estiloCategorias(labels, hijos, jerarquia){
+			var i;
+			var numero = jerarquia*15;
+			for(i = 0; i < hijos.length; i++){
+				var find = labels.find(elemento => elemento.title ==  hijos[i].nombre);
+				find.style = "margin-left: " + numero + "px;";
+				if(hijos[i].criterioHijo){
+					estiloCategorias(labels,hijos[i].criterioHijo.categorias, jerarquia+1);
+				}
+			}
 		}
 	</script>
 </body>

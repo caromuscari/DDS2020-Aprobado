@@ -16,6 +16,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class Ingresos {
             ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = RepositorioEntidades.getInstance().obtenerIngresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
-            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             map.put("categoriasIngreso", getCategoriasIngreso(ingreso));
             return new ModelAndView(map, "modificarIngreso.html");
         }

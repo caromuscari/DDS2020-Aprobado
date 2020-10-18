@@ -12,6 +12,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -22,7 +23,7 @@ public class VinculadorController {
     private static RepositorioEntidades repoEntidades = RepositorioEntidades.getInstance();
     private static List<CondicionVinculacion> condiciones;
 
-    public static ModelAndView paginaVinculador(Request request, Response response) {
+    public static ModelAndView paginaVinculador(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -34,7 +35,7 @@ public class VinculadorController {
         }
     }
 
-    public static String vincular(Request request, Response response){
+    public static String vincular(Request request, Response response, EntityManager entity){
         //Inicializaciones
         condiciones = new ArrayList<>();
         CondicionFecha condicionFecha = new CondicionFecha();

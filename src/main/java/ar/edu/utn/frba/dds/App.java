@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Controladores.*;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 
@@ -11,15 +10,17 @@ import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 import com.google.gson.Gson;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
+import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 
 public class App {
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
+    static EntityManagerFactory entityManagerFactory;
 
     private static int pageSize = 2;
     private static Gson gson = new Gson();
@@ -40,42 +41,44 @@ public class App {
             staticFiles.location("/public");
         }
 
+        entityManagerFactory = Persistence.createEntityManagerFactory("db");
+
         // Acceso: http://localhost:4567/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
 
         //Login
         get("/login", Login::paginaLogin, engine);
-        post("/autenticacion", Login::autenticar);
+        post("/autenticacion", RouteWithTransaction(Login::autenticar));
         post("/logout", Login::logout);
 
         //Home
         get("/", App::redireccion, engine);
-        get("/home", App::paginaHome, engine);
+        get("/home", TemplWithTransaction(App::paginaHome), engine);
 
         //Ingresos
-        get("/ingreso", Ingresos::paginaIngresos, engine);
-        get("/ingreso/:id", Ingresos::modificarIngreso, engine);
-        post("/ingreso/:id", Ingresos::guardarIngreso, engine);
+        get("/ingreso", TemplWithTransaction(Ingresos::paginaIngresos), engine);
+        get("/ingreso/:id", TemplWithTransaction(Ingresos::modificarIngreso), engine);
+        post("/ingreso/:id", TemplWithTransaction(Ingresos::guardarIngreso), engine);
 
         //Presupuestos
-        get("/presupuesto", Presupuestos::paginaPresupuestos, engine);
-        get("/presupuesto/:id", Presupuestos::modificarPresupuesto, engine);
-        post("/presupuesto/:id", Presupuestos::guardarPresupuesto, engine);
+        get("/presupuesto", TemplWithTransaction(Presupuestos::paginaPresupuestos), engine);
+        get("/presupuesto/:id", TemplWithTransaction(Presupuestos::modificarPresupuesto), engine);
+        post("/presupuesto/:id", TemplWithTransaction(Presupuestos::guardarPresupuesto), engine);
 
         //Vinculador
-        get("/vinculador", VinculadorController::paginaVinculador, engine);
-        post("/vincular", VinculadorController::vincular);
+        get("/vinculador", TemplWithTransaction(VinculadorController::paginaVinculador), engine);
+        post("/vincular", RouteWithTransaction(VinculadorController::vincular));
 
         //Egresos
-        get("/egreso", Egresos::paginaEgresos, engine);
-        post("/egreso", Egresos::guardarEgreso, engine);
-        get("/nuevo_egreso", Egresos::paginaNuevoEgreso, engine);
-        get("/egreso/:id", Egresos::paginaModificarEgreso, engine);
-        get("/detalle_egreso/:id", Egresos::paginaDetalleEgreso, engine);
-        get("/egreso/:id/presupuesto", Egresos::paginaAgregarPresupuesto, engine);
-        post("/egreso/:id/presupuesto", Egresos::agregarPresupuesto, engine);
-        post("/egreso/:id", Egresos::guardarEgreso, engine);
-        delete("/egreso/:id", Egresos::borrarEgreso, engine);
+        get("/egreso", TemplWithTransaction(Egresos::paginaEgresos), engine);
+        post("/egreso", TemplWithTransaction(Egresos::guardarEgreso), engine);
+        get("/nuevo_egreso", TemplWithTransaction(Egresos::paginaNuevoEgreso), engine);
+        get("/egreso/:id", TemplWithTransaction(Egresos::paginaModificarEgreso), engine);
+        get("/detalle_egreso/:id", TemplWithTransaction(Egresos::paginaDetalleEgreso), engine);
+        get("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::paginaAgregarPresupuesto), engine);
+        post("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::agregarPresupuesto), engine);
+        post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
+        delete("/egreso/:id", TemplWithTransaction(Egresos::borrarEgreso), engine);
 
         get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
 
@@ -83,9 +86,10 @@ public class App {
         post("/licitacion", LicitacionController::crearLicitacion);
         post("/validarLicitacion", LicitacionController::validarLicitacion);
         get("/licitacion", (request, response) -> LicitacionController.mostrarMensajes(request,response), gson::toJson);
+
         //Filtros
-        get("/egreso/filtrar/", Egresos::filtrarPorCategoria);
-        get("/ingreso/filtrar/", Ingresos::filtrarPorCategoria);
+        get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
+        get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
 
         // ===============================================================================
 
@@ -93,7 +97,7 @@ public class App {
         new ExampleDataCreator().createData();
     }
 
-    public static ModelAndView paginaHome(Request request, Response response) {
+    public static ModelAndView paginaHome(Request request, Response response, EntityManager entity) {
         // Si no hay session creada por login, me redirige a la vista de Login
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
@@ -116,5 +120,36 @@ public class App {
 
     public static void setPageSize(int pageSize) {
         App.pageSize = pageSize;
+    }
+
+    private static TemplateViewRoute TemplWithTransaction(dds.WithTransaction<ModelAndView> fn) {
+        TemplateViewRoute r = (req, res) -> {
+            EntityManager em = entityManagerFactory.createEntityManager();
+            em.getTransaction().begin();
+            try {
+                ModelAndView result = fn.method(req, res, em);
+                em.getTransaction().commit();
+                return result;
+            } catch (Exception ex) {
+                em.getTransaction().rollback();
+                throw ex;
+            }
+        };
+        return r;
+    }
+    private static Route RouteWithTransaction(dds.WithTransaction<Object> fn) {
+        Route r = (req, res) -> {
+            EntityManager em = entityManagerFactory.createEntityManager();
+            em.getTransaction().begin();
+            try {
+                Object result = fn.method(req, res, em);
+                em.getTransaction().commit();
+                return result;
+            } catch (Exception ex) {
+                em.getTransaction().rollback();
+                throw ex;
+            }
+        };
+        return r;
     }
 }

@@ -15,6 +15,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.stream.IntStream;
 
 public class Presupuestos {
 
-    public static ModelAndView paginaPresupuestos(Request request, Response response) {
+    public static ModelAndView paginaPresupuestos(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request,response);
         }
@@ -43,7 +44,7 @@ public class Presupuestos {
         }
     }
 
-    public static ModelAndView modificarPresupuesto(Request request, Response response) {
+    public static ModelAndView modificarPresupuesto(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request,response);
         }
@@ -58,7 +59,7 @@ public class Presupuestos {
         }
     }
 
-    public static ModelAndView guardarPresupuesto(Request request, Response response) {
+    public static ModelAndView guardarPresupuesto(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }

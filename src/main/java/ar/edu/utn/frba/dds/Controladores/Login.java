@@ -6,6 +6,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class Login {
         return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
     }
 
-    public static String autenticar(Request request, Response response) throws NoSuchAlgorithmException {
+    public static String autenticar(Request request, Response response, EntityManager entity) throws NoSuchAlgorithmException {
         String user = request.queryMap("usuario").value();
         String pass = request.queryMap("pass").value();
 

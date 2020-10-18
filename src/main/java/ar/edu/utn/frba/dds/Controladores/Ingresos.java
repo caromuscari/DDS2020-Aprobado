@@ -16,6 +16,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.stream.IntStream;
 
 public class Ingresos {
 
-    public static ModelAndView paginaIngresos(Request request, Response response) {
+    public static ModelAndView paginaIngresos(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request,response);
         }
@@ -46,7 +47,7 @@ public class Ingresos {
         }
     }
 
-    public static ModelAndView modificarIngreso(Request request, Response response) {
+    public static ModelAndView modificarIngreso(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request,response);
         }
@@ -61,7 +62,7 @@ public class Ingresos {
         }
     }
 
-    public static ModelAndView guardarIngreso(Request request, Response response) {
+    public static ModelAndView guardarIngreso(Request request, Response response, EntityManager entity) {
         if(request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }
@@ -98,7 +99,7 @@ public class Ingresos {
         return categorias;
     }
 
-    public static String filtrarPorCategoria (Request request, Response response){
+    public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
         String categoria = request.queryParams("categoria");
         List<IngresoDTO> ingresos = new ArrayList<>();
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();

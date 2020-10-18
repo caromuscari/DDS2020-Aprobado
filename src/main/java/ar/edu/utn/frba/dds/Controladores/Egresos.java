@@ -17,6 +17,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class Egresos {
     private static RepositorioProveedores proveedores = RepositorioProveedores.getInstance();
     private static RepositorioMedioDePago medios = RepositorioMedioDePago.getInstance();
 
-    public static ModelAndView paginaEgresos(Request request, Response response) {
+    public static ModelAndView paginaEgresos(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -53,7 +54,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView paginaNuevoEgreso(Request request, Response response) {
+    public static ModelAndView paginaNuevoEgreso(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -68,7 +69,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView paginaDetalleEgreso(Request request, Response response) {
+    public static ModelAndView paginaDetalleEgreso(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -84,7 +85,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView paginaAgregarPresupuesto(Request request, Response response) {
+    public static ModelAndView paginaAgregarPresupuesto(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -95,7 +96,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView agregarPresupuesto(Request request, Response response) {
+    public static ModelAndView agregarPresupuesto(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -128,7 +129,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView paginaModificarEgreso(Request request, Response response) {
+    public static ModelAndView paginaModificarEgreso(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
@@ -146,7 +147,7 @@ public class Egresos {
         }
     }
 
-    public static ModelAndView borrarEgreso(Request request, Response response) {
+    public static ModelAndView borrarEgreso(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }
@@ -162,7 +163,7 @@ public class Egresos {
         return new ModelAndView(map, "egresos.html");
     }
 
-    public static ModelAndView guardarEgreso(Request request, Response response) {
+    public static ModelAndView guardarEgreso(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }
@@ -237,7 +238,7 @@ public class Egresos {
         return categorias;
     }
 
-    public static String filtrarPorCategoria(Request request, Response response) {
+    public static String filtrarPorCategoria(Request request, Response response, EntityManager entity) {
         String categoria = request.queryParams("categoria");
         List<EgresoDTO> egresos = new ArrayList<>();
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();

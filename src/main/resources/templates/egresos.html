@@ -92,9 +92,6 @@
 		<div class="sidenav">
 				<a>filtrar por categoria</a>
 				<select class="form-control" id="filtroCategoria" name="filtroCategoria" >
-					{{#each categorias}}
-					<option value="{{nombre}}" selected>{{nombre}}</option>
-					{{/each}}
 				</select>
 				<button class="btn btn-outline-primary" onclick="filtrarEgreso()">Filtrar</button>
 		</div>
@@ -103,6 +100,8 @@
 
 
 	<script type="text/javascript">
+		var TAB = "\t";
+
 		function borrarEgreso(codigo,id){
 			var confirmaBorrado = confirm("Desea borrar el egreso " + codigo);
 			if (confirmaBorrado == true) {
@@ -169,6 +168,50 @@
 				}
 			})
 		}
+
+		function cargarCategorias(){
+			var select = document.getElementById("filtroCategoria");
+			var categ = {{{categorias}}};
+			var hijos;
+			var i, j;
+			for(i = 0; i < categ.length; i++){
+				var optgroup = select.appendChild(document.createElement("optgroup"));
+				optgroup.label = categ[i].nombre;
+
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length; j++){
+					var option = select.appendChild(document.createElement("option"));
+					option.value = listaHijos[j].nombre;
+					option.textContent = listaHijos[j].nombre;
+
+					if(listaHijos[j].criterioHijo){
+						var nivelHijo = 0;
+						loopCategorias(select,listaHijos[j].criterioHijo.categorias,nivelHijo);
+					}
+				}
+			}
+		}
+
+		function loopCategorias(select, hijos, nivelHijo){
+			var i;
+			var cantTabs = TAB;
+			for (i = 0; i < nivelHijo; i++){
+				cantTabs = cantTabs + TAB;
+			}
+			for(i = 0; i < hijos.length; i++){
+				var option = select.appendChild(document.createElement("option"));
+				option.value = hijos[i].nombre;
+				option.textContent = cantTabs + hijos[i].nombre;
+
+				if(hijos[i].criterioHijo){
+					loopCategorias(select,hijos[i].criterioHijo.categorias,nivelHijo-1);
+				}
+			}
+		}
+
+		$(document).ready(function() {
+			cargarCategorias();
+		})
 
 	</script>
 </body>

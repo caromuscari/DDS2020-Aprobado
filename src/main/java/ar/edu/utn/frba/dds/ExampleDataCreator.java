@@ -32,7 +32,6 @@ public class ExampleDataCreator {
         inicializarMediosDePago();
         inicializarOrganizacion();
         inicializarUsuarios();
-        inicializarCategorias();
 
         List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
         RepoUsuarios.getInstance().buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
@@ -83,13 +82,9 @@ public class ExampleDataCreator {
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
-        Categoria categoria1 = new Categoria("pedales");
-        Categoria categoria2 = new Categoria("alfombras");
-        Categoria categoria3 = new Categoria("fiestas");
+        Categoria categoria1 = new Categoria("Peru");
 
         listaCategorias.add(categoria1);
-        listaCategorias.add(categoria2);
-        listaCategorias.add(categoria3);
 
 
         //Creo ingresos
@@ -211,27 +206,6 @@ public class ExampleDataCreator {
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-    }
-
-    private void inicializarCategorias(){
-        List<Categoria> listaCategorias = new ArrayList<>();
-        Categoria categoria1 = new Categoria("pedales");
-        Categoria categoria2 = new Categoria("alfombras");
-        Categoria categoria3 = new Categoria("fiestas");
-        Categoria categoria4 = new Categoria("plantas");
-        Categoria categoria5 = new Categoria("macetas");
-        Categoria categoria6 = new Categoria("tazas");
-        Categoria categoria7 = new Categoria("cucharas");
-
-        listaCategorias.add(categoria1);
-        listaCategorias.add(categoria2);
-        listaCategorias.add(categoria3);
-        listaCategorias.add(categoria4);
-        listaCategorias.add(categoria5);
-        listaCategorias.add(categoria6);
-        listaCategorias.add(categoria7);
-
-        RepositorioCategorias.getInstance().setCategorias(listaCategorias);
     }
 
     public static void crearCategorias(Organizacion org){

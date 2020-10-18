@@ -40,14 +40,13 @@ public class Egresos {
             List<EgresoDTO> egresos = new ArrayList<>();
             List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
             Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
-            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
             int elementoFinal = ((pagina*App.getPageSize()) < egresos.size()) ? (pagina*App.getPageSize()) : egresos.size();
             map.put("egresos",  egresos.subList(elementoInicial,elementoFinal));
-            map.put("categorias", usuario.getOrganizacion().getCriterios());
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             List<Integer> range = IntStream.rangeClosed(1, ((egresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
             return new ModelAndView(map, "egresos.html");
@@ -220,8 +219,10 @@ public class Egresos {
 
         egreso.setCategorias(categorias);
 
-        MedioDePago medio = new MedioDePago(descrMedioDePago,Long.parseLong(numeroMedioDePago), TipoPago.valueOf(nombreMedioDePago));
-        egreso.setMedioDePago(medio);
+        if(numeroMedioDePago != null && nombreMedioDePago != null) {
+            MedioDePago medio = new MedioDePago(descrMedioDePago, Long.parseLong(numeroMedioDePago), TipoPago.valueOf(nombreMedioDePago));
+            egreso.setMedioDePago(medio);
+        }
 
         response.redirect("/egreso");
         return null;

@@ -32,6 +32,18 @@ public class App {
 
         enableDebugScreen();
         port(4568);
+        initRoutes();
+        initPersistence();
+
+        //Inicializar datos de prueba
+        new ExampleDataCreator(entityManagerFactory).createData();
+    }
+
+    public static void initPersistence(){
+        entityManagerFactory = Persistence.createEntityManagerFactory("db");
+    }
+
+    public static void initRoutes(){
         boolean localhost = true;
         if (localhost) {
             String projectDir = System.getProperty("user.dir");
@@ -40,8 +52,6 @@ public class App {
         } else {
             staticFiles.location("/public");
         }
-
-        entityManagerFactory = Persistence.createEntityManagerFactory("db");
 
         // Acceso: http://localhost:4567/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
@@ -92,9 +102,6 @@ public class App {
         get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
 
         // ===============================================================================
-
-        //Inicializar datos de prueba
-        new ExampleDataCreator().createData();
     }
 
     public static ModelAndView paginaHome(Request request, Response response, EntityManager entity) {

@@ -31,7 +31,7 @@ public class Presupuestos {
         }
         else {
             List<LicitacionDTO> licitaciones = new ArrayList<>();
-            List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+            List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
             entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
@@ -50,7 +50,7 @@ public class Presupuestos {
         }
         else {
             Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = RepositorioEntidades.getInstance().obtenerPresupuestoPorId(request.params(":id"));
+            ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioEntidades(entity).obtenerPresupuestoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -69,7 +69,7 @@ public class Presupuestos {
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
-        Presupuesto presupuesto = RepositorioEntidades.instance.obtenerPresupuestoPorId(id);
+        Presupuesto presupuesto = new RepositorioEntidades(entity).obtenerPresupuestoPorId(id);
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {

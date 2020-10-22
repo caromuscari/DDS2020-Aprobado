@@ -32,7 +32,7 @@ public class Ingresos {
         }
         else {
             List<IngresoDTO> ingresos = new ArrayList<>();
-            List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+            List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
             entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
             List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
             Map<String, Object> map = new HashMap<>();
@@ -53,7 +53,7 @@ public class Ingresos {
         }
         else {
             Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = RepositorioEntidades.getInstance().obtenerIngresoPorId(request.params(":id"));
+            ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioEntidades(entity).obtenerIngresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -72,7 +72,7 @@ public class Ingresos {
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
-        Ingreso ingreso = RepositorioEntidades.instance.obtenerIngresoPorId(id);
+        Ingreso ingreso = new RepositorioEntidades(entity).obtenerIngresoPorId(id);
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {
@@ -102,7 +102,7 @@ public class Ingresos {
     public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
         String categoria = request.queryParams("categoria");
         List<IngresoDTO> ingresos = new ArrayList<>();
-        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+        List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
         entidades.forEach(entidad -> {
                     entidad.getIngresos().stream()
                             .filter(ingreso -> filtrar(ingreso, categoria))

@@ -19,6 +19,8 @@ import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,13 +29,24 @@ import java.util.List;
 
 public class ExampleDataCreator {
 
+    private static RepositorioEntidades repoEntidades;
+    static EntityManager entityManager;
+
+    public ExampleDataCreator(EntityManagerFactory entityManagerFactory) {
+        this.entityManager = entityManagerFactory.createEntityManager();
+    }
+
     public void createData(){
         inicializarProveedores();
         inicializarMediosDePago();
         inicializarOrganizacion();
         inicializarUsuarios();
 
-        List<Entidad> entidades = RepositorioEntidades.getInstance().obtenerEntidades();
+
+        repoEntidades = new RepositorioEntidades(entityManager);
+        List<Entidad> entidades = repoEntidades.obtenerEntidades();
+
+
         RepoUsuarios.getInstance().buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
 
         /*ItemPresupuesto p1 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
@@ -56,6 +69,9 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarOrganizacion(){
+
+        repoEntidades = new RepositorioEntidades(entityManager);
+
         TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Agropecuario");
         Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
@@ -77,8 +93,8 @@ public class ExampleDataCreator {
         empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
         empresa2.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 3");
 
-        RepositorioEntidades.getInstance().crearEntidad(empresa1);
-        RepositorioEntidades.getInstance().crearEntidad(empresa2);
+        repoEntidades.crearEntidad(empresa1);
+        repoEntidades.crearEntidad(empresa2);
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
@@ -127,8 +143,8 @@ public class ExampleDataCreator {
         Presupuesto presupuesto2 = new Presupuesto(items2,RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Presupuesto 2");
         licitacion1.setPresupuestos(Arrays.asList(presupuesto1));
         licitacion2.setPresupuestos(Arrays.asList(presupuesto2));
-        RepositorioEntidades.getInstance().obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
-        RepositorioEntidades.getInstance().obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
+        repoEntidades.obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
+        repoEntidades.obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
         LicitacionRepo.getInstance().add(licitacion1);
         LicitacionRepo.getInstance().add(licitacion2);
 

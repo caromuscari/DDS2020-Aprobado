@@ -20,7 +20,7 @@ import java.util.*;
 public class VinculadorController {
 
     private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
-    private static RepositorioEntidades repoEntidades = RepositorioEntidades.getInstance();
+    private static RepositorioEntidades repoEntidades;
     private static List<CondicionVinculacion> condiciones;
 
     public static ModelAndView paginaVinculador(Request request, Response response, EntityManager entity) {
@@ -35,7 +35,7 @@ public class VinculadorController {
         }
     }
 
-    public static String vincular(Request request, Response response, EntityManager entity){
+    public static String vincular(Request request, Response response, EntityManager entityManager){
         //Inicializaciones
         condiciones = new ArrayList<>();
         CondicionFecha condicionFecha = new CondicionFecha();
@@ -43,7 +43,14 @@ public class VinculadorController {
         String seleccionado = request.queryMap("seleccionado").value();
         String orden = request.queryMap("orden").value();
         String ent = request.queryMap("entidad").value();
+
+        //=====================================================
+        // Busco la entidad en la DB
+
+        repoEntidades = new RepositorioEntidades(entityManager);
         Entidad entidad = repoEntidades.obtenerEntidadPorNombre(ent);
+
+        //=====================================================
 
         // Periodo de aceptabilidad de ingresos
         LocalDate fechaInicio = LocalDate.parse(request.queryMap("fechaInicio").value());

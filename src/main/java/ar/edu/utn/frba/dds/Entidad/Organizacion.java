@@ -4,16 +4,28 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
 public class Organizacion {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     private String nombre;
     private String descripcion;
+
+    @OneToMany
+    @JoinColumn(name = "organizacion_id")
     private List<Entidad> entidades;
+
+    @OneToMany
+    @JoinColumn(name = "organizacion_id")
     private List<CriterioCategoria> criterios;
 
     public Organizacion(String nombre, String descripcion) {

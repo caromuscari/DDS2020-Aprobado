@@ -1,6 +1,14 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
-public interface ErrorValidacion {
+import javax.persistence.*;
 
-    public String obtenerMensaje();
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoError", discriminatorType = DiscriminatorType.STRING)
+public abstract class ErrorValidacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    public abstract String obtenerMensaje();
 }

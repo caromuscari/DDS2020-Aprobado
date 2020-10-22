@@ -135,8 +135,8 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarMediosDePago(){
-        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta credito",100L,TipoPago.CREDIT_CARD);
-        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta debito",200L,TipoPago.DEBIT_CARD);
+        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta credito",100L,"CREDIT_CARD");
+        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta debito",200L,"DEBIT_CARD");
     }
 
     private static void inicializarProveedores(){

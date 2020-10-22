@@ -2,9 +2,23 @@ package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 
+import javax.persistence.*;
+
+@Entity
 public class ResultadoValidacion {
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @Enumerated(EnumType.STRING)
     private EstadoValidacion estado;
+
+    @OneToOne
+    @JoinColumn(name = "error_id")
     private ErrorValidacion error;
+
+    @OneToOne
+    @JoinColumn(name = "licitacion_id")
     private Licitacion licitacion;
 
     public ResultadoValidacion() {

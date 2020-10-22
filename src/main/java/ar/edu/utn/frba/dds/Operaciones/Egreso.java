@@ -1,22 +1,49 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import ar.edu.utn.frba.dds.DateConverter;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Entity
 public class Egreso {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @OneToMany
+    @JoinColumn(name = "egreso_id")
     private List<DocumentoComercial> documentos;
+
+    @OneToMany
+    @JoinColumn(name = "egreso_id")
     private List<ItemOperacionEgreso> items;
+
+    @OneToOne
+    @JoinColumn(name = "medioDePago_id")
     private MedioDePago medioDePago;
     private Double precioTotal;
+
+    @OneToOne
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
+
+    @OneToOne
+    @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
+
+    @OneToMany
+    @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
     private List<Categoria> categorias;
+
+    @Column
+    @Convert(converter = DateConverter.class)
     private LocalDate fecha;
     private Boolean vinculado;
     private String nombre;

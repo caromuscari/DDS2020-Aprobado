@@ -1,6 +1,16 @@
 package ar.edu.utn.frba.dds.Entidad;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class TipoActividad {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     private int limiteInferiorIngresos;
     private int limiteMedioIngresos;

@@ -5,7 +5,12 @@ import ar.edu.utn.frba.dds.ResultadoLicitacion.ErrorMenorValor;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
-public class CantidadPresupuestos implements CriterioSeleccion {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("CantidadPrespuestos")
+public class CantidadPresupuestos extends CriterioSeleccion {
     @Override
     public ResultadoValidacion validar(Licitacion licitacion) {
         ResultadoValidacion resultado;

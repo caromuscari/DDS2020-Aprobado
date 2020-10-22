@@ -6,16 +6,32 @@ import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Vinculador.CriterioEjecucion;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
 public class Licitacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String nombre;
+
+    @OneToMany
+    @JoinColumn(name = "licitacion_id")
     private List<Presupuesto> presupuestos;
+
+    @OneToOne
+    @JoinColumn(name = "egreso_id")
     private Egreso egreso;
     private Integer presupuestosRequeridos;
+
+    @OneToMany
+    @JoinColumn(name = "licitacion_id")
     private List<CriterioSeleccion> criterios;
+
+    @Embedded
     private NotificadorValidador notificador;
 
     public Licitacion(String nombre, Integer presupuestosRequeridos) {

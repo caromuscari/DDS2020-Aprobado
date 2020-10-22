@@ -3,17 +3,33 @@ package ar.edu.utn.frba.dds.Licitacion;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Operaciones.*;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Entity
 public class Presupuesto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @OneToMany
+    @JoinColumn(name = "presupuesto_id")
     private List<DocumentoComercial> documentos;
+
+    @OneToMany
+    @JoinColumn(name = "presupuesto_id")
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
+
+    @OneToOne
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
+
+    @OneToMany
+    @JoinTable(name = "presupuesto_categoria", joinColumns = @JoinColumn(name = "presupuesto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
     private String nombre;
 

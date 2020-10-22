@@ -1,12 +1,15 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import ar.edu.utn.frba.dds.DateConverter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Entity
 public class Ingreso {
 
     public Ingreso(String descripcion, Double montoTotal, LocalDate fecha) {
@@ -18,11 +21,22 @@ public class Ingreso {
         this.categorias = new ArrayList<>();
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
     private Double montoTotal;
+
+    @Column
+    @Convert(converter = DateConverter.class)
     private LocalDate fecha;
+
+    @OneToMany
+    @JoinColumn(name = "ingreso_id")
     private List<Egreso> egresos;
+
+    @OneToMany
+    @JoinTable(name = "ingresos_categorias", joinColumns = @JoinColumn(name = "ingreso_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
     public String getDescripcion() { return descripcion; }

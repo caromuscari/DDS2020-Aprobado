@@ -1,11 +1,19 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
+import javax.persistence.*;
+
+@Entity
 public class ItemEgreso {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private String codigo;
     private String descripcion;
+    @Enumerated(EnumType.STRING)
     private CategoriaItem categoria;
     private Double precio;
+    @Enumerated(EnumType.STRING)
     private TipoItem tipo;
-    private String codigo;
 
     public ItemEgreso(String codigo, String descripcion, Double precio, TipoItem tipo, CategoriaItem categoria) {
         this.codigo = codigo;

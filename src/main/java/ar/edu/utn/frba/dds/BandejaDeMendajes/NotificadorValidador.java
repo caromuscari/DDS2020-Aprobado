@@ -3,9 +3,16 @@ package ar.edu.utn.frba.dds.BandejaDeMendajes;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import java.util.*;
 
+@Embeddable
 public class NotificadorValidador {
+    @OneToMany
+    @JoinTable(name = "Notificados_licitacion", joinColumns = @JoinColumn(name = "licitacion_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> revisores;
 
     public NotificadorValidador() {

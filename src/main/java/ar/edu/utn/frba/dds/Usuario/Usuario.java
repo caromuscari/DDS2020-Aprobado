@@ -3,20 +3,35 @@ import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
+import javax.persistence.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Usuario {
 
+    @Id
     private String usuario;
     private String password;
+    @Transient
     private int cantidadIntentos;
+    @Enumerated(EnumType.STRING)
     private TipoPerfil perfil;
+
+    @OneToOne
+    @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
+
+    @ElementCollection
+    @CollectionTable(name = "lastPasswords")
     private List<String> ultimasPasswords;
+
+    @OneToMany
+    @JoinColumn(name = "usuario_id")
     private List<Mensaje> bandejaDeMensajes;
 
+    @Transient
     private ValidadorPassword validar = new ValidadorPassword();
 
     public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){

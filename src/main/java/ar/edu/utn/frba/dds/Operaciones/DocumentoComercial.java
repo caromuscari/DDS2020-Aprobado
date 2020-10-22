@@ -1,7 +1,15 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
+import javax.persistence.*;
+
+@Entity
 public class DocumentoComercial {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private TipoDocumento tipo;
     private String url;
 

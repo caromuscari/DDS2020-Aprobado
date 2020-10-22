@@ -16,7 +16,6 @@
 			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/dds" />
 			<property name="hibernate.connection.username" value="root" />
 			<property name="hibernate.connection.password" value="admin" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 
 
 			<property name="hibernate.show_sql" value="true" />

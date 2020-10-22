@@ -62,7 +62,7 @@ public class RepositorioEntidades {
 
     public void borrarEgreso(String id) {
         Query query = entityManager.createQuery(
-                "DETELE FROM Egresos e WHERE e.egresoId = :id");
+                "DETELE FROM Egresos e WHERE e.egreso_id = :id");
         query.setParameter("id", id).executeUpdate();
 
         //obtenerEntidades().forEach(entidad -> entidad.getEgresos().removeIf(egreso -> Integer.parseInt(id) == egreso.getId()));

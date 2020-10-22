@@ -1,10 +1,15 @@
 package ar.edu.utn.frba.dds.Entidad;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("Empresa")
 public class Empresa extends EntidadJuridica{
+    @Enumerated(EnumType.STRING)
     private TipoEmpresa tipoEmpresa;
+    @Transient
     private List<RegistroRecategorizacion> historial;
 
     public List<RegistroRecategorizacion> getHistorial() {

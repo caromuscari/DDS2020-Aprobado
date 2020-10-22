@@ -19,7 +19,7 @@ public class RepositorioMedioDePago {
         return instance;
     }
 
-    public MedioDePago crearMedioDePago(String identificador, Long numero, TipoPago tipo) {
+    public MedioDePago crearMedioDePago(String identificador, Long numero, String tipo) {
         MedioDePago medio = new MedioDePago(identificador, numero, tipo);
         medios.add(medio);
         return medio;

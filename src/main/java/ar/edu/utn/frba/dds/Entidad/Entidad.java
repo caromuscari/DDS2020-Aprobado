@@ -7,14 +7,30 @@ import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoEntidad", discriminatorType = DiscriminatorType.STRING)
 public abstract class Entidad {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String nombre;
+
+    @OneToMany
+    @JoinColumn(name = "entidad_id")
     private List<Egreso> egresos;
+
+    @OneToMany
+    @JoinColumn(name = "entidad_id")
     private List<Licitacion> licitaciones;
+
+    @OneToMany
+    @JoinColumn(name = "entidad_id")
     private List<Ingreso> ingresos;
 
     public Entidad() {

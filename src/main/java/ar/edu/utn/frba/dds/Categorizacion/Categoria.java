@@ -1,12 +1,21 @@
 package ar.edu.utn.frba.dds.Categorizacion;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Entity
 public class Categoria {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
     private String nombre;
+
+    @OneToOne
+    @JoinColumn(name = "criterioHijo_id")
     private CriterioCategoria criterioHijo;
 
     public Categoria(String nombre) {

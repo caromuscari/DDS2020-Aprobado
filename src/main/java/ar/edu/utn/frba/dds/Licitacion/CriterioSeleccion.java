@@ -2,7 +2,16 @@ package ar.edu.utn.frba.dds.Licitacion;
 
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
-public interface CriterioSeleccion {
+import javax.persistence.*;
 
-    public ResultadoValidacion validar(Licitacion licitacion);
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoCriterioSeleccion", discriminatorType = DiscriminatorType.STRING)
+public abstract class CriterioSeleccion {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    public abstract ResultadoValidacion validar(Licitacion licitacion);
 }

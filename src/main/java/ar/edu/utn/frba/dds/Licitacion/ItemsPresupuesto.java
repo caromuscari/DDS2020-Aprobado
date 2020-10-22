@@ -6,10 +6,15 @@ import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ErrorItemFaltante;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ItemsPresupuesto implements CriterioSeleccion{
+@Entity
+@DiscriminatorValue("ItemsPrespuesto")
+public class ItemsPresupuesto extends CriterioSeleccion{
     @Override
     public ResultadoValidacion validar(Licitacion licitacion) {
         ResultadoValidacion resultado;

@@ -2,14 +2,23 @@ package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Proveedor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String nombre;
     private Long identificador;
     private String direccionPostal;
+    @OneToMany
+    @JoinColumn(name = "proveedor_id")
     private List<ItemEgreso> items;
+    @OneToMany
+    @JoinTable(name = "proveedor_categorias", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
     public Proveedor() {

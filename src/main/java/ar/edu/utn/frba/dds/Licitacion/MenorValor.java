@@ -4,9 +4,13 @@ import ar.edu.utn.frba.dds.ResultadoLicitacion.ErrorMenorValor;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.Comparator;
 
-public class MenorValor implements CriterioSeleccion{
+@Entity
+@DiscriminatorValue("MenorValor")
+public class MenorValor extends CriterioSeleccion{
     @Override
     public ResultadoValidacion validar(Licitacion licitacion) {
         ResultadoValidacion resultado;

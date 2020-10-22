@@ -2,10 +2,17 @@ package ar.edu.utn.frba.dds.BandejaDeMendajes;
 
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
 public class Mensaje {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @OneToMany
+    @JoinColumn(name = "mensaje_id")
     private List<ResultadoValidacion> resultados;
     private Boolean leido;
 

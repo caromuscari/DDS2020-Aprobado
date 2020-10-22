@@ -1,7 +1,16 @@
 package ar.edu.utn.frba.dds.Licitacion;
 
+import javax.persistence.*;
+
+@Entity
 public class ItemOperacionPresupuesto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private Integer cantidad;
+
+    @OneToOne
+    @JoinColumn(name = "item_id")
     private ItemPresupuesto itemPresupuesto;
 
     public ItemOperacionPresupuesto(Integer cantidad, ItemPresupuesto itemPresupuesto) {

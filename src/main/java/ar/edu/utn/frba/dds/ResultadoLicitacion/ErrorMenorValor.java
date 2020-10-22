@@ -1,6 +1,11 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
-public class ErrorMenorValor implements ErrorValidacion {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("ErrorMenorValor")
+public class ErrorMenorValor extends ErrorValidacion {
     private Double precioTotalEgreso;
     private Double precioTotalMenorPresupuesto;
 

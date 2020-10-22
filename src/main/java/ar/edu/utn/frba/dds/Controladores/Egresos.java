@@ -234,7 +234,7 @@ public class Egresos {
         egreso.setCategorias(categorias);
 
         if(numeroMedioDePago != null && nombreMedioDePago != null) {
-            MedioDePago medio = new MedioDePago(descrMedioDePago, Long.parseLong(numeroMedioDePago), TipoPago.valueOf(nombreMedioDePago));
+            MedioDePago medio = new MedioDePago(descrMedioDePago, Long.parseLong(numeroMedioDePago), nombreMedioDePago);
             egreso.setMedioDePago(medio);
         }
 

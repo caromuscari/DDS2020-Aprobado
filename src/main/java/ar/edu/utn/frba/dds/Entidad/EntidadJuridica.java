@@ -1,5 +1,8 @@
 package ar.edu.utn.frba.dds.Entidad;
 
+import javax.persistence.*;
+
+@Entity
 public abstract class EntidadJuridica extends Entidad {
     private String razonSocial;
     private Long cuit;
@@ -7,6 +10,9 @@ public abstract class EntidadJuridica extends Entidad {
     private int codigoInscripcion;
     private int cantidadPersonal;
     private Double ventasProyectadas;
+
+    @OneToOne
+    @JoinColumn(name = "tipoActividad_id")
     private TipoActividad tipoActividad;
     private Double ventasPromedio;
 

@@ -1,8 +1,15 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
+import javax.persistence.*;
+
+@Entity
 public class ItemOperacionEgreso {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer cantidad;
+    @OneToOne
+    @JoinColumn(name = "item_id")
     private ItemEgreso itemEgreso;
 
     public ItemOperacionEgreso(Integer cantidad, ItemEgreso itemEgreso) {

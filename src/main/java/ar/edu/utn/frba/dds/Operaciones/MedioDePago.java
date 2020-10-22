@@ -1,9 +1,15 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
+import javax.persistence.*;
+
+@Entity
 public class MedioDePago {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String identificador;
     private Long numero;
-    private TipoPago tipo;
+    private String tipo;
 
     public Long getNumero() {
         return numero;
@@ -12,10 +18,10 @@ public class MedioDePago {
         this.numero = numero;
     }
 
-    public TipoPago getTipo() {
+    public String getTipo() {
         return tipo;
     }
-    public void setTipo(TipoPago tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
@@ -26,7 +32,7 @@ public class MedioDePago {
         this.identificador = identificador;
     }
 
-    public MedioDePago(String identificador, Long numero, TipoPago tipo) {
+    public MedioDePago(String identificador, Long numero, String tipo) {
         this.identificador = identificador;
         this.numero = numero;
         this.tipo = tipo;

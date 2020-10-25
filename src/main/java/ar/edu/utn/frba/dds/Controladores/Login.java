@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class Login {
 
-    private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
 
     public static ModelAndView paginaLogin(Request request, Response response) {
         Map<String, Object> map = new HashMap<>();
@@ -26,7 +25,8 @@ public class Login {
         return null;
     }
 
-    public static boolean checkLogin(String usuario, String pass) throws NoSuchAlgorithmException {
+    public static boolean checkLogin(String usuario, String pass, EntityManager entityManager) throws NoSuchAlgorithmException {
+        RepoUsuarios repoUsuarios = new RepoUsuarios(entityManager);
         Usuario user = repoUsuarios.buscarUsuario(usuario);
         return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
     }
@@ -35,7 +35,7 @@ public class Login {
         String user = request.queryMap("usuario").value();
         String pass = request.queryMap("pass").value();
 
-        if (checkLogin(user, pass)) {
+        if (checkLogin(user, pass, entity)) {
             request.session(true);
             request.session().attribute("usuario", user);
             response.cookie("usuario", user);

@@ -21,7 +21,7 @@ public abstract class Entidad {
     private int id;
     private String nombre;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "entidad_id")
     private List<Egreso> egresos;
 
@@ -67,15 +67,16 @@ public abstract class Entidad {
             mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
     }
 
-    public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor,String nombre){
+    public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre){
         Egreso egreso = new Egreso(items,proveedor,nombre);
+        this.egresos.add(egreso);
+
+        /*
         List<Categoria> listaCategorias = new ArrayList<>();
         Categoria categoria1 = new Categoria("Peru");
-
         listaCategorias.add(categoria1);
-
         egreso.setCategorias(listaCategorias);
-        this.egresos.add(egreso);
+         */
     }
 
     public List<Egreso> filtrarEgresos(Categoria categoria){

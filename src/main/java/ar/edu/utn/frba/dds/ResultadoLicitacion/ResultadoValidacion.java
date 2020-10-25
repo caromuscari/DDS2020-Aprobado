@@ -17,7 +17,7 @@ public class ResultadoValidacion {
     @JoinColumn(name = "error_id")
     private ErrorValidacion error;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "licitacion_id")
     private Licitacion licitacion;
 

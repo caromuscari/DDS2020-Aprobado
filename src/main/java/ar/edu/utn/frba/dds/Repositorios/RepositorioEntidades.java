@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class RepositorioEntidades {
         this.entityManager = entityManager;
     }
 
-    public void crearEntidad(Entidad entidad) { this.persist(entidad); }
+    public void crearEntidad(Entidad entidad) { this.entityManager.persist(entidad); }
 
     public void eliminarEntidad(Entidad entidad){ this.entityManager.remove(entidad); }
 
@@ -34,13 +35,7 @@ public class RepositorioEntidades {
     }
 
     public Egreso obtenerEgresoPorId(String id) {
-        for (Egreso egreso : obtenerEntidades().stream().map(e -> e.getEgresos()).flatMap(List::stream).collect(Collectors.toList())) {
-            if (Integer.parseInt(id) == egreso.getId()) {
-                return egreso;
-            }
-        }
-        return null;
-
+        return this.entityManager.find(Egreso.class, id);
     }
 
     public Egreso obtenerEgresoPorNombre(String nombre) {
@@ -87,7 +82,4 @@ public class RepositorioEntidades {
         return null;
     }
 
-    public void persist(Entidad entidad){
-        this.entityManager.persist(entidad);
-    }
 }

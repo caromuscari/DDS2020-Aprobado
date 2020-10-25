@@ -29,25 +29,39 @@ import java.util.List;
 
 public class ExampleDataCreator {
 
+    //Repositorios
     private static RepositorioEntidades repoEntidades;
-    static EntityManager entityManager;
+    private static RepoUsuarios repoUsuarios;
+    private static RepositorioEgresos repoEgresos;
+    private static RepositorioItemsOperacionEgreso repoItemsOperacionEgreso;
+    private static RepositorioProveedores repoProveedores;
+    private static RepositorioMedioDePago repoMediosDePago;
+
+    private static EntityManager entityManager;
 
     public ExampleDataCreator(EntityManagerFactory entityManagerFactory) {
         this.entityManager = entityManagerFactory.createEntityManager();
     }
 
     public void createData(){
+
+        repoEntidades = new RepositorioEntidades(entityManager);
+        repoUsuarios = new RepoUsuarios(entityManager);
+        repoEgresos = new RepositorioEgresos(entityManager);
+        repoItemsOperacionEgreso = new RepositorioItemsOperacionEgreso(entityManager);
+        repoProveedores = new RepositorioProveedores(entityManager);
+        repoMediosDePago = new RepositorioMedioDePago(entityManager);
+
         inicializarProveedores();
         inicializarMediosDePago();
         inicializarOrganizacion();
         inicializarUsuarios();
 
+        //List<Entidad> entidades = repoEntidades.obtenerEntidades();
+        //List<Usuario> usuarios = repoUsuarios.getRegistrados();
 
-        repoEntidades = new RepositorioEntidades(entityManager);
-        List<Entidad> entidades = repoEntidades.obtenerEntidades();
 
-
-        RepoUsuarios.getInstance().buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
+        //repoUsuarios.buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
 
         /*ItemPresupuesto p1 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
         ItemPresupuesto p2 = new ItemPresupuesto(300.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
@@ -61,16 +75,14 @@ public class ExampleDataCreator {
         // Egreso
         ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
         ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-        RepositorioItemsOperacionEgreso.getInstance().crearItem(5, e1);
-        RepositorioItemsOperacionEgreso.getInstance().crearItem(5, e2);
+        repoItemsOperacionEgreso.crearItem(5, e1);
+        repoItemsOperacionEgreso.crearItem(5, e2);
 
         List<ItemOperacionEgreso> compras = new ArrayList<>();
 
     }
 
     private static void inicializarOrganizacion(){
-
-        repoEntidades = new RepositorioEntidades(entityManager);
 
         TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Agropecuario");
@@ -89,12 +101,19 @@ public class ExampleDataCreator {
         List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
         itemsOperacion2.add(itemOperacionEgreso2);
 
-        empresa1.generarEgreso(itemsOperacion1, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 1");
-        empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
-        empresa2.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 3");
 
+        //empresa1.generarEgreso(itemsOperacion1, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 1");
+        //empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
+        //empresa2.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 3");
+
+
+        entityManager.getTransaction().begin();
+        repoEgresos.crearEgreso(itemsOperacion1, repoProveedores.obtenerProveedores().get(0), "Egreso 1");
         repoEntidades.crearEntidad(empresa1);
         repoEntidades.crearEntidad(empresa2);
+        entityManager.getTransaction().commit();
+
+
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
@@ -139,30 +158,32 @@ public class ExampleDataCreator {
         items1.add(iop2);
         List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
         items2.add(iop3);
-        Presupuesto presupuesto1 = new Presupuesto(items1,RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Presupuesto 1");
-        Presupuesto presupuesto2 = new Presupuesto(items2,RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Presupuesto 2");
+        Presupuesto presupuesto1 = new Presupuesto(items1,repoProveedores.obtenerProveedores().get(0),"Presupuesto 1");
+        Presupuesto presupuesto2 = new Presupuesto(items2,repoProveedores.obtenerProveedores().get(0),"Presupuesto 2");
         licitacion1.setPresupuestos(Arrays.asList(presupuesto1));
         licitacion2.setPresupuestos(Arrays.asList(presupuesto2));
-        repoEntidades.obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
-        repoEntidades.obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
+
+
+        //repoEntidades.obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
+        //repoEntidades.obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
         LicitacionRepo.getInstance().add(licitacion1);
         LicitacionRepo.getInstance().add(licitacion2);
 
     }
 
     private static void inicializarMediosDePago(){
-        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta credito",100L,"CREDIT_CARD");
-        RepositorioMedioDePago.getInstance().crearMedioDePago("Tarjeta debito",200L,"DEBIT_CARD");
+        repoMediosDePago.crearMedioDePago("Tarjeta credito",100L,"CREDIT_CARD");
+        repoMediosDePago.crearMedioDePago("Tarjeta debito",200L,"DEBIT_CARD");
     }
 
     private static void inicializarProveedores(){
-        RepositorioProveedores.getInstance().crearProveedor("HP", 1L, "1234",  new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("348","Impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("48347","Tinta para impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().crearProveedor("Sony", 2L, "1234", new ItemEgreso("8359","Computadora",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().obtenerProveedorPorNombre("Sony").addItem(new ItemEgreso("29347","Auriculares",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().crearProveedor("Samsung", 21314l, "666", new ItemEgreso("3473","Computadora",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        RepositorioProveedores.getInstance().obtenerProveedorPorNombre("Samsung").addItem(new ItemEgreso("284","Monitor",20.0,TipoItem.PRODUCTO,CategoriaItem.MONITOR));
+        repoProveedores.crearProveedor("HP", 1L, "1234",  new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("348","Impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("48347","Tinta para impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.crearProveedor("Sony", 2L, "1234", new ItemEgreso("8359","Computadora",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.obtenerProveedorPorNombre("Sony").addItem(new ItemEgreso("29347","Auriculares",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.crearProveedor("Samsung", 21314l, "666", new ItemEgreso("3473","Computadora",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        repoProveedores.obtenerProveedorPorNombre("Samsung").addItem(new ItemEgreso("284","Monitor",20.0,TipoItem.PRODUCTO,CategoriaItem.MONITOR));
     }
 
     private static void inicializarUsuarios(){
@@ -212,10 +233,16 @@ public class ExampleDataCreator {
             usuario3.setBandejaDeMensajes(listaMensajes2);
             usuario4.setBandejaDeMensajes(listaMensajes1);
 
-            RepoUsuarios.getInstance().agregarUsuario(usuario1);
-            RepoUsuarios.getInstance().agregarUsuario(usuario2);
-            RepoUsuarios.getInstance().agregarUsuario(usuario3);
-            RepoUsuarios.getInstance().agregarUsuario(usuario4);
+            /*
+            entityManager.getTransaction().begin();
+            repoUsuarios.agregarUsuario(usuario1);
+            repoUsuarios.agregarUsuario(usuario2);
+            repoUsuarios.agregarUsuario(usuario3);
+            repoUsuarios.agregarUsuario(usuario4);
+            entityManager.getTransaction().commit();
+
+             */
+
 
             crearCategorias(usuario4.getOrganizacion());
         }

@@ -19,7 +19,6 @@ import java.util.*;
 
 public class VinculadorController {
 
-    private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
     private static RepositorioEntidades repoEntidades;
     private static List<CondicionVinculacion> condiciones;
 

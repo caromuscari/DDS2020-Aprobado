@@ -19,7 +19,6 @@ import javax.persistence.Persistence;
 
 
 public class App {
-    private static RepoUsuarios repoUsuarios = RepoUsuarios.getInstance();
     static EntityManagerFactory entityManagerFactory;
 
     private static int pageSize = 2;
@@ -90,12 +89,12 @@ public class App {
         post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
         delete("/egreso/:id", TemplWithTransaction(Egresos::borrarEgreso), engine);
 
-        get("/proveedor", ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores);
+        get("/proveedor", RouteWithTransaction(ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores));
 
         //Licitaciones
         post("/licitacion", LicitacionController::crearLicitacion);
         post("/validarLicitacion", LicitacionController::validarLicitacion);
-        get("/licitacion", (request, response) -> LicitacionController.mostrarMensajes(request,response), gson::toJson);
+        get("/licitacion", RouteWithTransaction(LicitacionController::mostrarMensajes), gson::toJson);
 
         //Filtros
         get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
@@ -109,7 +108,7 @@ public class App {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
-            Usuario usuario = repoUsuarios.buscarUsuario(request.session().attribute("usuario"));
+            Usuario usuario = new RepoUsuarios(entityManagerFactory.createEntityManager()).buscarUsuario(request.session().attribute("usuario"));
             Map<String, Object> map = new HashMap<>();
             map.put("organizacion", usuario.getOrganizacion());
             return new ModelAndView(map, "home.html");

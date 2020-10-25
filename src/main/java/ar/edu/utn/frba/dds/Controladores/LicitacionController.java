@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityManager;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 
 public class LicitacionController {
 
-    private static RepoUsuarios repo = RepoUsuarios.getInstance();
 
     public static Object crearLicitacion(Request request, Response response) {
         String jsonLicitacion = request.body();
@@ -38,7 +38,7 @@ public class LicitacionController {
         return null;
     }
 
-    public static Object mostrarMensajes(Request request, Response response) {
+    public static Object mostrarMensajes(Request request, Response response, EntityManager entity) {
         String licitacion = request.queryMap("nombreLicitacion").value();
         String nombreUsuario = request.queryMap("usuario").value();
 
@@ -54,7 +54,7 @@ public class LicitacionController {
                 return null;
             }
 
-            Usuario usuario = repo.buscarUsuario(nombreUsuario);
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(nombreUsuario);
 
             if (usuario != null) {
                 List<MensajeDTO> listaMensajes = usuario.getBandejaDeMensajes().stream()

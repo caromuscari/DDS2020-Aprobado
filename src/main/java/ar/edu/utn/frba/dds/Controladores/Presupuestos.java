@@ -49,7 +49,7 @@ public class Presupuestos {
             return Login.paginaLogin(request,response);
         }
         else {
-            Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioEntidades(entity).obtenerPresupuestoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
@@ -64,7 +64,7 @@ public class Presupuestos {
             return Login.paginaLogin(request, response);
         }
 
-        Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
+        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
 
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");

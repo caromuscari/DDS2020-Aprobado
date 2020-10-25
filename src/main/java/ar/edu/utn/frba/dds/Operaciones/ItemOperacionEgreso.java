@@ -8,7 +8,8 @@ public class ItemOperacionEgreso {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer cantidad;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private ItemEgreso itemEgreso;
 

@@ -11,7 +11,7 @@ public abstract class EntidadJuridica extends Entidad {
     private int cantidadPersonal;
     private Double ventasProyectadas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tipoActividad_id")
     private TipoActividad tipoActividad;
     private Double ventasPromedio;

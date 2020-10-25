@@ -1,38 +1,39 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
+import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class RepositorioEgresos {
 
-    public static RepositorioEgresos instance = null;
-    private List<Egreso> egresos = new ArrayList<>();
+    private EntityManager entityManager;
 
-    private RepositorioEgresos() {}
-
-    public static RepositorioEgresos getInstance() {
-        if (instance == null) {
-            instance = new RepositorioEgresos();
-        }
-        return instance;
+    public RepositorioEgresos(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     public Egreso crearEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre) {
         Egreso egreso = new Egreso(items, proveedor, nombre);
-        egresos.add(egreso);
+        this.entityManager.persist(egreso);
         return egreso;
     }
 
     public List<Egreso> obtenerEgresos() {
-        return egresos;
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Egreso> consulta = cb.createQuery(Egreso.class);
+        Root<Egreso> egresos = consulta.from(Egreso.class);
+        return this.entityManager.createQuery(consulta.select(egresos)).getResultList();
     }
 
     public Egreso obtenerEgresoPorNombre(String nombre) {
-        for (Egreso egreso : egresos) {
+        for (Egreso egreso : obtenerEgresos()) {
             if (nombre.equals(egreso.getNombre())) {
                 return egreso;
             }
@@ -41,11 +42,11 @@ public class RepositorioEgresos {
     }
 
     public void eliminarEgreso(Egreso egreso){
-        egresos.remove(egreso);
+        this.entityManager.remove(egreso);
     }
 
     public Egreso obtenerEgresoPorId(String id) {
-        for (Egreso egreso : egresos) {
+        for (Egreso egreso : obtenerEgresos()) {
             if (Integer.parseInt(id) == egreso.getId()) {
                 return egreso;
             }

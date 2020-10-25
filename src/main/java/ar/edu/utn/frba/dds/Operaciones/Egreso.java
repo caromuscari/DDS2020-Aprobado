@@ -21,7 +21,7 @@ public class Egreso {
     @JoinColumn(name = "egreso_id")
     private List<DocumentoComercial> documentos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "egreso_id")
     private List<ItemOperacionEgreso> items;
 
@@ -30,11 +30,11 @@ public class Egreso {
     private MedioDePago medioDePago;
     private Double precioTotal;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
 
@@ -57,7 +57,6 @@ public class Egreso {
     }
 
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre) {
-        this.id = new Random().nextInt(1000);
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();

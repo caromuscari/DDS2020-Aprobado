@@ -11,7 +11,7 @@ public class Mensaje {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "mensaje_id")
     private List<ResultadoValidacion> resultados;
     private Boolean leido;

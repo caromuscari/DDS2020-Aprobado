@@ -19,7 +19,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private TipoPerfil perfil;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
@@ -27,7 +27,7 @@ public class Usuario {
     @CollectionTable(name = "lastPasswords")
     private List<String> ultimasPasswords;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private List<Mensaje> bandejaDeMensajes;
 

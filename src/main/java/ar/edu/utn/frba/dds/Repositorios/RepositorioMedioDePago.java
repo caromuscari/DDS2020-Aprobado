@@ -1,36 +1,41 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
+import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.MedioDePago;
 import ar.edu.utn.frba.dds.Operaciones.TipoPago;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RepositorioMedioDePago {
-    public static RepositorioMedioDePago instance = null;
+
     private List<MedioDePago> medios = new ArrayList<>();
+    private EntityManager entityManager;
 
-    private RepositorioMedioDePago() {}
-
-    public static RepositorioMedioDePago getInstance() {
-        if (instance == null) {
-            instance = new RepositorioMedioDePago();
-        }
-        return instance;
+    public RepositorioMedioDePago(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
+
 
     public MedioDePago crearMedioDePago(String identificador, Long numero, String tipo) {
         MedioDePago medio = new MedioDePago(identificador, numero, tipo);
-        medios.add(medio);
+        this.entityManager.persist(medio);
         return medio;
     }
 
     public List<MedioDePago> obtenerMediosDePago() {
-        return medios;
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<MedioDePago> consulta = cb.createQuery(MedioDePago.class);
+        Root<MedioDePago> mediosDePago = consulta.from(MedioDePago.class);
+        return this.entityManager.createQuery(consulta.select(mediosDePago)).getResultList();
     }
 
     public MedioDePago obtenerItemsPorId(String id) {
-        for (MedioDePago medio : medios) {
+        for (MedioDePago medio : obtenerMediosDePago()) {
             if (medio.getIdentificador().equals(id)) {
                 return medio;
             }
@@ -39,7 +44,7 @@ public class RepositorioMedioDePago {
     }
 
     public void eliminarMedioDePago(MedioDePago medio){
-        medios.remove(medio);
+        this.entityManager.remove(medio);
     }
 
 }

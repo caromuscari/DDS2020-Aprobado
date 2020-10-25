@@ -6,7 +6,8 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("Empresa")
-public class Empresa extends EntidadJuridica{
+public class Empresa extends EntidadJuridica{ 
+
     @Enumerated(EnumType.STRING)
     private TipoEmpresa tipoEmpresa;
     @Transient
@@ -39,4 +40,6 @@ public class Empresa extends EntidadJuridica{
         this.historial.add(new RegistroRecategorizacion(this.tipoEmpresa,tipo));
         this.tipoEmpresa = tipo;
     }
+
+
 }

@@ -34,7 +34,7 @@ public class Ingresos {
             List<IngresoDTO> ingresos = new ArrayList<>();
             List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
             entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
-            List<Categoria> categorias = RepositorioCategorias.getInstance().getCategorias();
+            List<Categoria> categorias = new RepositorioCategorias(entity).getCategorias();
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
@@ -52,7 +52,7 @@ public class Ingresos {
             return Login.paginaLogin(request,response);
         }
         else {
-            Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioEntidades(entity).obtenerIngresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
@@ -67,7 +67,7 @@ public class Ingresos {
             return Login.paginaLogin(request, response);
         }
 
-        Usuario usuario = RepoUsuarios.getInstance().buscarUsuario(request.session().attribute("usuario"));
+        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
 
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");

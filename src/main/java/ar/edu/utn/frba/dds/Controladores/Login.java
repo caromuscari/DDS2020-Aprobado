@@ -27,8 +27,11 @@ public class Login {
 
     public static boolean checkLogin(String usuario, String pass, EntityManager entityManager) throws NoSuchAlgorithmException {
         RepoUsuarios repoUsuarios = new RepoUsuarios(entityManager);
-        Usuario user = repoUsuarios.buscarUsuario(usuario);
-        return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
+        if(repoUsuarios.existeUsuario(usuario)) {
+            Usuario user = repoUsuarios.buscarUsuario(usuario);
+            return user.getPassword().equals(repoUsuarios.getEncriptador().hashear(pass));
+        }
+        return false;
     }
 
     public static String autenticar(Request request, Response response, EntityManager entity) throws NoSuchAlgorithmException {

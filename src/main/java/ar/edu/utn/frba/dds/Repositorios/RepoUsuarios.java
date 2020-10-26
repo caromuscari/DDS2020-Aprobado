@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
-import ar.edu.utn.frba.dds.Categorizacion.Categoria;
-import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
-import ar.edu.utn.frba.dds.Entidad.Organizacion;
+import ar.edu.utn.frba.dds.Excepciones.UsuarioExistsException;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
@@ -11,10 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RepoUsuarios {
 
@@ -42,10 +37,23 @@ public class RepoUsuarios {
         Predicate condicion = cb.equal(usuario.get("usuario"), nombre);
         CriteriaQuery<Usuario> where = consulta.select(usuario).where(condicion);
         return this.entityManager.createQuery(where).getSingleResult();
+
     }
 
-    public void agregarUsuario(Usuario usuario) {
-        this.entityManager.persist(usuario);
+    public boolean existeUsuario(String usuario){
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> consulta = cb.createQuery(Long.class);
+        Root<Usuario> user = consulta.from(Usuario.class);
+        Predicate condicion = cb.equal(user.get("usuario"), usuario);
+        CriteriaQuery<Long> where = consulta.where(condicion).select(cb.count(user));
+        return this.entityManager.createQuery(where).getSingleResult() > 0;
+    }
+
+    public void agregarUsuario(Usuario usuario) throws UsuarioExistsException {
+        if(!existeUsuario(usuario.getUsuario()))
+            this.entityManager.persist(usuario);
+        else
+            throw new UsuarioExistsException(usuario.getUsuario());
     }
 
 }

@@ -15,6 +15,10 @@ public class ItemEgreso {
     @Enumerated(EnumType.STRING)
     private TipoItem tipo;
 
+    public ItemEgreso(){
+
+    }
+
     public ItemEgreso(String codigo, String descripcion, Double precio, TipoItem tipo, CategoriaItem categoria) {
         this.codigo = codigo;
         this.descripcion = descripcion;

@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
+import ar.edu.utn.frba.dds.Excepciones.UsuarioExistsException;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
@@ -57,8 +58,8 @@ public class ExampleDataCreator {
         inicializarOrganizacion();
         inicializarUsuarios();
 
-        //List<Entidad> entidades = repoEntidades.obtenerEntidades();
-        //List<Usuario> usuarios = repoUsuarios.getRegistrados();
+        List<Entidad> entidades = repoEntidades.obtenerEntidades();
+        List<Usuario> usuarios = repoUsuarios.getRegistrados();
 
 
         //repoUsuarios.buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
@@ -102,13 +103,12 @@ public class ExampleDataCreator {
         itemsOperacion2.add(itemOperacionEgreso2);
 
 
-        //empresa1.generarEgreso(itemsOperacion1, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 1");
-        //empresa1.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 2");
-        //empresa2.generarEgreso(itemsOperacion2, RepositorioProveedores.getInstance().obtenerProveedores().get(0),"Egreso 3");
+        empresa1.generarEgreso(itemsOperacion1, repoProveedores.obtenerProveedores().get(0),"Egreso 1");
+        empresa1.generarEgreso(itemsOperacion2, repoProveedores.obtenerProveedores().get(0),"Egreso 2");
+        empresa2.generarEgreso(itemsOperacion2, repoProveedores.obtenerProveedores().get(0),"Egreso 3");
 
 
         entityManager.getTransaction().begin();
-        repoEgresos.crearEgreso(itemsOperacion1, repoProveedores.obtenerProveedores().get(0), "Egreso 1");
         repoEntidades.crearEntidad(empresa1);
         repoEntidades.crearEntidad(empresa2);
         entityManager.getTransaction().commit();
@@ -233,7 +233,7 @@ public class ExampleDataCreator {
             usuario3.setBandejaDeMensajes(listaMensajes2);
             usuario4.setBandejaDeMensajes(listaMensajes1);
 
-            /*
+
             entityManager.getTransaction().begin();
             repoUsuarios.agregarUsuario(usuario1);
             repoUsuarios.agregarUsuario(usuario2);
@@ -241,12 +241,10 @@ public class ExampleDataCreator {
             repoUsuarios.agregarUsuario(usuario4);
             entityManager.getTransaction().commit();
 
-             */
-
 
             crearCategorias(usuario4.getOrganizacion());
         }
-        catch (NoSuchAlgorithmException e) {
+        catch (NoSuchAlgorithmException | UsuarioExistsException e) {
             e.printStackTrace();
         }
     }

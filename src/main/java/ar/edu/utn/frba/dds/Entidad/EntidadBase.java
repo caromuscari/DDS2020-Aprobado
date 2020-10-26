@@ -15,6 +15,9 @@ public class EntidadBase extends Entidad {
     @JoinColumn(name = "entJuridica_id")
     private EntidadJuridica entidadJuridica;
 
+    public EntidadBase(){
+    }
+
     public EntidadBase(String nombre, String descripcion, EntidadJuridica entidadJuridica) {
         super(nombre);
         this.descripcion = descripcion;

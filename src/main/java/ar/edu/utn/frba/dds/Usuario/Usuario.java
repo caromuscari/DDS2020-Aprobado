@@ -34,6 +34,8 @@ public class Usuario {
     @Transient
     private ValidadorPassword validar = new ValidadorPassword();
 
+    public Usuario(){}
+
     public Usuario(String usuario, String password, TipoPerfil perfil, Organizacion organizacion){
         this.usuario = usuario;
         this.password = password;

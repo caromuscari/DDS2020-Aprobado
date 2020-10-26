@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.Entidad;
 
+import ar.edu.utn.frba.dds.Vinculador.TipoOrden;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,8 @@ public class TipoActividad {
     private int limiteSuperiorEmpleados;
 
     private String nombre;
+
+    public TipoActividad(){}
 
     public int getLimiteInferiorIngresos() {
         return limiteInferiorIngresos;

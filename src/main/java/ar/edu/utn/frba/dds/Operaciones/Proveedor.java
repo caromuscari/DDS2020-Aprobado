@@ -14,14 +14,14 @@ public class Proveedor {
     private String nombre;
     private Long identificador;
     private String direccionPostal;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "proveedor_id")
     private List<ItemEgreso> items;
     @OneToMany
     @JoinTable(name = "proveedor_categorias", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
-    public Proveedor() {
+    public Proveedor(){
     }
 
     public Proveedor(String nombre, Long identificador, String direccionPostal) {

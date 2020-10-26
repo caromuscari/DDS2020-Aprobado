@@ -27,6 +27,8 @@ public class Empresa extends EntidadJuridica{
         this.tipoEmpresa = tipoEmpresa;
     }
 
+    public Empresa(){}
+
     public Empresa(String nombre, String razonSocial, Long cuit, int codigoPostal, int codigoInscripcion, int cantidadPersonal, Double ventasProyectadas, TipoActividad tipoActividad, Double ventasPromedio) {
         super(nombre, razonSocial, cuit, codigoPostal, codigoInscripcion, cantidadPersonal, ventasProyectadas, tipoActividad, ventasPromedio);
         this.tipoEmpresa = super.getTipoActividad().obtenerTipoEmpresa(ventasPromedio, cantidadPersonal);

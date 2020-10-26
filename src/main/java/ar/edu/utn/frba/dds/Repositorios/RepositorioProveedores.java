@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;

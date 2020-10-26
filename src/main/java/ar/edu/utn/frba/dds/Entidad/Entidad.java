@@ -25,11 +25,11 @@ public abstract class Entidad {
     @JoinColumn(name = "entidad_id")
     private List<Egreso> egresos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "entidad_id")
     private List<Licitacion> licitaciones;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "entidad_id")
     private List<Ingreso> ingresos;
 

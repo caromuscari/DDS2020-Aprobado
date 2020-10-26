@@ -7,20 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Entity
 public class Ingreso {
-
-    public Ingreso(String descripcion, Double montoTotal, LocalDate fecha) {
-        this.id = new Random().nextInt(1000);
-        this.descripcion = descripcion;
-        this.montoTotal = montoTotal;
-        this.fecha = fecha;
-        this.egresos = new ArrayList<>();
-        this.categorias = new ArrayList<>();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -35,9 +24,17 @@ public class Ingreso {
     @JoinColumn(name = "ingreso_id")
     private List<Egreso> egresos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "ingresos_categorias", joinColumns = @JoinColumn(name = "ingreso_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
+
+    public Ingreso(String descripcion, Double montoTotal, LocalDate fecha) {
+        this.descripcion = descripcion;
+        this.montoTotal = montoTotal;
+        this.fecha = fecha;
+        this.egresos = new ArrayList<>();
+        this.categorias = new ArrayList<>();
+    }
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }

@@ -20,13 +20,15 @@ public class Organizacion {
     private String nombre;
     private String descripcion;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "organizacion_id")
     private List<Entidad> entidades;
 
     @OneToMany
     @JoinColumn(name = "organizacion_id")
     private List<CriterioCategoria> criterios;
+
+    public Organizacion(){}
 
     public Organizacion(String nombre, String descripcion) {
         this.nombre = nombre;

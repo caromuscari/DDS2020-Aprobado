@@ -24,7 +24,7 @@
 								<a class="nav-link" href="/home">Home</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link active" href="#">Egresos <span class="sr-only">(current)</span></a>
+								<a class="nav-link active" href="/egreso">Egresos <span class="sr-only">(current)</span></a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="/ingreso">Ingresos</a>
@@ -106,10 +106,13 @@
 			var confirmaBorrado = confirm("Desea borrar el egreso " + codigo);
 			if (confirmaBorrado == true) {
 				$.ajax({
-					url: "/egreso/"+id,
-					type: "DELETE",
+					url: '/egreso/' + id,
+					type: 'DELETE',
 					success: function(result){
 						location.replace("/egreso");
+					},
+					error: function(result){
+			    		alert(result.statusText)
 					}
 				})
 			}

@@ -18,6 +18,9 @@ public class ItemOperacionPresupuesto {
         this.itemPresupuesto = itemPresupuesto;
     }
 
+    public ItemOperacionPresupuesto() {
+    }
+
     public Integer getCantidad(){return cantidad;}
     public void setCantidad(Integer cantidad){this.cantidad = cantidad;}
 

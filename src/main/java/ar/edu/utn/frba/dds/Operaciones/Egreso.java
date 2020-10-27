@@ -38,7 +38,7 @@ public class Egreso {
     @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
     private List<Categoria> categorias;
 

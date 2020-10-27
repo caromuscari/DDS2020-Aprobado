@@ -130,10 +130,10 @@ public class ExampleDataCreator {
         items1.add(iop2);
         List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
         items2.add(iop3);
-        Presupuesto presupuesto1 = new Presupuesto(items1,new Proveedor("HP", 1L, "1234"),"Presupuesto 1");
-        Presupuesto presupuesto2 = new Presupuesto(items2,new Proveedor("HP", 1L, "1234"),"Presupuesto 2");
-//        licitacion1.addPresupuesto(presupuesto1);
-//        licitacion2.addPresupuesto(presupuesto2);
+        Presupuesto presupuesto1 = new Presupuesto(items1,proveedores.get(0),"Presupuesto 1");
+        Presupuesto presupuesto2 = new Presupuesto(items2,proveedores.get(0),"Presupuesto 2");
+        licitacion1.addPresupuesto(presupuesto1);
+        licitacion2.addPresupuesto(presupuesto2);
 
         empresa1.addLicitacion(licitacion1);
         empresa2.addLicitacion(licitacion2);

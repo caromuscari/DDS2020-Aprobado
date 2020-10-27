@@ -71,7 +71,6 @@ public class Egresos{
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
-            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("egreso", egreso);
@@ -189,7 +188,7 @@ public class Egresos{
             }
         }
 
-        ar.edu.utn.frba.dds.Operaciones.Egreso egreso = null;
+        Egreso egreso = null;
 
         if (id == null) {
             egreso = new RepositorioEgresos(entity).crearEgreso(items, proveedor, nombreEgreso);

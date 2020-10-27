@@ -9,7 +9,7 @@ public class ItemOperacionEgreso {
     private Long id;
     private Integer cantidad;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "item_id")
     private ItemEgreso itemEgreso;
 

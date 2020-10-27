@@ -24,7 +24,7 @@ public class Presupuesto {
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
@@ -50,9 +50,7 @@ public class Presupuesto {
         this.items = items;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
-        this.items = new ArrayList<>();
         this.nombre = nombre;
-        this.id = new Random().nextInt(1000);
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
@@ -101,4 +99,6 @@ public class Presupuesto {
         if (categorias.size() == 0) return true;
         else return false;
     }
+
+//    public void addItem(ItemOperacionPresupuesto item){ this.items.add(item);}
 }

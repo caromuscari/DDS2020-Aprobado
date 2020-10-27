@@ -24,6 +24,9 @@ public class ItemPresupuesto {
         this.tipo = tipo;
     }
 
+    public ItemPresupuesto() {
+    }
+
     public Double getPrecio(){return precio;}
     public void setPrecio(Double precio){this.precio = precio;}
 

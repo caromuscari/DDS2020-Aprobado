@@ -35,7 +35,7 @@ public class RepositorioEntidades {
     }
 
     public Egreso obtenerEgresoPorId(String id) {
-        return this.entityManager.find(Egreso.class, id);
+        return this.entityManager.find(Egreso.class, Integer.parseInt(id));
     }
 
     public Egreso obtenerEgresoPorNombre(String nombre) {
@@ -56,12 +56,8 @@ public class RepositorioEntidades {
     }
 
     public void borrarEgreso(String id) {
-        Query query = entityManager.createQuery(
-                "DETELE FROM Egresos e WHERE e.egreso_id = :id");
-        query.setParameter("id", id).executeUpdate();
-
-        //obtenerEntidades().forEach(entidad -> entidad.getEgresos().removeIf(egreso -> Integer.parseInt(id) == egreso.getId()));
-
+        Egreso e = this.entityManager.find(Egreso.class, Integer.parseInt(id));
+        this.entityManager.remove(e);
     }
 
     public Ingreso obtenerIngresoPorId(String id) {

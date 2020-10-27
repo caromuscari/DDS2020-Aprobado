@@ -16,7 +16,7 @@ public class ItemEgreso {
     private TipoItem tipo;
 
     public ItemEgreso(){
-
+        // Para Hibernate
     }
 
     public ItemEgreso(String codigo, String descripcion, Double precio, TipoItem tipo, CategoriaItem categoria) {

@@ -27,6 +27,7 @@ public class VinculadorController {
             return Login.paginaLogin(request, response);
         } else {
 
+            repoEntidades = new RepositorioEntidades(entity);
             List<Entidad> entidades = repoEntidades.obtenerEntidades();
             Map<String, Object> map = new HashMap<>();
             map.put("entidades",entidades);

@@ -17,7 +17,7 @@ public class Egreso {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "egreso_id")
     private List<DocumentoComercial> documentos;
 
@@ -25,12 +25,12 @@ public class Egreso {
     @JoinColumn(name = "egreso_id")
     private List<ItemOperacionEgreso> items;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medioDePago_id")
     private MedioDePago medioDePago;
     private Double precioTotal;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
@@ -38,7 +38,7 @@ public class Egreso {
     @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
     private List<Categoria> categorias;
 
@@ -54,6 +54,10 @@ public class Egreso {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Egreso(){
+        // Para Hibernate
     }
 
     public Egreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre) {

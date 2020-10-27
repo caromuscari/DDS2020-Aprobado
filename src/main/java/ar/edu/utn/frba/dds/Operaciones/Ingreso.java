@@ -28,6 +28,10 @@ public class Ingreso {
     @JoinTable(name = "ingresos_categorias", joinColumns = @JoinColumn(name = "ingreso_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
+    public Ingreso(){
+        // Para Hibernate
+    }
+
     public Ingreso(String descripcion, Double montoTotal, LocalDate fecha) {
         this.descripcion = descripcion;
         this.montoTotal = montoTotal;

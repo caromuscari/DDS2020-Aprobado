@@ -13,6 +13,10 @@ public class ItemOperacionEgreso {
     @JoinColumn(name = "item_id")
     private ItemEgreso itemEgreso;
 
+    public ItemOperacionEgreso(){
+        // Para Hibernate
+    }
+
     public ItemOperacionEgreso(Integer cantidad, ItemEgreso itemEgreso) {
         this.cantidad = cantidad;
         this.itemEgreso = itemEgreso;

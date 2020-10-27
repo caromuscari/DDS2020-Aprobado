@@ -18,8 +18,13 @@ public class Categoria {
     @JoinColumn(name = "criterioHijo_id")
     private CriterioCategoria criterioHijo;
 
+
     public Categoria(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Categoria(){
+        // Para Hibernate
     }
 
     public String getNombre() { return nombre; }

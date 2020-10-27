@@ -33,6 +33,10 @@ public class Presupuesto {
     private List<Categoria> categorias;
     private String nombre;
 
+    public Presupuesto(){
+        // Para Hibernate
+    }
+
     public Presupuesto(List<DocumentoComercial> documentos, List<ItemOperacionPresupuesto> items, Double precioTotal, Proveedor proveedor,String nombre) {
         this.documentos = documentos;
         this.items = items;

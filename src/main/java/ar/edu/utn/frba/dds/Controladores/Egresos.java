@@ -161,7 +161,10 @@ public class Egresos{
 
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
         String id = request.params(":id");
+
         repoEntidades.borrarEgreso(request.params(":id"));
+        entity.getTransaction().commit();
+
         List<EgresoDTO> egresos = new ArrayList<>();
         List<Entidad> entidades = repoEntidades.obtenerEntidades();
         entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));

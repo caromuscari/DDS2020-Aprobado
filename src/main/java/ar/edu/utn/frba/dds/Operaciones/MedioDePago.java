@@ -11,6 +11,10 @@ public class MedioDePago {
     private Long numero;
     private String tipo;
 
+    public MedioDePago(){
+        // Para Hibernate
+    }
+
     public Long getNumero() {
         return numero;
     }

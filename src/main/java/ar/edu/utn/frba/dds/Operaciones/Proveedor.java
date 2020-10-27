@@ -22,6 +22,7 @@ public class Proveedor {
     private List<Categoria> categorias;
 
     public Proveedor(){
+        // Para Hibernate
     }
 
     public Proveedor(String nombre, Long identificador, String direccionPostal) {

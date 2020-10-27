@@ -20,11 +20,11 @@ public class Organizacion {
     private String nombre;
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacion_id")
     private List<Entidad> entidades;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacion_id")
     private List<CriterioCategoria> criterios;
 
@@ -73,5 +73,13 @@ public class Organizacion {
         List<Categoria> totalCategorias = this.criterios.stream().map(c -> c.getTotalCategorias()).flatMap(List::stream).collect(Collectors.toList());
 
         return totalCategorias.stream().filter(c -> c.getNombre().matches(nombre)).findFirst().get();
+    }
+
+    public List<Categoria> getCategorias(){
+        return this.criterios.stream().map(c -> c.getTotalCategorias()).flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    public void addEntidad(Entidad entidad){
+        this.entidades.add(entidad);
     }
 }

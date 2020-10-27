@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioPresupuesto;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.google.gson.Gson;
 import spark.ModelAndView;
@@ -30,8 +31,9 @@ public class Presupuestos {
             return Login.paginaLogin(request,response);
         }
         else {
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<LicitacionDTO> licitaciones = new ArrayList<>();
-            List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
+            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
             entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
@@ -50,7 +52,7 @@ public class Presupuestos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioEntidades(entity).obtenerPresupuestoPorId(request.params(":id"));
+            ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioPresupuesto(entity).obtenerPresupuestoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -69,7 +71,7 @@ public class Presupuestos {
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
-        Presupuesto presupuesto = new RepositorioEntidades(entity).obtenerPresupuestoPorId(id);
+        Presupuesto presupuesto = new RepositorioPresupuesto(entity).obtenerPresupuestoPorId(id);
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {

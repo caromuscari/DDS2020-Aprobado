@@ -15,16 +15,16 @@ public class Presupuesto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "presupuesto_id")
     private List<DocumentoComercial> documentos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "presupuesto_id")
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
@@ -44,7 +44,6 @@ public class Presupuesto {
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
         this.nombre = nombre;
-        this.id = new Random().nextInt(1000);
     }
 
     public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor,String nombre) {
@@ -72,7 +71,6 @@ public class Presupuesto {
     public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
 
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
 
     public String getNombre() {
         return nombre;

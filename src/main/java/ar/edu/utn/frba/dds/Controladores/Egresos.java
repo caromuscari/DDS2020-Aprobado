@@ -36,9 +36,9 @@ public class Egresos{
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
-            List<EgresoDTO> egresos = new ArrayList<>();
-            List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+            List<EgresoDTO> egresos = new ArrayList<>();
+            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
@@ -68,17 +68,14 @@ public class Egresos{
     }
 
     public static ModelAndView paginaDetalleEgreso(Request request, Response response, EntityManager entity) {
-
-        RepositorioEntidades repoEntidades = new RepositorioEntidades(entity);
-
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Operaciones.Egreso egreso = repoEntidades.obtenerEgresoPorId(request.params(":id"));
+            Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("egreso", egreso);
-            map.put("nombreEntidad", repoEntidades.obtenerEntidadDeEgreso(egreso).getNombre());
+            map.put("nombreEntidad", new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso).getNombre());
             map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
             if (egreso.getPresupuesto() != null)
                 map.put("categoriasPresupuesto", getCategoriasArray(egreso.getPresupuesto().getCategorias()));
@@ -91,7 +88,7 @@ public class Egresos{
             return Login.paginaLogin(request, response);
         } else {
             Map<String, Object> map = new HashMap<>();
-            Egreso egreso = new RepositorioEntidades(entity).obtenerEgresoPorId(request.params("id"));
+            Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params("id"));
             map.put("egreso", egreso);
             return new ModelAndView(map, "nuevoPresupuestoEnEgreso.html");
         }
@@ -115,7 +112,7 @@ public class Egresos{
                 ObjectMapper mapper = new ObjectMapper();
                 PresupuestoDTO presupuestoDTO = mapper.readValue(tempFile.toFile(), PresupuestoDTO.class);
 
-                ar.edu.utn.frba.dds.Operaciones.Egreso egreso = new RepositorioEntidades(entity).obtenerEgresoPorId(request.params("id"));
+                Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params("id"));
                 egreso.setPresupuesto(new Presupuesto(new ArrayList<>(), presupuestoDTO.getProveedor(), presupuestoDTO.getNombre()));
 
                 Files.deleteIfExists(tempFile);
@@ -131,21 +128,18 @@ public class Egresos{
     }
 
     public static ModelAndView paginaModificarEgreso(Request request, Response response, EntityManager entity) {
-
-        RepositorioEntidades repoEntidades = new RepositorioEntidades(entity);
-
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Operaciones.Egreso egreso = repoEntidades.obtenerEgresoPorId(request.params(":id"));
+            Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("egreso", egreso);
             map.put("proveedores", new RepositorioProveedores(entity).obtenerProveedores());
             map.put("mediosDePago", new RepositorioMedioDePago(entity).obtenerMediosDePago());
             map.put("entidades", usuario.getOrganizacion().getEntidades());
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
-            map.put("nombreEntidad", repoEntidades.obtenerEntidadDeEgreso(egreso).getNombre());
+            map.put("nombreEntidad", new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso).getNombre());
             map.put("categoriasEgreso", getCategoriasArray(egreso.getCategorias()));
             return new ModelAndView(map, "modificarEgreso.html");
         }
@@ -153,24 +147,16 @@ public class Egresos{
 
     public static ModelAndView borrarEgreso(Request request, Response response, EntityManager entity) {
 
-        RepositorioEntidades repoEntidades = new RepositorioEntidades(entity);
-
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         }
-
-        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
         String id = request.params(":id");
 
-        repoEntidades.borrarEgreso(request.params(":id"));
+        new RepositorioEntidades(entity).borrarEgreso(id);
         entity.getTransaction().commit();
 
-        List<EgresoDTO> egresos = new ArrayList<>();
-        List<Entidad> entidades = repoEntidades.obtenerEntidades();
-        entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
-        Map<String, Object> map = new HashMap<>();
-        map.put("egresos", egresos);
-        return new ModelAndView(map, "egresos.html");
+        response.redirect("/egreso");
+        return null;
     }
 
     public static ModelAndView guardarEgreso(Request request, Response response, EntityManager entity) {
@@ -210,7 +196,7 @@ public class Egresos{
         if (id == null) {
             egreso = new RepositorioEgresos(entity).crearEgreso(items, proveedor, nombreEgreso);
         } else {
-            egreso = repoEntidades.obtenerEgresoPorId(request.params(":id"));
+            egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params(":id"));
             egreso.setNombre(nombreEgreso);
             egreso.setProveedor(proveedor);
             egreso.setItems(items);
@@ -254,7 +240,8 @@ public class Egresos{
     public static String filtrarPorCategoria(Request request, Response response, EntityManager entity) {
         String categoria = request.queryParams("categoria");
         List<EgresoDTO> egresos = new ArrayList<>();
-        List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
+        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
         entidades.forEach(entidad -> {
                     entidad.getEgresos().stream()
                             .filter(egreso -> filtrar(egreso, categoria))

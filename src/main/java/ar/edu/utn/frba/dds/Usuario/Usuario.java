@@ -27,7 +27,7 @@ public class Usuario {
     @CollectionTable(name = "lastPasswords")
     private List<String> ultimasPasswords;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private List<Mensaje> bandejaDeMensajes;
 

@@ -6,28 +6,23 @@ import java.util.Optional;
 
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 
+import javax.persistence.EntityManager;
+
 public class LicitacionRepo {
 
-    static List<Licitacion> licitaciones = new ArrayList<>();
+    private EntityManager entityManager;
 
-    public static LicitacionRepo instance = null;
-
-    public static Optional<Licitacion> find(String id){
-        return licitaciones.stream()
-                .filter(l -> l.getNombre().matches(id))
-                .findFirst();
+    public LicitacionRepo(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public static LicitacionRepo getInstance() {
-        if (instance == null) {
-            instance = new LicitacionRepo();
-        }
-        return instance;
+    public Licitacion obtenerLicitacionPorID(String id){
+        return this.entityManager.find(Licitacion.class, Integer.parseInt(id));
     }
 
-    public static void add(Licitacion licitacion){
-        licitaciones.add(licitacion);
-    }
+    public void remove(Licitacion licitacion){ this.entityManager.remove(licitacion); }
 
-    public static void remove(Licitacion licitacion){ licitaciones.remove(licitacion); }
+    public void persistir(Licitacion licitacion) {
+        this.entityManager.persist(licitacion);
+    }
 }

@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.Controladores;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
+import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Vinculador.*;
 import ar.edu.utn.frba.dds.Vinculador.PrimeroEgreso;
 import com.google.gson.Gson;
@@ -19,16 +20,14 @@ import java.util.*;
 
 public class VinculadorController {
 
-    private static RepositorioEntidades repoEntidades;
     private static List<CondicionVinculacion> condiciones;
 
     public static ModelAndView paginaVinculador(Request request, Response response, EntityManager entity) {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
-
-            repoEntidades = new RepositorioEntidades(entity);
-            List<Entidad> entidades = repoEntidades.obtenerEntidades();
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
             Map<String, Object> map = new HashMap<>();
             map.put("entidades",entidades);
             return new ModelAndView(map, "vinculador.html");
@@ -47,8 +46,7 @@ public class VinculadorController {
         //=====================================================
         // Busco la entidad en la DB
 
-        repoEntidades = new RepositorioEntidades(entityManager);
-        Entidad entidad = repoEntidades.obtenerEntidadPorNombre(ent);
+        Entidad entidad = new RepositorioEntidades(entityManager).obtenerEntidadPorNombre(ent);
 
         //=====================================================
 

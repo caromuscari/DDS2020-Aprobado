@@ -34,8 +34,6 @@ public class App {
         initRoutes();
         initPersistence();
 
-        //Inicializar datos de prueba
-        new ExampleDataCreator(entityManagerFactory).createData();
     }
 
     public static void initPersistence(){
@@ -92,8 +90,8 @@ public class App {
         get("/proveedor", RouteWithTransaction(ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores));
 
         //Licitaciones
-        post("/licitacion", LicitacionController::crearLicitacion);
-        post("/validarLicitacion", LicitacionController::validarLicitacion);
+        post("/licitacion", RouteWithTransaction(LicitacionController::crearLicitacion));
+        post("/validarLicitacion", RouteWithTransaction(LicitacionController::validarLicitacion));
         get("/licitacion", RouteWithTransaction(LicitacionController::mostrarMensajes), gson::toJson);
 
         //Filtros
@@ -108,7 +106,7 @@ public class App {
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
         } else {
-            Usuario usuario = new RepoUsuarios(entityManagerFactory.createEntityManager()).buscarUsuario(request.session().attribute("usuario"));
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             Map<String, Object> map = new HashMap<>();
             map.put("organizacion", usuario.getOrganizacion());
             return new ModelAndView(map, "home.html");

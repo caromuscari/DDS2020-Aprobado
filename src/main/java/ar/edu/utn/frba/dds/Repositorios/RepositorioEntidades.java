@@ -23,7 +23,7 @@ public class RepositorioEntidades {
         this.entityManager = entityManager;
     }
 
-    public void crearEntidad(Entidad entidad) { this.entityManager.persist(entidad); }
+    public void persistirEntidad(Entidad entidad) { this.entityManager.persist(entidad); }
 
     public void eliminarEntidad(Entidad entidad){ this.entityManager.remove(entidad); }
 
@@ -32,19 +32,6 @@ public class RepositorioEntidades {
         CriteriaQuery<Entidad> consulta = cb.createQuery(Entidad.class);
         Root<Entidad> entidades = consulta.from(Entidad.class);
         return this.entityManager.createQuery(consulta.select(entidades)).getResultList();
-    }
-
-    public Egreso obtenerEgresoPorId(String id) {
-        return this.entityManager.find(Egreso.class, Integer.parseInt(id));
-    }
-
-    public Egreso obtenerEgresoPorNombre(String nombre) {
-        for (Egreso egreso : obtenerEntidades().stream().map(e -> e.getEgresos()).flatMap(List::stream).collect(Collectors.toList())) {
-            if (nombre.equals(egreso.getNombre())) {
-                return egreso;
-            }
-        }
-        return null;
     }
 
     public Entidad obtenerEntidadDeEgreso(Egreso egreso){
@@ -58,24 +45,6 @@ public class RepositorioEntidades {
     public void borrarEgreso(String id) {
         Egreso e = this.entityManager.find(Egreso.class, Integer.parseInt(id));
         this.entityManager.remove(e);
-    }
-
-    public Ingreso obtenerIngresoPorId(String id) {
-        for (Ingreso ingreso : obtenerEntidades().stream().map(e -> e.getIngresos()).flatMap(List::stream).collect(Collectors.toList())) {
-            if (Integer.parseInt(id) == ingreso.getId()) {
-                return ingreso;
-            }
-        }
-        return null;
-    }
-
-    public Presupuesto obtenerPresupuestoPorId(String id) {
-        for (Presupuesto presupuesto : obtenerEntidades().stream().map(e -> e.getLicitaciones()).flatMap(List::stream).map(l -> l.getPresupuestos()).flatMap(List::stream).collect(Collectors.toList())) {
-            if (Integer.parseInt(id) == presupuesto.getId()) {
-                return presupuesto;
-            }
-        }
-        return null;
     }
 
 }

@@ -9,7 +9,7 @@ public class ItemOperacionPresupuesto {
     private int id;
     private Integer cantidad;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private ItemPresupuesto itemPresupuesto;
 

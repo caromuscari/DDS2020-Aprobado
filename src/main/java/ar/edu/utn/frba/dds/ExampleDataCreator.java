@@ -20,8 +20,10 @@ import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,36 +32,14 @@ import java.util.List;
 
 public class ExampleDataCreator {
 
-    //Repositorios
-    private static RepositorioEntidades repoEntidades;
-    private static RepoUsuarios repoUsuarios;
-    private static RepositorioEgresos repoEgresos;
-    private static RepositorioItemsOperacionEgreso repoItemsOperacionEgreso;
-    private static RepositorioProveedores repoProveedores;
-    private static RepositorioMedioDePago repoMediosDePago;
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("db");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    private static EntityManager entityManager;
+        inicializarUsuarios(entityManager);
 
-    public ExampleDataCreator(EntityManagerFactory entityManagerFactory) {
-        this.entityManager = entityManagerFactory.createEntityManager();
-    }
-
-    public void createData(){
-
-        repoEntidades = new RepositorioEntidades(entityManager);
-        repoUsuarios = new RepoUsuarios(entityManager);
-        repoEgresos = new RepositorioEgresos(entityManager);
-        repoItemsOperacionEgreso = new RepositorioItemsOperacionEgreso(entityManager);
-        repoProveedores = new RepositorioProveedores(entityManager);
-        repoMediosDePago = new RepositorioMedioDePago(entityManager);
-
-        inicializarProveedores();
-        inicializarMediosDePago();
-        inicializarOrganizacion();
-        inicializarUsuarios();
-
-        List<Entidad> entidades = repoEntidades.obtenerEntidades();
-        List<Usuario> usuarios = repoUsuarios.getRegistrados();
+//        List<Entidad> entidades = repoEntidades.obtenerEntidades();
+//        List<Usuario> usuarios = repoUsuarios.getRegistrados();
 
 
         //repoUsuarios.buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
@@ -74,16 +54,17 @@ public class ExampleDataCreator {
         List<ItemOperacionPresupuesto> products = new ArrayList<>();*/
 
         // Egreso
-        ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
-        ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-        repoItemsOperacionEgreso.crearItem(5, e1);
-        repoItemsOperacionEgreso.crearItem(5, e2);
-
-        List<ItemOperacionEgreso> compras = new ArrayList<>();
+//        ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+//        ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+//        repoItemsOperacionEgreso.crearItem(5, e1);
+//        repoItemsOperacionEgreso.crearItem(5, e2);
+//
+//        List<ItemOperacionEgreso> compras = new ArrayList<>();
 
     }
 
-    private static void inicializarOrganizacion(){
+    private static void inicializarOrganizacion(EntityManager entityManager, Organizacion organizacion){
+        List<Proveedor> proveedores = inicializarProveedores(entityManager);
 
         TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Agropecuario");
@@ -102,25 +83,19 @@ public class ExampleDataCreator {
         List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
         itemsOperacion2.add(itemOperacionEgreso2);
 
+        Egreso e1 = empresa1.generarEgreso(itemsOperacion1, proveedores.get(0),"Egreso 1");
+        Egreso e2 = empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
+        Egreso e3 = empresa2.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 3");
 
-        empresa1.generarEgreso(itemsOperacion1, repoProveedores.obtenerProveedores().get(0),"Egreso 1");
-        empresa1.generarEgreso(itemsOperacion2, repoProveedores.obtenerProveedores().get(0),"Egreso 2");
-        empresa2.generarEgreso(itemsOperacion2, repoProveedores.obtenerProveedores().get(0),"Egreso 3");
-
-
-        entityManager.getTransaction().begin();
-        repoEntidades.crearEntidad(empresa1);
-        repoEntidades.crearEntidad(empresa2);
-        entityManager.getTransaction().commit();
-
-
+        e1.setMedioDePago(new MedioDePago("Tarjeta Macro",100L,"CREDIT_CARD"));
+        e2.setMedioDePago(new MedioDePago("Tarjeta Santander",90L,"CREDIT_CARD"));
+        e3.setMedioDePago(new MedioDePago("Tarjeta Cabal",200L,"DEBIT_CARD"));
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
         Categoria categoria1 = new Categoria("Peru");
 
         listaCategorias.add(categoria1);
-
 
         //Creo ingresos
         Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.now());
@@ -136,13 +111,10 @@ public class ExampleDataCreator {
         Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.now());
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
-        empresa2.setIngresos(ingresosEmpresa2);
 
         Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020, 2,20));
-        List<Ingreso> ingresosEmpresa3 = new ArrayList<>();
-        ingresosEmpresa3.add(ingreso4);
-        empresa2.setIngresos(ingresosEmpresa3);
-
+        ingresosEmpresa2.add(ingreso4);
+        empresa2.setIngresos(ingresosEmpresa2);
 
         //Creo licitaciones y presupuestos
         Licitacion licitacion1 = new Licitacion("Licitacion 1",3);
@@ -158,35 +130,48 @@ public class ExampleDataCreator {
         items1.add(iop2);
         List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
         items2.add(iop3);
-        Presupuesto presupuesto1 = new Presupuesto(items1,repoProveedores.obtenerProveedores().get(0),"Presupuesto 1");
-        Presupuesto presupuesto2 = new Presupuesto(items2,repoProveedores.obtenerProveedores().get(0),"Presupuesto 2");
-        licitacion1.setPresupuestos(Arrays.asList(presupuesto1));
-        licitacion2.setPresupuestos(Arrays.asList(presupuesto2));
+        Presupuesto presupuesto1 = new Presupuesto(items1,new Proveedor("HP", 1L, "1234"),"Presupuesto 1");
+        Presupuesto presupuesto2 = new Presupuesto(items2,new Proveedor("HP", 1L, "1234"),"Presupuesto 2");
+//        licitacion1.addPresupuesto(presupuesto1);
+//        licitacion2.addPresupuesto(presupuesto2);
 
+        empresa1.addLicitacion(licitacion1);
+        empresa2.addLicitacion(licitacion2);
 
-        //repoEntidades.obtenerEntidades().get(0).setLicitaciones(Arrays.asList(licitacion1));
-        //repoEntidades.obtenerEntidades().get(1).setLicitaciones(Arrays.asList(licitacion2));
-        LicitacionRepo.getInstance().add(licitacion1);
-        LicitacionRepo.getInstance().add(licitacion2);
+        organizacion.addEntidad(empresa1);
+        organizacion.addEntidad(empresa2);
 
     }
 
-    private static void inicializarMediosDePago(){
-        repoMediosDePago.crearMedioDePago("Tarjeta credito",100L,"CREDIT_CARD");
-        repoMediosDePago.crearMedioDePago("Tarjeta debito",200L,"DEBIT_CARD");
+    private static List<Proveedor> inicializarProveedores(EntityManager entityManager){
+        Proveedor prov1 = new Proveedor("HP", 1L, "1234");
+        prov1.addItem(new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("348","Impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("48347","Tinta para impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+
+        Proveedor prov2 = new Proveedor("Sony", 2L, "1234");
+        prov2.addItem(new ItemEgreso("8359","Computadora",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov2.addItem(new ItemEgreso("29347","Auriculares",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+
+        Proveedor prov3 = new Proveedor("Samsung", 21314l, "666");
+        prov3.addItem(new ItemEgreso("3473","Computadora",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov3.addItem(new ItemEgreso("284","Monitor",20.0,TipoItem.PRODUCTO,CategoriaItem.MONITOR));
+
+        List<Proveedor> proveedores = new ArrayList<>();
+        proveedores.add(prov1);
+        proveedores.add(prov2);
+        proveedores.add(prov3);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(prov1);
+        entityManager.persist(prov2);
+        entityManager.persist(prov3);
+        entityManager.getTransaction().commit();
+
+        return proveedores;
     }
 
-    private static void inicializarProveedores(){
-        repoProveedores.crearProveedor("HP", 1L, "1234",  new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("348","Impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.obtenerProveedorPorNombre("HP").addItem(new ItemEgreso("48347","Tinta para impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.crearProveedor("Sony", 2L, "1234", new ItemEgreso("8359","Computadora",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.obtenerProveedorPorNombre("Sony").addItem(new ItemEgreso("29347","Auriculares",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.crearProveedor("Samsung", 21314l, "666", new ItemEgreso("3473","Computadora",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        repoProveedores.obtenerProveedorPorNombre("Samsung").addItem(new ItemEgreso("284","Monitor",20.0,TipoItem.PRODUCTO,CategoriaItem.MONITOR));
-    }
-
-    private static void inicializarUsuarios(){
+    private static void inicializarUsuarios(EntityManager entityManager){
         Hash encriptador = new Hash();
 
         List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
@@ -233,18 +218,17 @@ public class ExampleDataCreator {
             usuario3.setBandejaDeMensajes(listaMensajes2);
             usuario4.setBandejaDeMensajes(listaMensajes1);
 
+            crearCategorias(usuario4.getOrganizacion());
+            inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
 
             entityManager.getTransaction().begin();
-            repoUsuarios.agregarUsuario(usuario1);
-            repoUsuarios.agregarUsuario(usuario2);
-            repoUsuarios.agregarUsuario(usuario3);
-            repoUsuarios.agregarUsuario(usuario4);
+            entityManager.persist(usuario1);
+            entityManager.persist(usuario2);
+            entityManager.persist(usuario3);
+            entityManager.persist(usuario4);
             entityManager.getTransaction().commit();
-
-
-            crearCategorias(usuario4.getOrganizacion());
         }
-        catch (NoSuchAlgorithmException | UsuarioExistsException e) {
+        catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }

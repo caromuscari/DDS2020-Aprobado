@@ -18,7 +18,7 @@ public class Licitacion {
     private int id;
     private String nombre;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "licitacion_id")
     private List<Presupuesto> presupuestos;
 
@@ -27,7 +27,7 @@ public class Licitacion {
     private Egreso egreso;
     private Integer presupuestosRequeridos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "licitacion_id")
     private List<CriterioSeleccion> criterios;
 
@@ -40,6 +40,9 @@ public class Licitacion {
         this.presupuestos = new ArrayList<Presupuesto>();
         this.criterios = new ArrayList<CriterioSeleccion>();
         this.notificador = new NotificadorValidador();
+    }
+
+    public Licitacion() {
     }
 
     //Setters y Getters
@@ -83,4 +86,6 @@ public class Licitacion {
     public void agregarCriterio(CriterioSeleccion criterio){
         this.criterios.add(criterio);
     }
+
+    public void addPresupuesto(Presupuesto presupuesto){ this.presupuestos.add(presupuesto);}
 }

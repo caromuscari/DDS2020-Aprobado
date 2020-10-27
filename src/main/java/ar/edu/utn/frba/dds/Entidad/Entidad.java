@@ -67,10 +67,11 @@ public abstract class Entidad {
             mapToDouble(egreso -> egreso.getPrecioTotal()).sum();
     }
 
-    public void generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre){
+    public Egreso generarEgreso(List<ItemOperacionEgreso> items, Proveedor proveedor, String nombre){
         Egreso egreso = new Egreso(items,proveedor,nombre);
         this.egresos.add(egreso);
 
+        return egreso;
         /*
         List<Categoria> listaCategorias = new ArrayList<>();
         Categoria categoria1 = new Categoria("Peru");
@@ -82,4 +83,6 @@ public abstract class Entidad {
     public List<Egreso> filtrarEgresos(Categoria categoria){
         return this.egresos.stream().filter(e -> e.contieneCategoria(categoria)).collect(Collectors.toList());
     }
+
+    public void addLicitacion(Licitacion licitacion){ this.licitaciones.add(licitacion);}
 }

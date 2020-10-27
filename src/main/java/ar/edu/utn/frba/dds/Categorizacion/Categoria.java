@@ -14,7 +14,7 @@ public class Categoria {
 
     private String nombre;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "criterioHijo_id")
     private CriterioCategoria criterioHijo;
 

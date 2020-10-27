@@ -21,19 +21,19 @@ import java.util.stream.Collectors;
 public class LicitacionController {
 
 
-    public static Object crearLicitacion(Request request, Response response) {
+    public static Object crearLicitacion(Request request, Response response, EntityManager entity) {
         String jsonLicitacion = request.body();
         Licitacion licitacion = new ObjectMapper().convertValue(jsonLicitacion, Licitacion.class);
-        LicitacionRepo.add(licitacion);
+        new LicitacionRepo(entity).persistir(licitacion);
         response.body("Licitacion: " + licitacion.getNombre());
         return null;
     }
 
-    public static Object validarLicitacion(Request request, Response response) {
+    public static Object validarLicitacion(Request request, Response response, EntityManager entitys) {
         String nombreLicitacion = request.queryMap("nombreLicitacion").value();
-        Optional<Licitacion> licitacion = LicitacionRepo.find(nombreLicitacion);
-        if (licitacion.isPresent()) {
-            licitacion.get().validarLicitacion();
+        Licitacion licitacion = new LicitacionRepo(entitys).obtenerLicitacionPorID(nombreLicitacion);
+        if (licitacion != null) {
+            licitacion.validarLicitacion();
         }
         return null;
     }

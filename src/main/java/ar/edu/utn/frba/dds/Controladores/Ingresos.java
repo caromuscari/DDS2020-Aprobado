@@ -31,16 +31,16 @@ public class Ingresos {
             return Login.paginaLogin(request,response);
         }
         else {
+            Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<IngresoDTO> ingresos = new ArrayList<>();
-            List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
+            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
             entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
-            List<Categoria> categorias = new RepositorioCategorias(entity).getCategorias();
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
             int elementoFinal = ((pagina*App.getPageSize()) < ingresos.size()) ? (pagina*App.getPageSize()) : ingresos.size();
             map.put("ingresos",ingresos.subList(elementoInicial,elementoFinal));
-            map.put("categorias",categorias);
+            map.put("categorias",new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             List<Integer> range = IntStream.rangeClosed(1, ((ingresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
             return new ModelAndView(map, "ingresos.html");
@@ -53,7 +53,7 @@ public class Ingresos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioEntidades(entity).obtenerIngresoPorId(request.params(":id"));
+            ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioIngreso(entity).obtenerIngresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -72,7 +72,7 @@ public class Ingresos {
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
-        Ingreso ingreso = new RepositorioEntidades(entity).obtenerIngresoPorId(id);
+        Ingreso ingreso = new RepositorioIngreso(entity).obtenerIngresoPorId(id);
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {
@@ -102,7 +102,8 @@ public class Ingresos {
     public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
         String categoria = request.queryParams("categoria");
         List<IngresoDTO> ingresos = new ArrayList<>();
-        List<Entidad> entidades = new RepositorioEntidades(entity).obtenerEntidades();
+        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
         entidades.forEach(entidad -> {
                     entidad.getIngresos().stream()
                             .filter(ingreso -> filtrar(ingreso, categoria))

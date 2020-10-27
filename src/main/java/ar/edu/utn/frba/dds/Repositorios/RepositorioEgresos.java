@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -45,12 +46,13 @@ public class RepositorioEgresos {
         this.entityManager.remove(egreso);
     }
 
-    public Egreso obtenerEgresoPorId(String id) {
-        for (Egreso egreso : obtenerEgresos()) {
-            if (Integer.parseInt(id) == egreso.getId()) {
-                return egreso;
-            }
-        }
-        return null;
+    public void borrarEgreso(String id) {
+        Egreso e = this.entityManager.find(Egreso.class, Integer.parseInt(id));
+        this.entityManager.remove(e);
     }
+
+    public Egreso obtenerEgresoPorId(String id) {
+        return this.entityManager.find(Egreso.class, Integer.parseInt(id));
+    }
+
 }

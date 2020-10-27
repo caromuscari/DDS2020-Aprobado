@@ -10,13 +10,16 @@ public class CriterioCategoria {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String nombre;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "criterioPadre_id")
     private List<Categoria> categorias;
 
     public CriterioCategoria(String nombre, List<Categoria> categorias) {
         this.nombre = nombre;
         this.categorias = categorias;
+    }
+
+    public CriterioCategoria() {
     }
 
     public String getNombre() { return nombre; }

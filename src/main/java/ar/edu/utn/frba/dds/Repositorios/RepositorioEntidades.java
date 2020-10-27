@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -39,12 +40,14 @@ public class RepositorioEntidades {
     }
 
     public Entidad obtenerEntidadPorNombre(String nombreEntidad){
-        return obtenerEntidades().stream().filter(e -> e.getNombre().equals(nombreEntidad)).findFirst().get();
-    }
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Entidad> consulta = cb.createQuery(Entidad.class);
+        Root<Entidad> entidades = consulta.from(Entidad.class);
+        Predicate condicion = cb.equal(entidades.get("nombre"), nombreEntidad);
+        CriteriaQuery<Entidad> where = consulta.select(entidades).where(condicion);
+        return this.entityManager.createQuery(where).getSingleResult();
 
-    public void borrarEgreso(String id) {
-        Egreso e = this.entityManager.find(Egreso.class, Integer.parseInt(id));
-        this.entityManager.remove(e);
+        //return obtenerEntidades().stream().filter(e -> e.getNombre().equals(nombreEntidad)).findFirst().get();
     }
 
 }

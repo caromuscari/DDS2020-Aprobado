@@ -3,11 +3,13 @@ package ar.edu.utn.frba.dds.Repositorios;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
+import sun.plugin.perf.PluginRollup;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +39,31 @@ public class RepositorioProveedores {
     }
 
     public Proveedor obtenerProveedorPorNombre(String nombre) {
-        for (Proveedor proveedor : obtenerProveedores()) {
-            if (proveedor.getNombre().matches(nombre)) {
-                return proveedor;
-            }
+        if (this.existsProveedorPorNombre(nombre)) {
+            CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+            CriteriaQuery<Proveedor> consulta = cb.createQuery(Proveedor.class);
+            Root<Proveedor> proveedores = consulta.from(Proveedor.class);
+            Predicate condicion = cb.equal(proveedores.get("nombre"), nombre);
+            CriteriaQuery<Proveedor> where = consulta.select(proveedores).where(condicion);
+            return this.entityManager.createQuery(where).getSingleResult();
         }
         return null;
+
+//        for (Proveedor proveedor : obtenerProveedores()) {
+//            if (proveedor.getNombre().matches(nombre)) {
+//                return proveedor;
+//            }
+//        }
+//        return null;
+    }
+
+    private boolean existsProveedorPorNombre(String nombre) {
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> consulta = cb.createQuery(Long.class);
+        Root<Proveedor> proveedores = consulta.from(Proveedor.class);
+        Predicate condicion = cb.equal(proveedores.get("nombre"), nombre);
+        CriteriaQuery<Long> select = consulta.where(condicion).select(cb.count(proveedores));
+        return this.entityManager.createQuery(select).getSingleResult() > 0;
     }
 
     public void eliminarProveedor(Proveedor proveedor){ this.entityManager.remove(proveedor); }

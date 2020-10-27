@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -34,12 +35,31 @@ public class RepositorioEgresos {
     }
 
     public Egreso obtenerEgresoPorNombre(String nombre) {
-        for (Egreso egreso : obtenerEgresos()) {
-            if (nombre.equals(egreso.getNombre())) {
-                return egreso;
-            }
+        if (this.existsEgresoPorNombre(nombre)) {
+            CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+            CriteriaQuery<Egreso> consulta = cb.createQuery(Egreso.class);
+            Root<Egreso> egresos = consulta.from(Egreso.class);
+            Predicate condicion = cb.equal(egresos.get("nombre"), nombre);
+            CriteriaQuery<Egreso> where = consulta.select(egresos).where(condicion);
+            return this.entityManager.createQuery(where).getSingleResult();
         }
         return null;
+
+//        for (Egreso egreso : obtenerEgresos()) {
+//            if (nombre.equals(egreso.getNombre())) {
+//                return egreso;
+//            }
+//        }
+//        return null;
+    }
+
+    private boolean existsEgresoPorNombre(String nombre) {
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> consulta = cb.createQuery(Long.class);
+        Root<Egreso> egresos = consulta.from(Egreso.class);
+        Predicate condicion = cb.equal(egresos.get("nombre"), nombre);
+        CriteriaQuery<Long> select = consulta.where(condicion).select(cb.count(egresos));
+        return this.entityManager.createQuery(select).getSingleResult() > 0;
     }
 
     public void eliminarEgreso(Egreso egreso){

@@ -151,7 +151,7 @@ public class Egresos{
         }
         String id = request.params(":id");
 
-        new RepositorioEntidades(entity).borrarEgreso(id);
+        new RepositorioEgresos(entity).borrarEgreso(id);
 
         return "Borrado exitoso";
     }
@@ -182,7 +182,7 @@ public class Egresos{
         List<ItemOperacionEgreso> items = new ArrayList<>();
         for (ItemEgreso item : proveedor.getItems()) {
             cantItem = request.queryParams(item.getDescripcion());
-            if (cantItem != null) {
+            if (cantItem != null && Integer.parseInt(cantItem) != 0) {
                 ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(Integer.parseInt(cantItem), item);
                 items.add(itemOperacionEgreso);
             }

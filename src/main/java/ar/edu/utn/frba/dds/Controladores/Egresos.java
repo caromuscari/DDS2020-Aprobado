@@ -145,7 +145,7 @@ public class Egresos{
         }
     }
 
-    public static ModelAndView borrarEgreso(Request request, Response response, EntityManager entity) {
+    public static Object borrarEgreso(Request request, Response response, EntityManager entity) {
 
         if (request.session(false) == null) {
             return Login.paginaLogin(request, response);
@@ -153,10 +153,8 @@ public class Egresos{
         String id = request.params(":id");
 
         new RepositorioEntidades(entity).borrarEgreso(id);
-        entity.getTransaction().commit();
 
-        response.redirect("/egreso");
-        return null;
+        return "Borrado exitoso";
     }
 
     public static ModelAndView guardarEgreso(Request request, Response response, EntityManager entity) {

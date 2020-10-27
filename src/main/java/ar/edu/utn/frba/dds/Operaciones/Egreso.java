@@ -30,7 +30,7 @@ public class Egreso {
     private MedioDePago medioDePago;
     private Double precioTotal;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 

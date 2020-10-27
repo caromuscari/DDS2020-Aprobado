@@ -85,7 +85,7 @@ public class App {
         get("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::paginaAgregarPresupuesto), engine);
         post("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::agregarPresupuesto), engine);
         post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
-        delete("/egreso/:id", TemplWithTransaction(Egresos::borrarEgreso), engine);
+        delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
 
         get("/proveedor", RouteWithTransaction(ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores));
 

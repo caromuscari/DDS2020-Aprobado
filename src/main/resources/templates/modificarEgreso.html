@@ -323,12 +323,8 @@
 					success: function(result){
 						for(var i = 0; i< result.length ; i++){
 							if("{{egreso.medioDePago.tipo}}" != result[i].name){
-								console.log("{{egreso.medioDePago.tipo}}" );
-								console.log(result[i].name );
 								$("#medioDePago").append(new Option(result[i].name, result[i].name,false));
 							}else{
-								console.log("IGUAL {{egreso.medioDePago.tipo}}" );
-								console.log(result[i].name );
 								$("#medioDePago").append(new Option(result[i].name, result[i].name,true,true));
 							}
 						}

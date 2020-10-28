@@ -229,14 +229,9 @@
 				type: "GET",
 				headers: {"Content-Type":"application/json","Authorization":"Bearer TEST-8909296145335845-102802-e6267baf517e9721730cdb75951ec7bb-160675555"},
 				success: function(result){
-					console.log(result);
-					var mediosDePago2 = new Array();
 					for(var i = 0; i< result.length ; i++){
 						$("#medioDePago").append(new Option(result[i].name, result[i].name));
-						mediosDePago2.push({"tipo":result[i].name});
 					}
-					console.log(mediosDePago2);
-
 				},
 				error: function () {
 					console.log("Error el obtener los metodos de pago");

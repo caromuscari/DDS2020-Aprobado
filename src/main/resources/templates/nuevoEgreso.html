@@ -71,7 +71,7 @@
 							<label for="entidad" class="col-sm-4 col-form-label">Entidad</label>
 							<div class="col-sm-8">
 								<select class="form-control" id="entidad" name="entidad">
-									<option value="none" selected disabled hidden>Selecionar una opcion</option>
+									<option value="none" selected entidadesdisabled hidden>Selecionar una opcion</option>
 									{{#each entidades}}
 										<option>{{nombre}}</option>
 									{{/each}}
@@ -102,9 +102,6 @@
 							<div class="col-sm-8">
 								<select class="form-control" id="medioDePago" name="medioDePago">
 									<option value="none" selected disabled hidden>Selecionar una opcion</option>
-									{{#each mediosDePago}}
-										<option>{{tipo}}</option>
-									{{/each}}
 								</select>
 							</div>
 
@@ -143,6 +140,7 @@
 			cargarCategorias();
 			$('#categorias').multiselect();
 			estiloCategoriasHijas();
+			cargarMetodoDePago();
 		})
 
 		function logout(){
@@ -223,6 +221,27 @@
 					}
 				}
 			}
+		}
+
+		function cargarMetodoDePago(){
+			$.ajax({
+				url: "https://api.mercadopago.com/v1/payment_methods",
+				type: "GET",
+				headers: {"Content-Type":"application/json","Authorization":"Bearer TEST-8909296145335845-102802-e6267baf517e9721730cdb75951ec7bb-160675555"},
+				success: function(result){
+					console.log(result);
+					var mediosDePago2 = new Array();
+					for(var i = 0; i< result.length ; i++){
+						$("#medioDePago").append(new Option(result[i].name, result[i].name));
+						mediosDePago2.push({"tipo":result[i].name});
+					}
+					console.log(mediosDePago2);
+
+				},
+				error: function () {
+					console.log("Error el obtener los metodos de pago");
+				}
+			})
 		}
 
 		function loopCategorias(select, hijos){

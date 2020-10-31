@@ -3,9 +3,11 @@ package ar.edu.utn.frba.dds.Controladores;
 import ar.edu.utn.frba.dds.DTO.MensajeDTO;
 import ar.edu.utn.frba.dds.Repositorios.LicitacionRepo;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
@@ -32,9 +34,19 @@ public class LicitacionController {
     public static Object validarLicitacion(Request request, Response response, EntityManager entitys) {
         String nombreLicitacion = request.queryMap("nombreLicitacion").value();
         Licitacion licitacion = new LicitacionRepo(entitys).obtenerLicitacionPorID(nombreLicitacion);
-        if (licitacion != null) {
-            licitacion.validarLicitacion();
+        response.header("Content-Type", "application/json");
+        try {
+            if (licitacion != null) {
+                List<ResultadoValidacion> resultadoValidacions = licitacion.validarLicitacion();
+                ObjectMapper mapper = new ObjectMapper();
+                String s = mapper.writeValueAsString(resultadoValidacions);
+                ArrayNode sa = mapper.readValue(s, ArrayNode.class);
+                return sa;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 

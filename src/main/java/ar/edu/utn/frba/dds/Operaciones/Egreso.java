@@ -30,7 +30,7 @@ public class Egreso {
     private MedioDePago medioDePago;
     private Double precioTotal;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 

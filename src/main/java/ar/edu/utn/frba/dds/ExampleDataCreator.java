@@ -7,10 +7,7 @@ import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Excepciones.UsuarioExistsException;
-import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
-import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
-import ar.edu.utn.frba.dds.Licitacion.Licitacion;
-import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import ar.edu.utn.frba.dds.Licitacion.*;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
@@ -134,6 +131,12 @@ public class ExampleDataCreator {
         Presupuesto presupuesto2 = new Presupuesto(items2,proveedores.get(0),"Presupuesto 2");
         licitacion1.addPresupuesto(presupuesto1);
         licitacion2.addPresupuesto(presupuesto2);
+
+        licitacion1.setEgreso(e1);
+        licitacion2.setEgreso(e2);
+
+        licitacion1.agregarCriterio(new CantidadPresupuestos());
+        //licitacion1.agregarCriterio(new ItemsPresupuesto());
 
         empresa1.addLicitacion(licitacion1);
         empresa2.addLicitacion(licitacion2);

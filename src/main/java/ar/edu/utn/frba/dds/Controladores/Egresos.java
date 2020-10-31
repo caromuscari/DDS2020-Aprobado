@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.PresupuestoDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
+import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Operaciones.*;
@@ -29,7 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Egresos{
+public class Egresos {
 
 
     public static ModelAndView paginaEgresos(Request request, Response response, EntityManager entity) {
@@ -42,12 +44,12 @@ public class Egresos{
             entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
-            int elementoInicial = (pagina-1)* App.getPageSize();
-            int elementoFinal = ((pagina*App.getPageSize()) < egresos.size()) ? (pagina*App.getPageSize()) : egresos.size();
-            map.put("egresos",  egresos.subList(elementoInicial,elementoFinal));
+            int elementoInicial = (pagina - 1) * App.getPageSize();
+            int elementoFinal = ((pagina * App.getPageSize()) < egresos.size()) ? (pagina * App.getPageSize()) : egresos.size();
+            map.put("egresos", egresos.subList(elementoInicial, elementoFinal));
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
-            List<Integer> range = IntStream.rangeClosed(1, ((egresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
-            map.put("pages",range);
+            List<Integer> range = IntStream.rangeClosed(1, ((egresos.size() - 1) / App.getPageSize()) + 1).boxed().collect(Collectors.toList());
+            map.put("pages", range);
             return new ModelAndView(map, "egresos.html");
         }
     }
@@ -111,12 +113,27 @@ public class Egresos{
                 ObjectMapper mapper = new ObjectMapper();
                 PresupuestoDTO presupuestoDTO = mapper.readValue(tempFile.toFile(), PresupuestoDTO.class);
 
+                RepositorioProveedores repositorioProveedores = new RepositorioProveedores(entity);
+                Proveedor proveedor = repositorioProveedores.obtenerProveedorPorNombre(presupuestoDTO.getProveedor().getNombre());
+
+                Presupuesto presupuesto = new Presupuesto(new ArrayList<>(), proveedor, presupuestoDTO.getNombre());
+                new RepositorioPresupuesto(entity).crearPresupuesto(presupuesto);
+
                 Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params("id"));
-                egreso.setPresupuesto(new Presupuesto(new ArrayList<>(), presupuestoDTO.getProveedor(), presupuestoDTO.getNombre()));
+                Entidad entidad = new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso);
+                List<Licitacion> licitaciones = entidad.getLicitaciones().stream().filter(licitacion -> {
+                    if (licitacion.getEgreso() != null) {
+                        return licitacion.getEgreso().getId() == egreso.getId();
+                    }
+                    return false;
+                }).collect(Collectors.toList());
+                licitaciones.forEach(licitacion -> licitacion.getPresupuestos().add(presupuesto));
+
+                egreso.setPresupuesto(presupuesto);
 
                 Files.deleteIfExists(tempFile);
             } catch (Exception e) {
-
+                e.printStackTrace();
             } finally {
                 uploadDir.delete();
             }
@@ -216,7 +233,7 @@ public class Egresos{
 
         egreso.setCategorias(categorias);
 
-        if(numeroMedioDePago != null && nombreMedioDePago != null) {
+        if (numeroMedioDePago != null && nombreMedioDePago != null) {
             MedioDePago medio = new MedioDePago(descrMedioDePago, Long.parseLong(numeroMedioDePago), nombreMedioDePago);
             egreso.setMedioDePago(medio);
         }

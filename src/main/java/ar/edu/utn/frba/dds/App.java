@@ -97,6 +97,7 @@ public class App {
         //Filtros
         get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
         get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
+        get("/presupuesto/filtrar/", RouteWithTransaction(Presupuestos::filtrarPorCategoria));
 
         // ===============================================================================
     }

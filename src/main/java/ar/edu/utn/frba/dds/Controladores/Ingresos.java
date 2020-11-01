@@ -82,8 +82,10 @@ public class Ingresos {
 
             for (String cat : nombreCategorias) {
                 categorias.add(total.stream()
-                        .filter(c -> c.getNombre().matches(cat))
-                        .findFirst().get());
+                                    .filter(c -> c.getNombre().matches(cat))
+                                    .findFirst()
+                                    .orElse(null)
+                );
             }
         }
         ingreso.setCategorias(categorias);

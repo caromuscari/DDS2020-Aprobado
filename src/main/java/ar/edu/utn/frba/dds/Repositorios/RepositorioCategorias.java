@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,15 @@ public class RepositorioCategorias {
         CriteriaQuery<Categoria> consulta = cb.createQuery(Categoria.class);
         Root<Categoria> categorias = consulta.from(Categoria.class);
         return this.entityManager.createQuery(consulta.select(categorias)).getResultList();
+    }
+
+    public Categoria getCategoria(String nombre) {
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Categoria> consulta = cb.createQuery(Categoria.class);
+        Root<Categoria> categorias = consulta.from(Categoria.class);
+        Predicate condicion = cb.equal(categorias.get("nombre"), nombre);
+        CriteriaQuery<Categoria> where = consulta.select(categorias).where(condicion);
+        return this.entityManager.createQuery(where).getSingleResult();
     }
 
     // Revisar si esto es válido

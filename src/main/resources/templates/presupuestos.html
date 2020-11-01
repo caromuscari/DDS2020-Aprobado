@@ -9,14 +9,15 @@
 
 	<link href="public/bootstrap.min.css" rel="stylesheet">
 	<link href="public/css/main.css" rel="stylesheet">
+	<link href="public/css/egresos.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 	<script src="public/bootstrap.min.js"></script>
 
 </head>
 
 <body>
-	<div class="container">
-		<div class="row">
+	<div class="container top">
+		<div class="row main">
 			<div class="col-lg-12">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light">
 					<div class="collapse navbar-collapse" id="navbarNav">
@@ -85,6 +86,12 @@
 				</nav>
 			</div>
 		</div>
+		<div class="sidenav">
+			<a>filtrar por categoria</a>
+			<select class="form-control" id="filtroCategoria" name="filtroCategoria" >
+			</select>
+			<button class="btn btn-outline-primary" onclick="filtrarIngreso()">Filtrar</button>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -97,6 +104,35 @@
 				}
 			})
 		}
+
+		function filtrarIngreso(){
+			selectedElement = document.getElementById("filtroCategoria");
+			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
+			$.ajax({
+				url: "/presepuesto/filtrar/",
+				data: {
+					categoria: filtro
+				},
+				type: "GET",
+				success: function(result){
+					json = JSON.parse(result);
+					ids = json.map(e => e.ingreso.id.toString())
+					table = document.getElementById("myTable");
+					tr = table.getElementsByTagName("tr");
+					for (i = 1; i < tr.length ; i++) {
+						if (ids.includes(tr[i].id)) {
+							tr[i].style.display = "";
+						} else {
+							tr[i].style.display = "none";
+						}
+					}
+				}
+			})
+		}
+
+		$(document).ready(function() {
+			cargarCategorias();
+		})
 
         function myFunction() {
             var input, filter, table, tr, td, i, txtValue;
@@ -116,6 +152,46 @@
                 }
             }
         }
+
+		function cargarCategorias(){
+			var select = document.getElementById("filtroCategoria");
+			var categ = {{{categorias}}};
+			var hijos;
+			var i, j;
+			for(i = 0; i < categ.length; i++){
+				var optgroup = select.appendChild(document.createElement("optgroup"));
+				optgroup.label = categ[i].nombre;
+
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length; j++){
+					var option = select.appendChild(document.createElement("option"));
+					option.value = listaHijos[j].nombre;
+					option.textContent = listaHijos[j].nombre;
+
+					if(listaHijos[j].criterioHijo){
+						var nivelHijo = 0;
+						loopCategorias(select,listaHijos[j].criterioHijo.categorias,nivelHijo);
+					}
+				}
+			}
+		}
+
+		function loopCategorias(select, hijos, nivelHijo){
+			var i;
+			var cantTabs = TAB;
+			for (i = 0; i < nivelHijo; i++){
+				cantTabs = cantTabs + TAB;
+			}
+			for(i = 0; i < hijos.length; i++){
+				var option = select.appendChild(document.createElement("option"));
+				option.value = hijos[i].nombre;
+				option.textContent = cantTabs + hijos[i].nombre;
+
+				if(hijos[i].criterioHijo){
+					loopCategorias(select,hijos[i].criterioHijo.categorias,nivelHijo-1);
+				}
+			}
+		}
 	</script>
 </body>
 </html>

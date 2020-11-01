@@ -2,12 +2,14 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.App;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.IngresoDTO;
 import ar.edu.utn.frba.dds.DTO.LicitacionDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
+import ar.edu.utn.frba.dds.Repositorios.RepositorioCategorias;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioPresupuesto;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -42,6 +44,7 @@ public class Presupuestos {
             map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
             List<Integer> range = IntStream.rangeClosed(1, ((licitaciones.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             return new ModelAndView(map, "presupuestos.html");
         }
     }
@@ -91,6 +94,28 @@ public class Presupuestos {
         return null;
     }
 
+    public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
+        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+        String categoria = request.queryParams("categoria");
+        List<LicitacionDTO> licitaciones = new ArrayList<>();
+        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
+        entidades.forEach(entidad -> entidad.getLicitaciones().forEach(
+                licitacion -> { if(presupuestosTienenCategoria(licitacion.getPresupuestos(),categoria, entity)){
+                    licitaciones.add(new LicitacionDTO(licitacion,entidad));
+                }}
+        ));
+        return toJson(entidades);
+    }
+    private static boolean presupuestosTienenCategoria(List<Presupuesto> listaPresupuestos, String nombreCategoria, EntityManager entity){
+        return listaPresupuestos.stream()
+                        .filter(p -> {
+                            Categoria categoria = new RepositorioCategorias(entity).getCategoria(nombreCategoria);
+                            return p.contieneCategoria(categoria);
+                        })
+                        .findFirst()
+                        .isPresent();
+    }
+
     private static List<String> getCategoriasPresupuestos(Presupuesto presupuesto) {
         List<String> categorias = new ArrayList<>();
         String comilla = "\"";
@@ -98,5 +123,10 @@ public class Presupuestos {
         presupuesto.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
 
         return categorias;
+    }
+    private static String toJson(List<Entidad> listaEgresos) {
+        Gson gson = new Gson();
+        String mensajeJson = gson.toJson(listaEgresos);
+        return mensajeJson;
     }
 }

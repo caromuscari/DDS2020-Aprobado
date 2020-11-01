@@ -45,7 +45,8 @@ public class RepositorioProveedores {
             Root<Proveedor> proveedores = consulta.from(Proveedor.class);
             Predicate condicion = cb.equal(proveedores.get("nombre"), nombre);
             CriteriaQuery<Proveedor> where = consulta.select(proveedores).where(condicion);
-            return this.entityManager.createQuery(where).getSingleResult();
+            List<Proveedor> listaProveedores = this.entityManager.createQuery(where).getResultList();
+            return !listaProveedores.isEmpty() ? listaProveedores.get(0) : null;
         }
         return null;
 

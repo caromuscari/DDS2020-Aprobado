@@ -88,7 +88,7 @@
 		</div>
 		<div class="sidenav">
 			<a>filtrar por categoria</a>
-			<select class="form-control" id="filtroCategoria" name="filtroCategoria" >
+			<select class="form-control" id="filtroCategoria" name="filtroCategoria" selected="filtro de Categoria" >
 			</select>
 			<button class="btn btn-outline-primary" onclick="filtrarIngreso()">Filtrar</button>
 		</div>
@@ -109,18 +109,18 @@
 			selectedElement = document.getElementById("filtroCategoria");
 			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
 			$.ajax({
-				url: "/presepuesto/filtrar/",
+				url: "/presupuesto/filtrar/",
 				data: {
 					categoria: filtro
 				},
 				type: "GET",
 				success: function(result){
 					json = JSON.parse(result);
-					ids = json.map(e => e.ingreso.id.toString())
+					nombres = json.map(e => e.nombre)
 					table = document.getElementById("myTable");
 					tr = table.getElementsByTagName("tr");
 					for (i = 1; i < tr.length ; i++) {
-						if (ids.includes(tr[i].id)) {
+						if (nombres.includes(tr[i].nombre)) {
 							tr[i].style.display = "";
 						} else {
 							tr[i].style.display = "none";
@@ -159,11 +159,11 @@
 			var hijos;
 			var i, j;
 			for(i = 0; i < categ.length; i++){
-				var optgroup = select.appendChild(document.createElement("optgroup"));
-				optgroup.label = categ[i].nombre;
-
-				var listaHijos = categ[i].categorias;
-				for(j = 0; j < listaHijos.length; j++){
+				var option = select.appendChild(document.createElement("option"));
+				option.value = categ[i].nombre;
+				option.textContent = categ[i].nombre;
+				var listaHijos = categ[i].categorias ? listaHijos.length : 0;
+				for(j = 0; j < listaHijos; j++){
 					var option = select.appendChild(document.createElement("option"));
 					option.value = listaHijos[j].nombre;
 					option.textContent = listaHijos[j].nombre;

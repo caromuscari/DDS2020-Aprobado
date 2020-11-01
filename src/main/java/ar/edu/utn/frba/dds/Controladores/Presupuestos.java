@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.IngresoDTO;
 import ar.edu.utn.frba.dds.DTO.LicitacionDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
@@ -35,8 +36,12 @@ public class Presupuestos {
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<LicitacionDTO> licitaciones = new ArrayList<>();
+            List<Licitacion> listaLicitaciones = new ArrayList<>();
             List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-            entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
+            entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> {
+                licitaciones.add(new LicitacionDTO(licitacion,entidad));
+                listaLicitaciones.add(licitacion);
+            }));
             Map<String, Object> map = new HashMap<>();
             int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
@@ -44,7 +49,7 @@ public class Presupuestos {
             map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
             List<Integer> range = IntStream.rangeClosed(1, ((licitaciones.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
-            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
+            map.put("categorias", new Gson().toJson(getCategoriasFromLicitaciones(listaLicitaciones)));
             return new ModelAndView(map, "presupuestos.html");
         }
     }
@@ -85,7 +90,9 @@ public class Presupuestos {
             for (String cat : nombreCategorias) {
                 categorias.add(total.stream()
                         .filter(c -> c.getNombre().matches(cat))
-                        .findFirst().get());
+                        .findFirst()
+                        .orElse(null)
+                );
             }
         }
         presupuesto.setCategorias(categorias);
@@ -104,7 +111,7 @@ public class Presupuestos {
                     licitaciones.add(new LicitacionDTO(licitacion,entidad));
                 }}
         ));
-        return toJson(entidades);
+        return toJson(licitaciones);
     }
     private static boolean presupuestosTienenCategoria(List<Presupuesto> listaPresupuestos, String nombreCategoria, EntityManager entity){
         return listaPresupuestos.stream()
@@ -124,9 +131,17 @@ public class Presupuestos {
 
         return categorias;
     }
-    private static String toJson(List<Entidad> listaEgresos) {
+    private static String toJson(List<LicitacionDTO> listaEgresos) {
         Gson gson = new Gson();
         String mensajeJson = gson.toJson(listaEgresos);
         return mensajeJson;
+    }
+
+    private static List<Categoria> getCategoriasFromLicitaciones(List<Licitacion> licitaciones){
+        List<Categoria> categorias = new ArrayList<>();
+        licitaciones.stream()
+                    .forEach(l -> l.getPresupuestos().stream()
+                                                        .forEach(p -> categorias.addAll(p.getCategorias())));
+        return categorias;
     }
 }

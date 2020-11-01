@@ -28,9 +28,14 @@ public class Presupuesto {
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
-    @OneToMany
-    @JoinTable(name = "presupuesto_categoria", joinColumns = @JoinColumn(name = "presupuesto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "presupuesto_categoria",
+            joinColumns = { @JoinColumn(name = "presupuesto_id") },
+            inverseJoinColumns = { @JoinColumn(name = "categoria_id") }
+    )
     private List<Categoria> categorias;
+
     private String nombre;
 
     public Presupuesto(){

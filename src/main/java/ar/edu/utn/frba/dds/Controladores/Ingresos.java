@@ -132,4 +132,14 @@ public class Ingresos {
         String mensajeJson = gson.toJson(listaIngresos);
         return mensajeJson;
     }
+
+    private static List<Categoria> getCategoriasFromEntidad(List<Entidad> entidades){
+        List<Categoria> listaCategorias = new ArrayList<>();
+        entidades.forEach(entidad -> {
+                    entidad.getIngresos().stream()
+                            .forEach(ingreso -> listaCategorias.addAll(ingreso.getCategorias()));
+                }
+        );
+        return listaCategorias;
+    }
 }

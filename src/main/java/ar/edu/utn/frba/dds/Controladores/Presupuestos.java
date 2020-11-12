@@ -2,16 +2,12 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.App;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
-import ar.edu.utn.frba.dds.DTO.EgresoDTO;
-import ar.edu.utn.frba.dds.DTO.IngresoDTO;
 import ar.edu.utn.frba.dds.DTO.LicitacionDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
-import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioCategorias;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioPresupuesto;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.google.gson.Gson;
@@ -49,9 +45,19 @@ public class Presupuestos {
             map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
             List<Integer> range = IntStream.rangeClosed(1, ((licitaciones.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
-            map.put("categorias", new Gson().toJson(getCategoriasFromLicitaciones(listaLicitaciones)));
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             return new ModelAndView(map, "presupuestos.html");
         }
+    }
+
+    private static void getLicitacionesFromEntidades(Map<String, Object> map, List<Entidad> entidades, int elementoInicial, int elementoFinal){
+        List<Licitacion> listaLicitaciones = new ArrayList<>();
+        List<LicitacionDTO> licitaciones = new ArrayList<>();
+        entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> {
+            licitaciones.add(new LicitacionDTO(licitacion,entidad));
+            listaLicitaciones.add(licitacion);
+        }));
+        map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
     }
 
     public static ModelAndView modificarPresupuesto(Request request, Response response, EntityManager entity) {

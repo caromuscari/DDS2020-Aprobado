@@ -78,23 +78,27 @@
 					</tbody>
 				</table>
 				<nav aria-label="Page navigation example">
-					<ul class="pagination">
+					<ul id="pages" class="pagination">
 						{{#each pages}}
-						<li class="page-item"><a class="page-link" href="/presupuesto?page={{.}}">{{.}}</a></li>
+						<li class="page-item"><a id="{{.}}" class="page-link" href="">{{.}}</a></li>
 						{{/each}}
 					</ul>
 				</nav>
 			</div>
 		</div>
 		<div class="sidenav">
-			<a>filtrar por categoria</a>
-			<select class="form-control" id="filtroCategoria" name="filtroCategoria" selected="filtro de Categoria" >
-			</select>
-			<button class="btn btn-outline-primary" onclick="filtrarIngreso()">Filtrar</button>
+			<form method="get" action="/presupuesto">
+				<a>filtrar por categoria</a>
+				<select class="form-control" id="filtroCategoria" name="filter" >
+					<option value="none" selected disabled hidden>Selecionar una opcion</option>
+				</select>
+				<button type="submit" class="btn btn-outline-primary">Filtrar</button>
+			</form>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+		var TAB = "\t";
 		function logout(){
 			$.ajax({
 				url: "/logout",
@@ -105,33 +109,18 @@
 			})
 		}
 
-		function filtrarIngreso(){
-			selectedElement = document.getElementById("filtroCategoria");
-			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
-			$.ajax({
-				url: "/presupuesto/filtrar/",
-				data: {
-					categoria: filtro
-				},
-				type: "GET",
-				success: function(result){
-					json = JSON.parse(result);
-					nombres = json.map(e => e.nombre)
-					table = document.getElementById("myTable");
-					tr = table.getElementsByTagName("tr");
-					for (i = 1; i < tr.length ; i++) {
-						if (nombres.includes(tr[i].nombre)) {
-							tr[i].style.display = "";
-						} else {
-							tr[i].style.display = "none";
-						}
-					}
-				}
-			})
-		}
-
 		$(document).ready(function() {
 			cargarCategorias();
+			cargarRutas();
+
+			var categorias = document.getElementById("filtroCategoria");
+			var hijos = categorias.children
+			for (var i = 0; i < hijos.length; i++) {
+  				if(hijos[i].value == "{{{filter}}}") {
+    				hijos[i].selected = true;
+    				break;
+  				}
+			}
 		})
 
         function myFunction() {
@@ -159,11 +148,11 @@
 			var hijos;
 			var i, j;
 			for(i = 0; i < categ.length; i++){
-				var option = select.appendChild(document.createElement("option"));
-				option.value = categ[i].nombre;
-				option.textContent = categ[i].nombre;
-				var listaHijos = categ[i].categorias ? listaHijos.length : 0;
-				for(j = 0; j < listaHijos; j++){
+				var optgroup = select.appendChild(document.createElement("optgroup"));
+				optgroup.label = categ[i].nombre;
+
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length ; j++){
 					var option = select.appendChild(document.createElement("option"));
 					option.value = listaHijos[j].nombre;
 					option.textContent = listaHijos[j].nombre;
@@ -192,6 +181,17 @@
 				}
 			}
 		}
+
+		function cargarRutas(){
+			var filtro = "{{{filter}}}";
+			var links = [...document.getElementById("pages").querySelectorAll("a")];
+
+			for(var i = 0; i < links.length; i++){
+				if (filtro == "") links[i].href = "/presupuesto?page=" + links[i].id;
+				else links[i].href = "/presupuesto?filter=" + filtro + "&page=" + links[i].id;
+			}
+		}
+
 	</script>
 </body>
 </html>

@@ -94,6 +94,14 @@ public class Presupuesto {
         return resultados.stream().anyMatch(c -> c.equals(true));
     }
 
+    public boolean contieneCategoria(String categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
+            //return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
+            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
     public void calcularPrecio(){
         this.precioTotal = this.items.stream().mapToDouble(i -> i.precioTotal()).sum();
     }

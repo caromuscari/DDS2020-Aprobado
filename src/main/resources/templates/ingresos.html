@@ -72,19 +72,22 @@
 					</tbody>
 				</table>
 				<nav aria-label="Page navigation example">
-					<ul class="pagination">
+					<ul id="pages" class="pagination">
 						{{#each pages}}
-						<li class="page-item"><a class="page-link" href="/ingreso?page={{.}}">{{.}}</a></li>
+						<li class="page-item"><a id="{{.}}" class="page-link" href="">{{.}}</a></li>
 						{{/each}}
 					</ul>
 				</nav>
 			</div>
 		</div>
 		<div class="sidenav">
-			<a>filtrar por categoria</a>
-			<select class="form-control" id="filtroCategoria" name="filtroCategoria" selected="filtro de Categoria">
-			</select>
-			<button class="btn btn-outline-primary" onclick="filtrarIngreso()">Filtrar</button>
+			<form method="get" action="/ingreso">
+				<a>filtrar por categoria</a>
+				<select class="form-control" id="filtroCategoria" name="filter" >
+					<option value="none" selected disabled hidden>Selecionar una opcion</option>
+				</select>
+				<button type="submit" class="btn btn-outline-primary">Filtrar</button>
+			</form>
 		</div>
 	</div>
 
@@ -92,6 +95,16 @@
 		var TAB = "\t";
 		$(document).ready(function() {
 			cargarCategorias();
+			cargarRutas();
+
+			var categorias = document.getElementById("filtroCategoria");
+			var hijos = categorias.children
+			for (var i = 0; i < hijos.length; i++) {
+  				if(hijos[i].value == "{{{filter}}}") {
+    				hijos[i].selected = true;
+    				break;
+  				}
+			}
 		})
 
 		function logout(){
@@ -121,31 +134,6 @@
 					}
 				}
 			}
-		}
-
-		function filtrarIngreso(){
-			selectedElement = document.getElementById("filtroCategoria");
-			filtro = selectedElement.options[selectedElement.selectedIndex].value ;
-			$.ajax({
-				url: "/ingreso/filtrar/",
-				data: {
-					categoria: filtro
-				},
-				type: "GET",
-				success: function(result){
-					json = JSON.parse(result);
-					ids = json.map(e => e.ingreso.id.toString())
-					table = document.getElementById("myTable");
-					tr = table.getElementsByTagName("tr");
-					for (i = 1; i < tr.length ; i++) {
-						if (ids.includes(tr[i].id)) {
-							tr[i].style.display = "";
-						} else {
-							tr[i].style.display = "none";
-						}
-					}
-				}
-			})
 		}
 
 		function cargarCategorias(){
@@ -185,6 +173,16 @@
 				if(hijos[i].criterioHijo){
 					loopCategorias(select,hijos[i].criterioHijo.categorias,nivelHijo-1);
 				}
+			}
+		}
+
+		function cargarRutas(){
+			var filtro = "{{{filter}}}";
+			var links = [...document.getElementById("pages").querySelectorAll("a")];
+
+			for(var i = 0; i < links.length; i++){
+				if (filtro == "") links[i].href = "/ingreso?page=" + links[i].id;
+				else links[i].href = "/ingreso?filter=" + filtro + "&page=" + links[i].id;
 			}
 		}
 

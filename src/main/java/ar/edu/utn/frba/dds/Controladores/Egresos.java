@@ -40,16 +40,23 @@ public class Egresos {
         } else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<EgresoDTO> egresos = new ArrayList<>();
-            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-            entidades.forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
             Map<String, Object> map = new HashMap<>();
-            int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
+            String page = request.queryParams("page");
+            String filtro = request.queryParams("filter");
+            int pagina = (page != null) ? Integer.parseInt(page) : 1;
             int elementoInicial = (pagina - 1) * App.getPageSize();
+
+            usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
+
+            if (filtro != null)  egresos.removeIf(dto -> !(dto.getEgreso().contieneCategoria(filtro)));
+
             int elementoFinal = ((pagina * App.getPageSize()) < egresos.size()) ? (pagina * App.getPageSize()) : egresos.size();
             map.put("egresos", egresos.subList(elementoInicial, elementoFinal));
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             List<Integer> range = IntStream.rangeClosed(1, ((egresos.size() - 1) / App.getPageSize()) + 1).boxed().collect(Collectors.toList());
             map.put("pages", range);
+            map.put("actualPage", page);
+            map.put("filter", filtro);
             return new ModelAndView(map, "egresos.html");
         }
     }

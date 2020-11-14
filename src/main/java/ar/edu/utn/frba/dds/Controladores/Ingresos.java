@@ -33,16 +33,23 @@ public class Ingresos {
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<IngresoDTO> ingresos = new ArrayList<>();
-            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-            entidades.forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
             Map<String, Object> map = new HashMap<>();
-            int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
+            String page = request.queryParams("page");
+            String filtro = request.queryParams("filter");
+            int pagina = (page != null) ? Integer.parseInt(page) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
+
+            usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
+
+            if (filtro != null)  ingresos.removeIf(dto -> !(dto.getIngreso().contieneCategoria(filtro)));
+
             int elementoFinal = ((pagina*App.getPageSize()) < ingresos.size()) ? (pagina*App.getPageSize()) : ingresos.size();
             map.put("ingresos",ingresos.subList(elementoInicial,elementoFinal));
             map.put("categorias",new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             List<Integer> range = IntStream.rangeClosed(1, ((ingresos.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
+            map.put("actualPage", page);
+            map.put("filter", filtro);
             return new ModelAndView(map, "ingresos.html");
         }
     }
@@ -76,16 +83,8 @@ public class Ingresos {
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {
-            List<Categoria> total = usuario.getOrganizacion().getCriterios().stream()
-                    .map(c -> c.getCategorias()).flatMap(List::stream)
-                    .collect(Collectors.toList());
-
             for (String cat : nombreCategorias) {
-                categorias.add(total.stream()
-                                    .filter(c -> c.getNombre().matches(cat))
-                                    .findFirst()
-                                    .orElse(null)
-                );
+                categorias.add(usuario.getOrganizacion().obtenerCategoria(cat));
             }
         }
         ingreso.setCategorias(categorias);

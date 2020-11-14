@@ -50,7 +50,7 @@ public class App {
             staticFiles.location("/public");
         }
 
-        // Acceso: http://localhost:4567/login
+        // Acceso: http://localhost:4568/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
 
         //Login
@@ -95,9 +95,9 @@ public class App {
         get("/licitacion", RouteWithTransaction(LicitacionController::mostrarMensajes), gson::toJson);
 
         //Filtros
-        get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
-        get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
-        get("/presupuesto/filtrar/", RouteWithTransaction(Presupuestos::filtrarPorCategoria));
+//        get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
+//        get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
+//        get("/presupuesto/filtrar/", RouteWithTransaction(Presupuestos::filtrarPorCategoria));
 
         // ===============================================================================
     }

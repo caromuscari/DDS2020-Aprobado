@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Ingreso {
@@ -62,6 +63,14 @@ public class Ingreso {
     public void asociarEgreso(Egreso egreso){
         this.egresos.add(egreso);
         egreso.vincular();
+    }
+
+    public boolean contieneCategoria(String categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
+            //return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
+            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
     }
 
     public Double montoTotalEgresos()

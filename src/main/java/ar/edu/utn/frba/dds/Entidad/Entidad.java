@@ -72,12 +72,6 @@ public abstract class Entidad {
         this.egresos.add(egreso);
 
         return egreso;
-        /*
-        List<Categoria> listaCategorias = new ArrayList<>();
-        Categoria categoria1 = new Categoria("Peru");
-        listaCategorias.add(categoria1);
-        egreso.setCategorias(listaCategorias);
-         */
     }
 
     public List<Egreso> filtrarEgresos(Categoria categoria){

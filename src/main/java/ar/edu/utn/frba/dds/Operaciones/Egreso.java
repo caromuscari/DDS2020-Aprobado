@@ -38,7 +38,7 @@ public class Egreso {
     @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
     private List<Categoria> categorias;
 
@@ -148,7 +148,6 @@ public class Egreso {
 
     public boolean contieneCategoria(String categoria){
         List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
-            //return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
             return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
 
         return resultados.stream().anyMatch(c -> c.equals(true));

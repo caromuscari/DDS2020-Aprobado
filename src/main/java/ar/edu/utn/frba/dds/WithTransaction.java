@@ -1,4 +1,4 @@
-package dds;
+package ar.edu.utn.frba.dds;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import spark.ModelAndView;

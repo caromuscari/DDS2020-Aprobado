@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
-import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 
 import javax.persistence.EntityManager;

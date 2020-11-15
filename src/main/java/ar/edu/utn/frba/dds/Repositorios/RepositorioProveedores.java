@@ -25,9 +25,7 @@ public class RepositorioProveedores {
 
     public Proveedor crearProveedor(String nombre, Long identificador, String direccionPostal, ItemEgreso item) {
         Proveedor proveedor = new Proveedor(nombre, identificador, direccionPostal);
-        entityManager.getTransaction().begin();
         this.entityManager.persist(proveedor);
-        entityManager.getTransaction().commit();
         return proveedor;
     }
 
@@ -49,13 +47,6 @@ public class RepositorioProveedores {
             return !listaProveedores.isEmpty() ? listaProveedores.get(0) : null;
         }
         return null;
-
-//        for (Proveedor proveedor : obtenerProveedores()) {
-//            if (proveedor.getNombre().matches(nombre)) {
-//                return proveedor;
-//            }
-//        }
-//        return null;
     }
 
     private boolean existsProveedorPorNombre(String nombre) {

@@ -3,7 +3,14 @@ package ar.edu.utn.frba.dds.Vinculador;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.google.gson.annotations.Expose;
 
+import javax.persistence.Basic;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +19,12 @@ public class ResultadoVinculacion {
     private String usuario;
     private String fechaVinculacion; // Dia de vinculacion (para el json)
     private String horaVinculacion; // Hora de la vinculacion
+
+    @JsonIgnore
     private LocalDate fecha;
+    @JsonIgnore
     private Entidad entidad;
+
     private List<Ingreso> ingresosVinculados;
     private List<Egreso> egresosNoVinculados;
     private List<Ingreso> ingresosNoCompletos;
@@ -38,9 +49,6 @@ public class ResultadoVinculacion {
 
     public List<Egreso> getEgresosNoVinculados() { return egresosNoVinculados; }
     public void setEgresosNoVinculados(List<Egreso> egresosNoVinculados) { this.egresosNoVinculados = egresosNoVinculados; }
-
-    public String getUser() { return usuario; }
-    public void setUser(String usuario) { this.usuario = usuario; }
 
     public String getHoraVinculacion() { return horaVinculacion; }
     public void setHoraVinculacion(String horaVinculacion) { this.horaVinculacion = horaVinculacion; }

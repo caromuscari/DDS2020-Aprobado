@@ -14,6 +14,10 @@ public class ErrorMenorValor extends ErrorValidacion {
         this.precioTotalMenorPresupuesto = precioTotalMenorPresupuesto;
     }
 
+    public ErrorMenorValor(){
+        // Para Hibernate
+    }
+
     @Override
     public String obtenerMensaje() {
         return String.format("No se eligió el presupuesto de menor valor. El egreso registrado tiene un precio total de {0} y el presupuesto de menor valor tiene un precio total de {1}",precioTotalEgreso,precioTotalMenorPresupuesto);

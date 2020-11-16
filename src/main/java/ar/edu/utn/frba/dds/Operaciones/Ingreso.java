@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ public class Ingreso {
 
     @Column
     @Convert(converter = DateConverter.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate fecha;
 
     @OneToMany

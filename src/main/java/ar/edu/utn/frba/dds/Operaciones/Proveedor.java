@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,9 +15,12 @@ public class Proveedor {
     private String nombre;
     private Long identificador;
     private String direccionPostal;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "proveedor_id")
+    @JsonIgnore
     private List<ItemEgreso> items;
+
     @OneToMany
     @JoinTable(name = "proveedor_categorias", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;

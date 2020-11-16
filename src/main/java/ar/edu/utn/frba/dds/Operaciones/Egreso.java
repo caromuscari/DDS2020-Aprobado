@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -44,7 +46,9 @@ public class Egreso {
 
     @Column
     @Convert(converter = DateConverter.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate fecha;
+
     private Boolean vinculado;
     private String nombre;
 

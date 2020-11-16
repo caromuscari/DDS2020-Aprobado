@@ -74,114 +74,120 @@
 						<option value="desc-asc">Descendente - Ascendente</option>
 						<option value="desc-desc">Descendente - Descendente</option>
 
-						<input class="fcol-lg-2" type="date" id="fechaInicio" name="trip-start" value="2014-12-14"
-							style="display: none; position: relative; left: 9%;">
-						<input class="col-lg-2" type="date" id="fechaFin" name="trip-start" value="2019-04-07"
-							style="display: none; position: relative; left: 11%;">
+						<div>
+							<input class="col-lg-2" type="text" style="position: relative; left: 9%;"
+								placeholder="Dias anteriores.." id="inicioRango">
+
+							<input class="col-lg-2" type="text" style="position: relative; left: 11%;"
+								placeholder="Dias posteriores.." id="finRango">
+						</div>
+
+						<br>
+						<select class="form-control col-lg-3" id="entidades" style="position: relative; right: 0.4%;"
+							value="">
+							<option selected disabled>Elija una entidad..</option>
+							{{#each entidades}}
+							<option>{{nombre}}</option>
+							{{/each}}
+						</select>
+
+						<div>
+							<br><br>
+							<button type="button" id="vincular" class="btn btn-outline-info"
+								onclick="vincular()">Vincular</button>
+
+						</div>
+
 				</div>
-
-				<br>
-				<select class="form-control col-lg-3" id="entidades" style="position: relative; right: 0.4%;" value="">
-					<option selected disabled>Elija una entidad..</option>
-					{{#each entidades}}
-					<option>{{nombre}}</option>
-					{{/each}}
-				</select>
-
-				<div>
-					<br><br>
-					<button type="button" id="vincular" class="btn btn-outline-info"
-						onclick="vincular()">Vincular</button>
+				<div class="alert alert-primary col-lg-4" role="alert"
+					style="position: absolute; left: 35%; bottom: 5%;" id="aclaracion">
+					Para definir el periodo de aceptabilidad de egresos, defina un rango de días anteriores y
+					dias posteriores
+					a partir de la fecha del ingreso
 				</div>
-
 			</div>
 		</div>
-	</div>
 
-	<script type="text/javascript">
+		<script type="text/javascript">
 
-		function logout() {
-			$.ajax({
-				url: "/logout",
-				type: "POST",
-				success: function (result) {
-					location.replace("/login");
-				}
-			})
-		}
-
-		function vincular() {
-
-			var seleccionado = $("#opciones").val();
-			var entidad = $("#entidades").val();
-			var fechaInicio = $("#fechaInicio").val();
-			var fechaFin = $("#fechaFin").val();
-			var orden = "";
-
-			/////////////////////////////////////////////////////////
-
-			if (seleccionado == "mix") {
-				orden = $("#ordenesMix").val();
-			}
-			else if(seleccionado != "fecha"){
-				orden = $("#ordenes").val();
-			}
-
-			if (seleccionado != null && entidad != null && orden != null) {
-				$.ajax({		
-					url: '/vincular',
-					type: 'POST',
-					data: { seleccionado: seleccionado, orden: orden, fechaInicio: fechaInicio, fechaFin: fechaFin, entidad: entidad },
-					success: function (data) {
-						descargarArchivo(data, entidad, seleccionado);
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						console.log(textStatus + " " + errorThrown);
+			function logout() {
+				$.ajax({
+					url: "/logout",
+					type: "POST",
+					success: function (result) {
+						location.replace("/login");
 					}
-				});
+				})
 			}
-			else {
-				alert("Hay campos sin seleccionar, verifique nuevamente")
-			}
-		}
 
-		function descargarArchivo(data, nombreEntidad, tipoCriterio) {
+			function vincular() {
 
-			// Creo link
-			var blob = new Blob([data], { type: "octec/stream" });
-			var url = window.URL.createObjectURL(blob);
+				var seleccionado = $("#opciones").val();
+				var entidad = $("#entidades").val();
+				var inicioRango = $("#inicioRango").val();
+				var finRango = $("#finRango").val();
+				var orden = "";
 
-			var link = document.createElement('a');
-			link.download = "vinculacion-" + nombreEntidad + "-" + tipoCriterio + ".json";
-			link.href = url;
-			link.click();
-		}
+				/////////////////////////////////////////////////////////
 
-		// JS de la aparicion de los criterios
-		$(document).ready(function () {
-
-
-			$("#opciones").change(function () {
-				$("#fechaInicio").show();
-				$("#fechaFin").show();
-				var seleccionado = $(this).children("option:selected").val();
-				if (seleccionado == "fecha") {
-					$("#ordenes").hide();
-					$("#ordenesMix").hide();
+				if (seleccionado == "mix") {
+					orden = $("#ordenesMix").val();
 				}
-				else if (seleccionado == "mix") {
-					$("#ordenes").hide();
-					$("#ordenesMix").show();
+				else if (seleccionado != "fecha") {
+					orden = $("#ordenes").val();
+				}
 
+				if (seleccionado != null && entidad != null && orden != null) {
+					$.ajax({
+						url: '/vincular',
+						type: 'POST',
+						data: { seleccionado: seleccionado, orden: orden, inicioRango: inicioRango, finRango: finRango, entidad: entidad },
+						success: function (data) {
+							descargarArchivo(data, entidad, seleccionado);
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							console.log(textStatus + " " + errorThrown);
+						}
+					});
 				}
 				else {
-					$("#ordenesMix").hide();
-					$("#ordenes").show();
+					alert("Hay campos sin seleccionar, verifique nuevamente")
 				}
-			})
-		})
+			}
 
-	</script>
+			function descargarArchivo(data, nombreEntidad, tipoCriterio) {
+
+				// Creo link
+				var blob = new Blob([data], { type: "octec/stream" });
+				var url = window.URL.createObjectURL(blob);
+
+				var link = document.createElement('a');
+				link.download = "vinculacion-" + nombreEntidad + "-" + tipoCriterio + ".json";
+				link.href = url;
+				link.click();
+			}
+
+			// JS de la aparicion de los criterios
+			$(document).ready(function () {
+				$("#opciones").change(function () {
+					var seleccionado = $(this).children("option:selected").val();
+					if (seleccionado == "fecha") {
+						$("#ordenes").hide();
+						$("#ordenesMix").hide();
+					}
+					else if (seleccionado == "mix") {
+						$("#ordenes").hide();
+						$("#ordenesMix").show();
+
+					}
+					else {
+						$("#ordenesMix").hide();
+						$("#ordenes").show();
+					}
+				})
+			})
+
+		</script>
 </body>
 
 </html>

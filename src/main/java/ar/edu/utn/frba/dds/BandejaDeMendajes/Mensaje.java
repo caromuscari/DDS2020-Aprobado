@@ -21,6 +21,10 @@ public class Mensaje {
         this.leido = false;
     }
 
+    public Mensaje(){
+        // Para Hibernate
+    }
+
     public List<ResultadoValidacion> getResultados() { return resultados; }
 
     public Boolean getLeido() { return leido; }

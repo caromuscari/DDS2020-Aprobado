@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
-import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
-import sun.plugin.perf.PluginRollup;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

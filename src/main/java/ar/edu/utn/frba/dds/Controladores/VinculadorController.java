@@ -6,8 +6,11 @@ import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Vinculador.*;
 import ar.edu.utn.frba.dds.Vinculador.PrimeroEgreso;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import spark.ModelAndView;
 import spark.Request;
@@ -51,11 +54,15 @@ public class VinculadorController {
         //=====================================================
 
         // Periodo de aceptabilidad de ingresos
-        LocalDate fechaInicio = LocalDate.parse(request.queryMap("fechaInicio").value());
-        LocalDate fechaFin = LocalDate.parse(request.queryMap("fechaFin").value());
 
-        condicionFecha.setInicioPeriodo(fechaInicio);
-        condicionFecha.setFinPeriodo(fechaFin);
+        //LocalDate fechaInicio = LocalDate.parse(request.queryMap("fechaInicio").value());
+        //LocalDate fechaFin = LocalDate.parse(request.queryMap("fechaFin").value());
+
+        int inicioRango = Integer.parseInt(request.queryMap("inicioRango").value());
+        int finRango = Integer.parseInt(request.queryMap("finRango").value());
+
+        condicionFecha.setDiasAnteriores(inicioRango);
+        condicionFecha.setDiasPosteriores(finRango);
         condiciones.add(condicionFecha);
 
             if (seleccionado.equals("fecha")) {
@@ -89,12 +96,20 @@ public class VinculadorController {
                 resultadoVinculacion = procIngreso.vincular(entidad);
             }
 
-        resultadoVinculacion.setUser(request.session().attribute("usuario"));
+        resultadoVinculacion.setUsuario(request.session().attribute("usuario"));
         resultadoVinculacion.setHoraVinculacion(LocalTime.now().withNano(0).toString());
 
-        // Creo el JSON
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String result = gson.toJson(resultadoVinculacion);
+        // Creo el JSON (con Jackson)
+        String result;
+
+        try {
+            ObjectMapper objMapper = new ObjectMapper();
+            ObjectWriter objectWriter = objMapper.writerWithDefaultPrettyPrinter();
+            result = objectWriter.writeValueAsString(resultadoVinculacion);
+        }
+        catch(JsonProcessingException e){
+            return e.getMessage();
+        }
 
         // Retorno JSON
         return result;

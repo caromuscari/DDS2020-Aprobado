@@ -14,6 +14,10 @@ public class ErrorCantidadPresupuestos extends ErrorValidacion {
         this.cantidadObtenida = cantidadObtenida;
     }
 
+    public ErrorCantidadPresupuestos(){
+        // Para Hibernate
+    }
+
     @Override
     public String obtenerMensaje() {
         return String.format("La cantidad de presupuestos solicitada fue {0} pero se obtuvieron {1} presupuestos", cantidadSolicitada, cantidadObtenida);

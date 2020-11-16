@@ -100,45 +100,9 @@ public class Ingresos {
         return categorias;
     }
 
-    public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
-        String categoria = request.queryParams("categoria");
-        List<IngresoDTO> ingresos = new ArrayList<>();
-        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-        entidades.forEach(entidad -> {
-                    entidad.getIngresos().stream()
-                            .filter(ingreso -> filtrar(ingreso, categoria))
-                            .map(ingreso -> new IngresoDTO(ingreso, entidad))
-                            .collect(Collectors.toCollection(() -> ingresos));
-                }
-        );
-        return toJson(ingresos);
-    }
-
-    private static boolean filtrar(Ingreso ingreso, String categoria){
-        return ingreso.getCategorias().stream()
-                .filter(i -> i.getNombre().equals(categoria) || Ingresos.tieneCategoria(i,categoria))
-                .count()>0;
-    }
-
-    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria){
-        Categoria categoriaHija = new Categoria(nombreCategoria);
-        return categoria.contieneCategoriaHija(categoriaHija);
-    }
-
     private static String toJson(List<IngresoDTO> listaIngresos){
         Gson gson = new Gson();
         String mensajeJson = gson.toJson(listaIngresos);
         return mensajeJson;
-    }
-
-    private static List<Categoria> getCategoriasFromEntidad(List<Entidad> entidades){
-        List<Categoria> listaCategorias = new ArrayList<>();
-        entidades.forEach(entidad -> {
-                    entidad.getIngresos().stream()
-                            .forEach(ingreso -> listaCategorias.addAll(ingreso.getCategorias()));
-                }
-        );
-        return listaCategorias;
     }
 }

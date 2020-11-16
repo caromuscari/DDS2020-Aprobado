@@ -69,7 +69,6 @@ public class Egresos {
             Map<String, Object> map = new HashMap<>();
             List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
             map.put("proveedores", new RepositorioProveedores(entity).obtenerProveedores());
-            map.put("mediosDePago", new RepositorioMedioDePago(entity).obtenerMediosDePago());
             map.put("entidades", entidades);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             return new ModelAndView(map, "nuevoEgreso.html");
@@ -159,7 +158,6 @@ public class Egresos {
             Map<String, Object> map = new HashMap<>();
             map.put("egreso", egreso);
             map.put("proveedores", new RepositorioProveedores(entity).obtenerProveedores());
-            map.put("mediosDePago", new RepositorioMedioDePago(entity).obtenerMediosDePago());
             map.put("entidades", usuario.getOrganizacion().getEntidades());
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
             map.put("nombreEntidad", new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso).getNombre());
@@ -256,32 +254,6 @@ public class Egresos {
         categoriasList.forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
 
         return categorias;
-    }
-
-    public static String filtrarPorCategoria(Request request, Response response, EntityManager entity) {
-        String categoria = request.queryParams("categoria");
-        List<EgresoDTO> egresos = new ArrayList<>();
-        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-        entidades.forEach(entidad -> {
-                    entidad.getEgresos().stream()
-                            .filter(egreso -> filtrar(egreso, categoria))
-                            .map(egreso -> new EgresoDTO(egreso, entidad))
-                            .collect(Collectors.toCollection(() -> egresos));
-                }
-        );
-        return toJson(egresos);
-    }
-
-    private static boolean filtrar(Egreso egreso, String categoria) {
-        return egreso.getCategorias().stream()
-                .filter(c -> c.getNombre().equals(categoria) || Egresos.tieneCategoria(c, categoria))
-                .count() > 0;
-    }
-
-    private static boolean tieneCategoria(Categoria categoria, String nombreCategoria) {
-        Categoria categoriaHija = new Categoria(nombreCategoria);
-        return categoria.contieneCategoriaHija(categoriaHija);
     }
 
     private static String toJson(List<EgresoDTO> listaEgresos) {

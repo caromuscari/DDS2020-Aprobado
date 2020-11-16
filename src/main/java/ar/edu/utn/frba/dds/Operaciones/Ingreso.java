@@ -28,7 +28,7 @@ public class Ingreso {
     @JoinColumn(name = "ingreso_id")
     private List<Egreso> egresos;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "ingresos_categorias", joinColumns = @JoinColumn(name = "ingreso_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
@@ -70,7 +70,6 @@ public class Ingreso {
 
     public boolean contieneCategoria(String categoria){
         List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
-            //return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
             return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
 
         return resultados.stream().anyMatch(c -> c.equals(true));

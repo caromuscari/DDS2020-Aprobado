@@ -7,7 +7,6 @@ import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioCategorias;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioPresupuesto;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.google.gson.Gson;
@@ -103,28 +102,6 @@ public class Presupuestos {
         return null;
     }
 
-    public static String filtrarPorCategoria (Request request, Response response, EntityManager entity){
-        Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        String categoria = request.queryParams("categoria");
-        List<LicitacionDTO> licitaciones = new ArrayList<>();
-        List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-        entidades.forEach(entidad -> entidad.getLicitaciones().forEach(
-                licitacion -> { if(presupuestosTienenCategoria(licitacion.getPresupuestos(),categoria, entity)){
-                    licitaciones.add(new LicitacionDTO(licitacion,entidad));
-                }}
-        ));
-        return toJson(licitaciones);
-    }
-    private static boolean presupuestosTienenCategoria(List<Presupuesto> listaPresupuestos, String nombreCategoria, EntityManager entity){
-        return listaPresupuestos.stream()
-                        .filter(p -> {
-                            Categoria categoria = new RepositorioCategorias(entity).getCategoria(nombreCategoria);
-                            return p.contieneCategoria(categoria);
-                        })
-                        .findFirst()
-                        .isPresent();
-    }
-
     private static List<String> getCategoriasPresupuestos(Presupuesto presupuesto) {
         List<String> categorias = new ArrayList<>();
         String comilla = "\"";
@@ -143,7 +120,7 @@ public class Presupuestos {
         List<Categoria> categorias = new ArrayList<>();
         licitaciones.stream()
                     .forEach(l -> l.getPresupuestos().stream()
-                                                        .forEach(p -> categorias.addAll(p.getCategorias())));
+                    .forEach(p -> categorias.addAll(p.getCategorias())));
         return categorias;
     }
 }

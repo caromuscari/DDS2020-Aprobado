@@ -44,13 +44,6 @@ public class RepositorioEgresos {
             return this.entityManager.createQuery(where).getSingleResult();
         }
         return null;
-
-//        for (Egreso egreso : obtenerEgresos()) {
-//            if (nombre.equals(egreso.getNombre())) {
-//                return egreso;
-//            }
-//        }
-//        return null;
     }
 
     private boolean existsEgresoPorNombre(String nombre) {

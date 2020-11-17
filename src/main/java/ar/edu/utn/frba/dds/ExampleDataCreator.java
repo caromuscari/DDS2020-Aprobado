@@ -7,10 +7,7 @@ import ar.edu.utn.frba.dds.Entidad.Empresa;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Excepciones.UsuarioExistsException;
-import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
-import ar.edu.utn.frba.dds.Licitacion.ItemPresupuesto;
-import ar.edu.utn.frba.dds.Licitacion.Licitacion;
-import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import ar.edu.utn.frba.dds.Licitacion.*;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
@@ -37,30 +34,6 @@ public class ExampleDataCreator {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         inicializarUsuarios(entityManager);
-
-//        List<Entidad> entidades = repoEntidades.obtenerEntidades();
-//        List<Usuario> usuarios = repoUsuarios.getRegistrados();
-
-
-        //repoUsuarios.buscarUsuario("gesoc").getOrganizacion().setEntidades(entidades);
-
-        /*ItemPresupuesto p1 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
-        ItemPresupuesto p2 = new ItemPresupuesto(300.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
-        ItemOperacionPresupuesto pp1 = new ItemOperacionPresupuesto(5,p1);
-        ItemOperacionPresupuesto pp2 = new ItemOperacionPresupuesto(5,p2);
-
-        DocumentoComercial prueba1 = new DocumentoComercial();
-        List<DocumentoComercial> documents = new ArrayList<>();
-        List<ItemOperacionPresupuesto> products = new ArrayList<>();*/
-
-        // Egreso
-//        ItemEgreso e1 = new ItemEgreso("210973","Monitor", 200.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
-//        ItemEgreso e2 = new ItemEgreso("274818","Computadora", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
-//        repoItemsOperacionEgreso.crearItem(5, e1);
-//        repoItemsOperacionEgreso.crearItem(5, e2);
-//
-//        List<ItemOperacionEgreso> compras = new ArrayList<>();
-
     }
 
     private static void inicializarOrganizacion(EntityManager entityManager, Organizacion organizacion){
@@ -134,6 +107,12 @@ public class ExampleDataCreator {
         Presupuesto presupuesto2 = new Presupuesto(items2,proveedores.get(0),"Presupuesto 2");
         licitacion1.addPresupuesto(presupuesto1);
         licitacion2.addPresupuesto(presupuesto2);
+
+        licitacion1.setEgreso(e1);
+        licitacion2.setEgreso(e2);
+
+        licitacion1.agregarCriterio(new CantidadPresupuestos());
+        //licitacion1.agregarCriterio(new ItemsPresupuesto());
 
         empresa1.addLicitacion(licitacion1);
         empresa2.addLicitacion(licitacion2);

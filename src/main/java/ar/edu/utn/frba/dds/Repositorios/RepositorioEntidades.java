@@ -46,8 +46,6 @@ public class RepositorioEntidades {
         Predicate condicion = cb.equal(entidades.get("nombre"), nombreEntidad);
         CriteriaQuery<Entidad> where = consulta.select(entidades).where(condicion);
         return this.entityManager.createQuery(where).getSingleResult();
-
-        //return obtenerEntidades().stream().filter(e -> e.getNombre().equals(nombreEntidad)).findFirst().get();
     }
 
 }

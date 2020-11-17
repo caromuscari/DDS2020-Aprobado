@@ -55,8 +55,8 @@ public class VinculadorTest {
 
         //Vinculador y condiciones
         condicionFecha = new CondicionFecha();
-        condicionFecha.setFinPeriodo(LocalDate.parse("2020-04-15"));
-        condicionFecha.setInicioPeriodo(LocalDate.parse("2020-05-15"));
+        condicionFecha.setDiasAnteriores(15);
+        condicionFecha.setDiasPosteriores(15);
         condiciones = new ArrayList<>();
         condiciones.add(condicionFecha);
 

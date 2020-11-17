@@ -8,22 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LicitacionDTO {
-    private List<PresupuestoDTO> presupuestos;
+    private List<Presupuesto> presupuestos;
     private String nombre;
     private Entidad entidad;
 
     public LicitacionDTO(Licitacion licitacion, Entidad entidad) {
         this.presupuestos = new ArrayList<>();
-        licitacion.getPresupuestos().forEach(presupuesto -> this.presupuestos.add(new PresupuestoDTO(presupuesto)));
+        licitacion.getPresupuestos().forEach(presupuesto -> this.presupuestos.add(presupuesto));
         this.nombre = licitacion.getNombre();
         this.entidad = entidad;
     }
 
-    public List<PresupuestoDTO> getPresupuestos() {
+    public List<Presupuesto> getPresupuestos() {
         return presupuestos;
     }
 
-    public void setPresupuestos(List<PresupuestoDTO> presupuestos) {
+    public void setPresupuestos(List<Presupuesto> presupuestos) {
         this.presupuestos = presupuestos;
     }
 

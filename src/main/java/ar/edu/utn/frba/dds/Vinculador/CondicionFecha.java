@@ -4,23 +4,22 @@ import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class CondicionFecha implements CondicionVinculacion{
-    private LocalDate inicioPeriodo;
-    private LocalDate finPeriodo;
+    private int diasAnteriores;
+    private int diasPosteriores;
 
-    public LocalDate getInicioPeriodo() { return inicioPeriodo; }
-    public void setInicioPeriodo(LocalDate diasAntes) { this.inicioPeriodo = diasAntes; }
+    public int getDiasAnteriores() { return diasAnteriores; }
+    public void setDiasAnteriores(int diasAnteriores) { this.diasAnteriores = diasAnteriores; }
 
-    public LocalDate getFinPeriodo() { return finPeriodo; }
-    public void setFinPeriodo(LocalDate finPeriodo) { this.finPeriodo = finPeriodo; }
+    public int getDiasPosteriores() { return diasPosteriores; }
+    public void setDiasPosteriores(int diasPosteriores) { this.diasPosteriores = diasPosteriores; }
 
     //Metodos
     @Override
     public boolean validarCondicion(Egreso egreso, Ingreso ingreso) {
-        long diasAnteriores = ChronoUnit.DAYS.between(inicioPeriodo,ingreso.getFecha());
-        long diasPosteriores = ChronoUnit.DAYS.between(ingreso.getFecha(), finPeriodo);
+        long diasAnteriores = this.diasAnteriores;
+        long diasPosteriores = this.diasPosteriores;
         LocalDate fechaDesde = ingreso.getFecha().minusDays(diasAnteriores);
         LocalDate fechaHasta = ingreso.getFecha().plusDays(diasPosteriores);
         return (egreso.getFecha().isAfter(fechaDesde) && egreso.getFecha().isBefore(fechaHasta));

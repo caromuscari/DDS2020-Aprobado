@@ -1,9 +1,5 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 
 import javax.persistence.EntityManager;

@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,7 +32,7 @@ public class Egreso {
     private MedioDePago medioDePago;
     private Double precioTotal;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
@@ -38,13 +40,15 @@ public class Egreso {
     @JoinColumn(name = "presupuesto_id")
     private Presupuesto presupuesto;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
     private List<Categoria> categorias;
 
     @Column
     @Convert(converter = DateConverter.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate fecha;
+
     private Boolean vinculado;
     private String nombre;
 
@@ -145,6 +149,14 @@ public class Egreso {
 
         return resultados.stream().anyMatch(c -> c.equals(true));
     }
+
+    public boolean contieneCategoria(String categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
+            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
 
     public void vincular(){
         this.vinculado = true;

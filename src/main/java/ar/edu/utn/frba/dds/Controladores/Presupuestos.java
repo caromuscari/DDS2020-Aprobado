@@ -2,15 +2,14 @@ package ar.edu.utn.frba.dds.Controladores;
 
 import ar.edu.utn.frba.dds.App;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
-import ar.edu.utn.frba.dds.DTO.IngresoDTO;
 import ar.edu.utn.frba.dds.DTO.LicitacionDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
+import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
-import ar.edu.utn.frba.dds.Operaciones.Ingreso;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
-import ar.edu.utn.frba.dds.Repositorios.RepositorioEntidades;
 import ar.edu.utn.frba.dds.Repositorios.RepositorioPresupuesto;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import ar.edu.utn.frba.dds.audit.Audit;
 import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
@@ -33,17 +32,36 @@ public class Presupuestos {
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
             List<LicitacionDTO> licitaciones = new ArrayList<>();
-            List<Entidad> entidades = usuario.getOrganizacion().getEntidades();
-            entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
             Map<String, Object> map = new HashMap<>();
-            int pagina = (request.queryParams("page") != null) ? Integer.parseInt(request.queryParams("page")) : 1;
+            String page = request.queryParams("page");
+            String filtro = request.queryParams("filter");
+            int pagina = (page != null) ? Integer.parseInt(page) : 1;
             int elementoInicial = (pagina-1)* App.getPageSize();
+
+            usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getLicitaciones()
+                    .forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
+
+            if (filtro != null) licitaciones.forEach(l -> l.getPresupuestos().removeIf(p -> !(p.contieneCategoria(filtro))));
+
             int elementoFinal = ((pagina*App.getPageSize()) < licitaciones.size()) ? (pagina*App.getPageSize()) : licitaciones.size();
             map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
             List<Integer> range = IntStream.rangeClosed(1, ((licitaciones.size()-1)/App.getPageSize())+1).boxed().collect(Collectors.toList());
             map.put("pages",range);
+            map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
+            map.put("actualPage", page);
+            map.put("filter", filtro);
             return new ModelAndView(map, "presupuestos.html");
         }
+    }
+
+    private static void getLicitacionesFromEntidades(Map<String, Object> map, List<Entidad> entidades, int elementoInicial, int elementoFinal){
+        List<Licitacion> listaLicitaciones = new ArrayList<>();
+        List<LicitacionDTO> licitaciones = new ArrayList<>();
+        entidades.forEach(entidad -> entidad.getLicitaciones().forEach(licitacion -> {
+            licitaciones.add(new LicitacionDTO(licitacion,entidad));
+            listaLicitaciones.add(licitacion);
+        }));
+        map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));
     }
 
     public static ModelAndView modificarPresupuesto(Request request, Response response, EntityManager entity) {
@@ -52,6 +70,7 @@ public class Presupuestos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+            Audit.crearAuditoria("MODIFICAR","Presupuesto",usuario.getUsuario());
             ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioPresupuesto(entity).obtenerPresupuestoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
@@ -67,7 +86,7 @@ public class Presupuestos {
         }
 
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-
+        Audit.crearAuditoria("ALTA","Presupuesto",usuario.getUsuario());
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
@@ -75,14 +94,8 @@ public class Presupuestos {
 
         List<Categoria> categorias = new ArrayList<>();
         if(nombreCategorias != null) {
-            List<Categoria> total = usuario.getOrganizacion().getCriterios().stream()
-                    .map(c -> c.getCategorias()).flatMap(List::stream)
-                    .collect(Collectors.toList());
-
             for (String cat : nombreCategorias) {
-                categorias.add(total.stream()
-                        .filter(c -> c.getNombre().matches(cat))
-                        .findFirst().get());
+                categorias.add(usuario.getOrganizacion().obtenerCategoria(cat));
             }
         }
         presupuesto.setCategorias(categorias);
@@ -97,6 +110,19 @@ public class Presupuestos {
 
         presupuesto.getCategorias().forEach(c -> categorias.add(comilla + c.getNombre() + comilla));
 
+        return categorias;
+    }
+    private static String toJson(List<LicitacionDTO> listaEgresos) {
+        Gson gson = new Gson();
+        String mensajeJson = gson.toJson(listaEgresos);
+        return mensajeJson;
+    }
+
+    private static List<Categoria> getCategoriasFromLicitaciones(List<Licitacion> licitaciones){
+        List<Categoria> categorias = new ArrayList<>();
+        licitaciones.stream()
+                    .forEach(l -> l.getPresupuestos().stream()
+                    .forEach(p -> categorias.addAll(p.getCategorias())));
         return categorias;
     }
 }

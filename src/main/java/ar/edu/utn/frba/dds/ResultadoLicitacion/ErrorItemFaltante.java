@@ -22,6 +22,10 @@ public class ErrorItemFaltante extends ErrorValidacion {
         else this.mensaje = "El egreso tiene mas items que el presupuesto de categoria {0}";
     }
 
+    public ErrorItemFaltante() {
+        // Para Hibernate
+    }
+
     @Override
     public String obtenerMensaje() {
         return String.format(this.mensaje, this.categoriasItems.toString());

@@ -78,9 +78,10 @@ public class Licitacion {
         this.notificador.desuscribir(usuario);
     }
 
-    public void validarLicitacion(){
+    public List<ResultadoValidacion> validarLicitacion(){
         List<ResultadoValidacion> resultados = this.criterios.stream().map(c -> c.validar(this)).collect(Collectors.toList());
         this.notificador.notificar(resultados);
+        return resultados;
     }
 
     public void agregarCriterio(CriterioSeleccion criterio){

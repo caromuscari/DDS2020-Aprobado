@@ -28,9 +28,14 @@ public class Presupuesto {
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
-    @OneToMany
-    @JoinTable(name = "presupuesto_categoria", joinColumns = @JoinColumn(name = "presupuesto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "presupuesto_categoria",
+            joinColumns = { @JoinColumn(name = "presupuesto_id") },
+            inverseJoinColumns = { @JoinColumn(name = "categoria_id") }
+    )
     private List<Categoria> categorias;
+
     private String nombre;
 
     public Presupuesto(){
@@ -89,6 +94,13 @@ public class Presupuesto {
         return resultados.stream().anyMatch(c -> c.equals(true));
     }
 
+    public boolean contieneCategoria(String categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
+           return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+
+        return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
     public void calcularPrecio(){
         this.precioTotal = this.items.stream().mapToDouble(i -> i.precioTotal()).sum();
     }
@@ -100,5 +112,4 @@ public class Presupuesto {
         else return false;
     }
 
-//    public void addItem(ItemOperacionPresupuesto item){ this.items.add(item);}
 }

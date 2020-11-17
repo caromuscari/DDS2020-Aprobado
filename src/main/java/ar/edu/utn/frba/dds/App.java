@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.Controladores.*;
-import ar.edu.utn.frba.dds.Usuario.Usuario;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 
 import java.util.*;
@@ -10,6 +9,7 @@ import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 import ar.edu.utn.frba.dds.audit.Audit;
+import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -21,6 +21,11 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.HashMap;
+import java.util.Map;
+
+import static spark.Spark.*;
+import static spark.debug.DebugScreen.enableDebugScreen;
 
 
 public class App {
@@ -65,7 +70,7 @@ public class App {
             staticFiles.location("/public");
         }
 
-        // Acceso: http://localhost:4567/login
+        // Acceso: http://localhost:4568/login
         HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
 
         //Login
@@ -102,20 +107,13 @@ public class App {
         post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
         delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
 
-        get("/proveedor", RouteWithTransaction(ar.edu.utn.frba.dds.Controladores.Proveedor::proveedores));
-
         //Licitaciones
         post("/licitacion", RouteWithTransaction(LicitacionController::crearLicitacion));
         post("/validarLicitacion", RouteWithTransaction(LicitacionController::validarLicitacion));
         get("/licitacion", RouteWithTransaction(LicitacionController::mostrarMensajes), gson::toJson);
 
-        //Filtros
-        get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
-        get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
-
         //Audit
         get("/audit",Audit::list);
-
         // ===============================================================================
     }
 
@@ -144,7 +142,7 @@ public class App {
         App.pageSize = pageSize;
     }
 
-    private static TemplateViewRoute TemplWithTransaction(dds.WithTransaction<ModelAndView> fn) {
+    private static TemplateViewRoute TemplWithTransaction(WithTransaction<ModelAndView> fn) {
         TemplateViewRoute r = (req, res) -> {
             EntityManager em = entityManagerFactory.createEntityManager();
             em.getTransaction().begin();
@@ -159,7 +157,7 @@ public class App {
         };
         return r;
     }
-    private static Route RouteWithTransaction(dds.WithTransaction<Object> fn) {
+    private static Route RouteWithTransaction(WithTransaction<Object> fn) {
         Route r = (req, res) -> {
             EntityManager em = entityManagerFactory.createEntityManager();
             em.getTransaction().begin();

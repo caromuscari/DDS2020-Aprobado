@@ -9,14 +9,15 @@
 
 	<link href="public/bootstrap.min.css" rel="stylesheet">
 	<link href="public/css/main.css" rel="stylesheet">
+	<link href="public/css/egresos.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 	<script src="public/bootstrap.min.js"></script>
 
 </head>
 
 <body>
-	<div class="container">
-		<div class="row">
+	<div class="container top">
+		<div class="row main">
 			<div class="col-lg-12">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light">
 					<div class="collapse navbar-collapse" id="navbarNav">
@@ -77,17 +78,27 @@
 					</tbody>
 				</table>
 				<nav aria-label="Page navigation example">
-					<ul class="pagination">
+					<ul id="pages" class="pagination">
 						{{#each pages}}
-						<li class="page-item"><a class="page-link" href="/presupuesto?page={{.}}">{{.}}</a></li>
+						<li class="page-item"><a id="{{.}}" class="page-link" href="">{{.}}</a></li>
 						{{/each}}
 					</ul>
 				</nav>
 			</div>
 		</div>
+		<div class="sidenav">
+			<form method="get" action="/presupuesto">
+				<a>filtrar por categoria</a>
+				<select class="form-control" id="filtroCategoria" name="filter" >
+					<option value="none" selected disabled hidden>Selecionar una opcion</option>
+				</select>
+				<button type="submit" class="btn btn-outline-primary">Filtrar</button>
+			</form>
+		</div>
 	</div>
 
 	<script type="text/javascript">
+		var TAB = "\t";
 		function logout(){
 			$.ajax({
 				url: "/logout",
@@ -97,6 +108,20 @@
 				}
 			})
 		}
+
+		$(document).ready(function() {
+			cargarCategorias();
+			cargarRutas();
+
+			var categorias = document.getElementById("filtroCategoria");
+			var hijos = categorias.children
+			for (var i = 0; i < hijos.length; i++) {
+  				if(hijos[i].value == "{{{filter}}}") {
+    				hijos[i].selected = true;
+    				break;
+  				}
+			}
+		})
 
         function myFunction() {
             var input, filter, table, tr, td, i, txtValue;
@@ -116,6 +141,57 @@
                 }
             }
         }
+
+		function cargarCategorias(){
+			var select = document.getElementById("filtroCategoria");
+			var categ = {{{categorias}}};
+			var hijos;
+			var i, j;
+			for(i = 0; i < categ.length; i++){
+				var optgroup = select.appendChild(document.createElement("optgroup"));
+				optgroup.label = categ[i].nombre;
+
+				var listaHijos = categ[i].categorias;
+				for(j = 0; j < listaHijos.length ; j++){
+					var option = select.appendChild(document.createElement("option"));
+					option.value = listaHijos[j].nombre;
+					option.textContent = listaHijos[j].nombre;
+
+					if(listaHijos[j].criterioHijo){
+						var nivelHijo = 0;
+						loopCategorias(select,listaHijos[j].criterioHijo.categorias,nivelHijo);
+					}
+				}
+			}
+		}
+
+		function loopCategorias(select, hijos, nivelHijo){
+			var i;
+			var cantTabs = TAB;
+			for (i = 0; i < nivelHijo; i++){
+				cantTabs = cantTabs + TAB;
+			}
+			for(i = 0; i < hijos.length; i++){
+				var option = select.appendChild(document.createElement("option"));
+				option.value = hijos[i].nombre;
+				option.textContent = cantTabs + hijos[i].nombre;
+
+				if(hijos[i].criterioHijo){
+					loopCategorias(select,hijos[i].criterioHijo.categorias,nivelHijo-1);
+				}
+			}
+		}
+
+		function cargarRutas(){
+			var filtro = "{{{filter}}}";
+			var links = [...document.getElementById("pages").querySelectorAll("a")];
+
+			for(var i = 0; i < links.length; i++){
+				if (filtro == "") links[i].href = "/presupuesto?page=" + links[i].id;
+				else links[i].href = "/presupuesto?filter=" + filtro + "&page=" + links[i].id;
+			}
+		}
+
 	</script>
 </body>
 </html>

@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.Repositorios;
 
-import ar.edu.utn.frba.dds.Operaciones.Egreso;
 import ar.edu.utn.frba.dds.Operaciones.ItemEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
-import sun.plugin.perf.PluginRollup;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -25,9 +23,7 @@ public class RepositorioProveedores {
 
     public Proveedor crearProveedor(String nombre, Long identificador, String direccionPostal, ItemEgreso item) {
         Proveedor proveedor = new Proveedor(nombre, identificador, direccionPostal);
-        entityManager.getTransaction().begin();
         this.entityManager.persist(proveedor);
-        entityManager.getTransaction().commit();
         return proveedor;
     }
 
@@ -45,16 +41,10 @@ public class RepositorioProveedores {
             Root<Proveedor> proveedores = consulta.from(Proveedor.class);
             Predicate condicion = cb.equal(proveedores.get("nombre"), nombre);
             CriteriaQuery<Proveedor> where = consulta.select(proveedores).where(condicion);
-            return this.entityManager.createQuery(where).getSingleResult();
+            List<Proveedor> listaProveedores = this.entityManager.createQuery(where).getResultList();
+            return !listaProveedores.isEmpty() ? listaProveedores.get(0) : null;
         }
         return null;
-
-//        for (Proveedor proveedor : obtenerProveedores()) {
-//            if (proveedor.getNombre().matches(nombre)) {
-//                return proveedor;
-//            }
-//        }
-//        return null;
     }
 
     private boolean existsProveedorPorNombre(String nombre) {

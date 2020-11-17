@@ -41,6 +41,13 @@ public class Categoria {
         return resultados.stream().anyMatch(c -> c.equals(true));
     }
 
+    public boolean contieneCategoriaHija(String categoria){
+        if (this.criterioHijo == null) return false;
+        List<Boolean> resultados = this.criterioHijo.getCategorias().stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
+            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+        return resultados.stream().anyMatch(c -> c.equals(true));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LicitacionController {
+public class  LicitacionController {
 
 
     public static Object crearLicitacion(Request request, Response response, EntityManager entity) {

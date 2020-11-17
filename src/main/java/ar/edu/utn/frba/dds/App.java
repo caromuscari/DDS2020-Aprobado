@@ -9,7 +9,12 @@ import java.util.*;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
+import ar.edu.utn.frba.dds.audit.Audit;
 import com.google.gson.Gson;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
@@ -20,7 +25,8 @@ import javax.persistence.Persistence;
 
 public class App {
     static EntityManagerFactory entityManagerFactory;
-
+    static Datastore datastore;
+    static Morphia morphia;
     private static int pageSize = 2;
     private static Gson gson = new Gson();
 
@@ -33,7 +39,16 @@ public class App {
         port(4568);
         initRoutes();
         initPersistence();
+        initNoSQL();
 
+    }
+
+    public static Datastore getDatastore() {
+        return datastore;
+    }
+
+    public static void setDatastore(Datastore datastore) {
+        App.datastore = datastore;
     }
 
     public static void initPersistence(){
@@ -98,6 +113,9 @@ public class App {
         get("/egreso/filtrar/", RouteWithTransaction(Egresos::filtrarPorCategoria));
         get("/ingreso/filtrar/", RouteWithTransaction(Ingresos::filtrarPorCategoria));
 
+        //Audit
+        get("/audit",Audit::list);
+
         // ===============================================================================
     }
 
@@ -155,5 +173,14 @@ public class App {
             }
         };
         return r;
+    }
+
+    private static void initNoSQL(){
+        morphia = new Morphia();
+        morphia.mapPackage("ar.edu.utn.frba.dds.audit");
+        MongoClientURI uri = new MongoClientURI("mongodb://root:gesoc@cluster0-shard-00-00.bdiyw.mongodb.net:27017,cluster0-shard-00-02.bdiyw.mongodb.net:27017,cluster0-shard-00-01.bdiyw.mongodb.net:27017/admin?ssl=true&replicaSet=atlas-neih4m-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1");
+        MongoClient mongoClient = new MongoClient(uri);
+        datastore = morphia.createDatastore(mongoClient, "gesoc");
+        datastore.ensureIndexes();
     }
 }

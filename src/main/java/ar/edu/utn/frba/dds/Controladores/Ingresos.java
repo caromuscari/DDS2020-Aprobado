@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.Operaciones.ItemOperacionEgreso;
 import ar.edu.utn.frba.dds.Operaciones.Proveedor;
 import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import ar.edu.utn.frba.dds.audit.Audit;
 import com.google.gson.Gson;
 import spark.ModelAndView;
 import spark.Request;
@@ -53,6 +54,7 @@ public class Ingresos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
+            Audit.crearAuditoria("MODIFICACION","Ingresos",usuario.getUsuario());
             ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioIngreso(entity).obtenerIngresoPorId(request.params(":id"));
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
@@ -68,7 +70,7 @@ public class Ingresos {
         }
 
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-
+        Audit.crearAuditoria("ALTA","Ingresos",usuario.getUsuario());
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 

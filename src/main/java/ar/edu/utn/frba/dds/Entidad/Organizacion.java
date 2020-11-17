@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.Entidad;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Operaciones.Egreso;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,12 +22,14 @@ public class Organizacion {
     private String nombre;
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "organizacion_id")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Entidad> entidades;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "organizacion_id")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<CriterioCategoria> criterios;
 
     public Organizacion(){}

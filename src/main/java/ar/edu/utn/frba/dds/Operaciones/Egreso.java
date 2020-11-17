@@ -23,7 +23,7 @@ public class Egreso {
     @JoinColumn(name = "egreso_id")
     private List<DocumentoComercial> documentos;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "egreso_id")
     private List<ItemOperacionEgreso> items;
 

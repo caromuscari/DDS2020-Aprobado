@@ -149,9 +149,11 @@ public class App {
             try {
                 ModelAndView result = fn.method(req, res, em);
                 em.getTransaction().commit();
+                em.close();
                 return result;
             } catch (Exception ex) {
                 em.getTransaction().rollback();
+                em.close();
                 throw ex;
             }
         };
@@ -164,9 +166,11 @@ public class App {
             try {
                 Object result = fn.method(req, res, em);
                 em.getTransaction().commit();
+                em.close();
                 return result;
             } catch (Exception ex) {
                 em.getTransaction().rollback();
+                em.close();
                 throw ex;
             }
         };

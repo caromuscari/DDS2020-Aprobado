@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class Proveedor {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "proveedor_id")
     @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<ItemEgreso> items;
 
     @OneToMany

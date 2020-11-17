@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.Licitacion;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Operaciones.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class Presupuesto {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "presupuesto_id")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<ItemOperacionPresupuesto> items;
     private Double precioTotal;
 

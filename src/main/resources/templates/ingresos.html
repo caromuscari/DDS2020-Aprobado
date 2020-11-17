@@ -45,9 +45,6 @@
 				<h1>GeSoc</h1>
 				<br>
 				<h2>Ingresos</h2>
-				<div class="float-right">
-					<input placeholder="buscar ingreso" type="text" id="myInput" onkeyup="myFunction()" />
-				</div>
 				<table id="myTable" class="table">
 					<thead>
 						<tr>
@@ -115,25 +112,6 @@
 					location.replace("/login");
 				}
 			})
-		}
-
-		function myFunction() {
-			var input, filter, table, tr, td, i, txtValue;
-			input = document.getElementById("myInput");
-			filter = input.value.toUpperCase();
-			table = document.getElementById("myTable");
-			tr = table.getElementsByTagName("tr");
-			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[0];
-				if (td) {
-					txtValue = td.textContent || td.innerText;
-					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
-					}
-				}
-			}
 		}
 
 		function cargarCategorias(){

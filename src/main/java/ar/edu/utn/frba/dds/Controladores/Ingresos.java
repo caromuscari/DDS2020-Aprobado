@@ -42,7 +42,10 @@ public class Ingresos {
 
             usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getIngresos().forEach(ingreso -> ingresos.add(new IngresoDTO(ingreso,entidad))));
 
-            if (filtro != null)  ingresos.removeIf(dto -> !(dto.getIngreso().contieneCategoria(filtro)));
+            if (filtro != null) {
+                Categoria cat = usuario.getOrganizacion().obtenerCategoria(filtro);
+                ingresos.removeIf(dto -> !(dto.getIngreso().contieneCategoria(cat)));
+            }
 
             int elementoFinal = ((pagina*App.getPageSize()) < ingresos.size()) ? (pagina*App.getPageSize()) : ingresos.size();
             map.put("ingresos",ingresos.subList(elementoInicial,elementoFinal));

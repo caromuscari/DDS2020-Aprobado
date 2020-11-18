@@ -8,6 +8,7 @@
 * Torres, Juan Martín
 
 ### Links útiles
-* Diagrama de clases: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/Diagrama_de_Clases.drawio
-* Diagrama de secuencia: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/Diagrama%20secuencia.drawio
-* DER: https://github.com/dds-utn/2020-ma-no-group-07/blob/master/doc/DER.drawio
+* Diagrama de clases: https://app.diagrams.net/#Hdds-utn%2F2020-ma-no-group-07%2Fmaster%2Fdoc%2FDiagrama_de_Clases.drawio
+* Diagrama de secuencia: https://app.diagrams.net/#Hdds-utn%2F2020-ma-no-group-07%2Fmaster%2Fdoc%2FDiagrama%20secuencia.drawio
+* DER: https://app.diagrams.net/#Hdds-utn%2F2020-ma-no-group-07%2Fmaster%2Fdoc%2FDER.drawio
+* Diagrama de arquitectura: 

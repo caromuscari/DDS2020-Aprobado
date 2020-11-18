@@ -68,9 +68,9 @@ public class Ingreso {
         egreso.vincular();
     }
 
-    public boolean contieneCategoria(String categoria){
-        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.getNombre().matches(categoria)) return true;
-            return c.contieneCategoriaHija(categoria);}).collect(Collectors.toList());
+    public boolean contieneCategoria(Categoria categoria){
+        List<Boolean> resultados = this.categorias.stream().map(c -> {if (c.equals(categoria)) return true;
+            return categoria.contieneCategoriaHija(c);}).collect(Collectors.toList());
 
         return resultados.stream().anyMatch(c -> c.equals(true));
     }

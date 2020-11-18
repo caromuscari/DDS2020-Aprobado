@@ -49,7 +49,10 @@ public class Egresos {
 
             usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getEgresos().forEach(egreso -> egresos.add(new EgresoDTO(egreso, entidad))));
 
-            if (filtro != null)  egresos.removeIf(dto -> !(dto.getEgreso().contieneCategoria(filtro)));
+            if (filtro != null) {
+                Categoria cat = usuario.getOrganizacion().obtenerCategoria(filtro);
+                egresos.removeIf(dto -> !(dto.getEgreso().contieneCategoria(cat)));
+            }
 
             int elementoFinal = ((pagina * App.getPageSize()) < egresos.size()) ? (pagina * App.getPageSize()) : egresos.size();
             map.put("egresos", egresos.subList(elementoInicial, elementoFinal));

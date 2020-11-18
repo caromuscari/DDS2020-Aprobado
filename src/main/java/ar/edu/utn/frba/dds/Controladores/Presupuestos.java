@@ -41,7 +41,10 @@ public class Presupuestos {
             usuario.getOrganizacion().getEntidades().forEach(entidad -> entidad.getLicitaciones()
                     .forEach(licitacion -> licitaciones.add(new LicitacionDTO(licitacion,entidad))));
 
-            if (filtro != null) licitaciones.forEach(l -> l.getPresupuestos().removeIf(p -> !(p.contieneCategoria(filtro))));
+            if (filtro != null) {
+                Categoria cat = usuario.getOrganizacion().obtenerCategoria(filtro);
+                licitaciones.forEach(l -> l.getPresupuestos().removeIf(p -> !(p.contieneCategoria(cat))));
+            }
 
             int elementoFinal = ((pagina*App.getPageSize()) < licitaciones.size()) ? (pagina*App.getPageSize()) : licitaciones.size();
             map.put("licitaciones",licitaciones.subList(elementoInicial,elementoFinal));

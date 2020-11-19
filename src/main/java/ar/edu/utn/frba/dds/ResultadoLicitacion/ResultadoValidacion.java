@@ -22,6 +22,7 @@ public class ResultadoValidacion {
     private Licitacion licitacion;
 
     public ResultadoValidacion() {
+        // Para Hibernate
     }
 
     public ResultadoValidacion(EstadoValidacion estado, Licitacion licitacion) {

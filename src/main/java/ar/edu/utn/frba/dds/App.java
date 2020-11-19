@@ -105,7 +105,7 @@ public class App {
         get("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::paginaAgregarPresupuesto), engine);
         post("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::agregarPresupuesto), engine);
         post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
-        delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
+            delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
 
         //Licitaciones
         post("/licitacion", RouteWithTransaction(LicitacionController::crearLicitacion));

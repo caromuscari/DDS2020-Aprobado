@@ -153,4 +153,5 @@ public class Egreso {
     public void vincular(){
         this.vinculado = true;
     }
+
 }

@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.Operaciones;
 
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -26,6 +28,7 @@ public class Ingreso {
 
     @OneToMany
     @JoinColumn(name = "ingreso_id")
+    @JsonIgnore
     private List<Egreso> egresos;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -75,8 +78,9 @@ public class Ingreso {
         return resultados.stream().anyMatch(c -> c.equals(true));
     }
 
-    public Double montoTotalEgresos()
-    {
-        return egresos.stream().mapToDouble(Egreso::getPrecioTotal).sum();
-    }
+    public Double montoTotalEgresos() { return egresos.stream().mapToDouble(Egreso::getPrecioTotal).sum(); }
+
+    @JsonSerialize
+    public Double montoRestante(){ return this.getMontoTotal() - montoTotalEgresos(); }
+
 }

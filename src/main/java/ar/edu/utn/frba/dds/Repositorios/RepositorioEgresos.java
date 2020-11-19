@@ -55,10 +55,6 @@ public class RepositorioEgresos {
         return this.entityManager.createQuery(select).getSingleResult() > 0;
     }
 
-    public void eliminarEgreso(Egreso egreso){
-        this.entityManager.remove(egreso);
-    }
-
     public void borrarEgreso(String id) {
         Egreso e = this.entityManager.find(Egreso.class, Integer.parseInt(id));
         this.entityManager.remove(e);

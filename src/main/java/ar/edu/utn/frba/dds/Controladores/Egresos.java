@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DTO.EgresoDTO;
 import ar.edu.utn.frba.dds.DTO.PresupuestoDTO;
 import ar.edu.utn.frba.dds.Entidad.Entidad;
-import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Repositorios.*;
@@ -180,6 +179,14 @@ public class Egresos {
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
         Audit.crearAuditoria("BAJA","Egreso",usuario.getUsuario());
         String id = request.params(":id");
+
+
+        // Desasocio de las licitaciones el egreso que voy a borrar
+        LicitacionRepo repoLicitacion = new LicitacionRepo(entity);
+        List<Licitacion> licitaciones = repoLicitacion.obtenerLicitacionesConEgresoAsociado(Integer.parseInt(id));
+        for( Licitacion l : licitaciones){
+            repoLicitacion.desasociarLicitacion(l);
+        }
 
         new RepositorioEgresos(entity).borrarEgreso(id);
 

@@ -60,6 +60,12 @@ public class ExampleDataCreator {
         Egreso e2 = empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
         Egreso e3 = empresa2.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 3");
 
+
+        // Tengo que setear la fecha porque en la creacion se setea LocalDate.now()
+        e1.setFecha(LocalDate.of(2020,6,11));
+        e2.setFecha(LocalDate.of(2020,6,30));
+
+
         e1.setMedioDePago(new MedioDePago("Tarjeta Macro",100L,"CREDIT_CARD"));
         e2.setMedioDePago(new MedioDePago("Tarjeta Santander",90L,"CREDIT_CARD"));
         e3.setMedioDePago(new MedioDePago("Tarjeta Cabal",200L,"DEBIT_CARD"));
@@ -71,21 +77,21 @@ public class ExampleDataCreator {
         listaCategorias.add(categoria1);
 
         //Creo ingresos
-        Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.now());
+        Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.of(2020,6,02));
 
         ingreso1.setCategorias(listaCategorias);
 
-        Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.now());
+        Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.of(2020,10,30));
         List<Ingreso> ingresosEmpresa1 = new ArrayList<>();
         ingresosEmpresa1.add(ingreso1);
         ingresosEmpresa1.add(ingreso2);
         empresa1.setIngresos(ingresosEmpresa1);
 
-        Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.now());
+        Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.of(2020,6,17));
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
 
-        Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020, 2,20));
+        Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020, 4,20));
         ingresosEmpresa2.add(ingreso4);
         empresa2.setIngresos(ingresosEmpresa2);
 

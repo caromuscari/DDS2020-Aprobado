@@ -24,10 +24,6 @@ public class Proveedor {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<ItemEgreso> items;
 
-    @OneToMany
-    @JoinTable(name = "proveedor_categorias", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<Categoria> categorias;
-
     public Proveedor(){
         // Para Hibernate
     }
@@ -50,9 +46,6 @@ public class Proveedor {
 
     public List<ItemEgreso> getItems() { return items; }
     public void setItems(List<ItemEgreso> items) { this.items = items; }
-
-    public List<Categoria> getCategorias() { return categorias; }
-    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
 
     public void addItem(ItemEgreso item){
         this.items.add(item);

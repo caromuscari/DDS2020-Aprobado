@@ -34,7 +34,7 @@ public class  LicitacionController {
     }
 
     public static Object validarLicitacion(Request request, Response response, EntityManager entitys) {
-        String nombreLicitacion = request.queryMap("nombreLicitacion").value();
+        String nombreLicitacion = request.queryMap("idLicitacion").value();
         Licitacion licitacion = new LicitacionRepo(entitys).obtenerLicitacionPorID(nombreLicitacion);
         response.header("Content-Type", "application/json");
         try {

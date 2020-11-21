@@ -21,11 +21,9 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-
-import static spark.Spark.*;
-import static spark.debug.DebugScreen.enableDebugScreen;
 
 
 public class App {
@@ -37,11 +35,8 @@ public class App {
 
     public static void main(String[] args) {
 
-        // ===============================================================================
-        // Server
-
         enableDebugScreen();
-        port(4568);
+        port(getHerokuAssignedPort());
         initRoutes();
         initPersistence();
         initNoSQL();
@@ -56,18 +51,50 @@ public class App {
         App.datastore = datastore;
     }
 
-    public static void initPersistence(){
-        entityManagerFactory = Persistence.createEntityManagerFactory("db");
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567;
     }
 
-    public static void initRoutes(){
-        boolean localhost = true;
+    public static void initPersistence() {
+        try {
+            URI dbUri = new URI(System.getenv("JAWSDB_URL"));
+            Map<String, Object> configOverrides = new HashMap<String, Object>();
+
+            if (dbUri != null && !"".equals(dbUri)) {
+                String username = dbUri.getUserInfo().split(":")[0];
+                String password = dbUri.getUserInfo().split(":")[1];
+                String dbUrl = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
+                configOverrides.put("hibernate.connection.url", dbUrl);
+                configOverrides.put("hibernate.connection.username", username);
+                configOverrides.put("hibernate.connection.password", password);
+            }
+
+            entityManagerFactory = Persistence.createEntityManagerFactory("db", configOverrides);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initRoutes() {
+        String localhostValue = System.getenv("LOCALHOST");
+        boolean localhost;
+
+        if (localhostValue != null && !"".equals(localhostValue)) {
+            localhost = false;
+        } else {
+            localhost = true;
+        }
+
         if (localhost) {
             String projectDir = System.getProperty("user.dir");
             String staticDir = "/src/main/resources/static/";
             staticFiles.externalLocation(projectDir + staticDir);
         } else {
-            staticFiles.location("/public");
+            staticFiles.location("/static");
         }
 
         // Acceso: http://localhost:4568/login
@@ -105,7 +132,7 @@ public class App {
         get("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::paginaAgregarPresupuesto), engine);
         post("/egreso/:id/presupuesto", TemplWithTransaction(Egresos::agregarPresupuesto), engine);
         post("/egreso/:id", TemplWithTransaction(Egresos::guardarEgreso), engine);
-            delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
+        delete("/egreso/:id", RouteWithTransaction(Egresos::borrarEgreso));
 
         //Licitaciones
         post("/licitacion", RouteWithTransaction(LicitacionController::crearLicitacion));
@@ -113,7 +140,10 @@ public class App {
         get("/licitacion", RouteWithTransaction(LicitacionController::mostrarMensajes), gson::toJson);
 
         //Audit
-        get("/audit",Audit::list);
+        get("/audit", Audit::list);
+
+        //Initializer
+        post("/initializer", RouteWithTransaction(ExampleDataCreator::inicializarSistema));
         // ===============================================================================
     }
 
@@ -129,7 +159,7 @@ public class App {
         }
     }
 
-    public static ModelAndView redireccion(Request request, Response response){
+    public static ModelAndView redireccion(Request request, Response response) {
         response.redirect("/home");
         return null;
     }
@@ -159,6 +189,7 @@ public class App {
         };
         return r;
     }
+
     private static Route RouteWithTransaction(WithTransaction<Object> fn) {
         Route r = (req, res) -> {
             EntityManager em = entityManagerFactory.createEntityManager();
@@ -177,7 +208,7 @@ public class App {
         return r;
     }
 
-    private static void initNoSQL(){
+    private static void initNoSQL() {
         morphia = new Morphia();
         morphia.mapPackage("ar.edu.utn.frba.dds.audit");
         MongoClientURI uri = new MongoClientURI("mongodb://root:gesoc@cluster0-shard-00-00.bdiyw.mongodb.net:27017,cluster0-shard-00-02.bdiyw.mongodb.net:27017,cluster0-shard-00-01.bdiyw.mongodb.net:27017/admin?ssl=true&replicaSet=atlas-neih4m-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1");

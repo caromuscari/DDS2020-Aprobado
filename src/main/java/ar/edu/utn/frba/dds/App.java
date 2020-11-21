@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.Controladores.*;
 import ar.edu.utn.frba.dds.Repositorios.RepoUsuarios;
 
-import java.util.*;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -23,9 +22,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
-
-import static spark.Spark.*;
-import static spark.debug.DebugScreen.enableDebugScreen;
 
 
 public class App {

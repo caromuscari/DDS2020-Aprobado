@@ -17,14 +17,12 @@ import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ExampleDataCreator {
@@ -34,6 +32,70 @@ public class ExampleDataCreator {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         inicializarUsuarios(entityManager);
+    }
+
+    private static void inicializarUsuarios(EntityManager entityManager){
+        Hash encriptador = new Hash();
+
+        List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
+        List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
+
+        ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
+        ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
+        ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
+
+        resultadosValidacion1.add(ResultadoValidacion1);
+        resultadosValidacion1.add(ResultadoValidacion2);
+        resultadosValidacion1.add(ResultadoValidacion3);
+
+        resultadosValidacion2.add(ResultadoValidacion2);
+        resultadosValidacion2.add(ResultadoValidacion3);
+
+        Mensaje mensaje1 = new Mensaje(resultadosValidacion1);
+        Mensaje mensaje2 = new Mensaje(resultadosValidacion1);
+        Mensaje mensaje3 = new Mensaje(resultadosValidacion2);
+
+        List<Mensaje> listaMensajes1 = new ArrayList<>();
+        List<Mensaje> listaMensajes2 = new ArrayList<>();
+
+        listaMensajes1.add(mensaje1);
+        listaMensajes1.add(mensaje2);
+        listaMensajes1.add(mensaje3);
+
+        listaMensajes2.add(mensaje1);
+        listaMensajes2.add(mensaje2);
+
+        Usuario usuario1;
+        Usuario usuario2;
+        Usuario usuario3;
+        Usuario usuario4;
+
+        try {
+            usuario1 = new Usuario("pepe", encriptador.hashear("pepe"), TipoPerfil.ADMINISTRADOR, new Organizacion("Grupo MediaTek S.A","Hacemos medias"));
+            usuario2 = new Usuario("carlitos", encriptador.hashear("carlitos"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de helados","Hacemos helados"));
+            usuario3 = new Usuario("ana", encriptador.hashear("ana"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de palas S.A","Hacemos palas"));
+            usuario4 = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, new Organizacion("Grupo 7 S.R.L", "Compañía fabless de semiconductores"));
+
+            usuario1.setBandejaDeMensajes(listaMensajes1);
+            usuario2.setBandejaDeMensajes(listaMensajes2);
+            usuario3.setBandejaDeMensajes(listaMensajes2);
+            usuario4.setBandejaDeMensajes(listaMensajes1);
+
+            crearCategorias(usuario4.getOrganizacion());
+            crearCategoriasPepe(usuario1.getOrganizacion());
+            inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
+            inicializarOrganizacionPepe(entityManager, usuario1.getOrganizacion());
+
+            entityManager.getTransaction().begin();
+            entityManager.persist(usuario1);
+            entityManager.persist(usuario2);
+            entityManager.persist(usuario3);
+            entityManager.persist(usuario4);
+            entityManager.getTransaction().commit();
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void inicializarOrganizacion(EntityManager entityManager, Organizacion organizacion){
@@ -128,6 +190,93 @@ public class ExampleDataCreator {
 
     }
 
+    private static void inicializarOrganizacionPepe(EntityManager entityManager, Organizacion organizacion){
+        List<Proveedor> proveedores = inicializarProveedores(entityManager);
+
+        TipoActividad electrónico = new TipoActividad(12890000, 48480000, 345430000,
+                5, 10, 50, "Electrónico");
+        Empresa satelite = new Empresa("Empresa SATELITE", "SATELITE SRL", Long.parseLong("123456"),
+                1111, 1, 1000, 10000.0, electrónico, 1000.0);
+        Empresa impac = new Empresa("Empresa IMPAC", "IMPAC S.A", Long.parseLong("234567"),
+                1111, 1, 1000, 10000.0, electrónico, 1000.0);
+
+        ItemEgreso itemEgreso = new ItemEgreso("1234", "Computadora", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemEgreso itemEgreso2 = new ItemEgreso("5678", "Monitor", 50.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
+        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
+
+        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
+        itemsOperacion1.add(itemOperacionEgreso);
+        List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
+        itemsOperacion2.add(itemOperacionEgreso2);
+
+        Egreso e1 = satelite.generarEgreso(itemsOperacion1, proveedores.get(0),"PC Intel");
+        Egreso e2 = satelite.generarEgreso(itemsOperacion2, proveedores.get(0),"Monitores DELL");
+        Egreso e3 = impac.generarEgreso(itemsOperacion2, proveedores.get(0),"Monitores LG");
+
+
+        // Tengo que setear la fecha porque en la creacion se setea LocalDate.now()
+        e1.setFecha(LocalDate.of(2020,5,18));
+        e2.setFecha(LocalDate.of(2020,5,3));
+
+
+        e1.setMedioDePago(new MedioDePago("Tarjeta Macro",100L,"CREDIT_CARD"));
+        e2.setMedioDePago(new MedioDePago("Tarjeta Santander",90L,"CREDIT_CARD"));
+        e3.setMedioDePago(new MedioDePago("Tarjeta Cabal",200L,"DEBIT_CARD"));
+
+
+
+        //Creo ingresos
+        Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.of(2020,6,02));
+
+
+        Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.of(2020,10,30));
+        List<Ingreso> ingresosEmpresa1 = new ArrayList<>();
+        ingresosEmpresa1.add(ingreso1);
+        ingresosEmpresa1.add(ingreso2);
+        satelite.setIngresos(ingresosEmpresa1);
+
+        Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.of(2020,6,17));
+        List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
+        ingresosEmpresa2.add(ingreso3);
+
+        Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020, 4,20));
+        ingresosEmpresa2.add(ingreso4);
+        impac.setIngresos(ingresosEmpresa2);
+
+        //Creo licitaciones y presupuestos
+        Licitacion licitacion1 = new Licitacion("Licitacion por computadoras",3);
+        Licitacion licitacion2 = new Licitacion("Licitacion por monitores",3);
+        ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+        ItemPresupuesto ip3 = new ItemPresupuesto(900.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
+        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
+        ItemOperacionPresupuesto iop3 = new ItemOperacionPresupuesto(3,ip3);
+        List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
+        items1.add(iop1);
+        items1.add(iop2);
+        List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
+        items2.add(iop3);
+        Presupuesto presupuesto1 = new Presupuesto(items1,proveedores.get(0),"Presupuesto 613");
+        Presupuesto presupuesto2 = new Presupuesto(items2,proveedores.get(0),"Presupuesto 215");
+        licitacion1.addPresupuesto(presupuesto1);
+        licitacion2.addPresupuesto(presupuesto2);
+
+        licitacion1.setEgreso(e1);
+        licitacion2.setEgreso(e2);
+
+        licitacion1.agregarCriterio(new CantidadPresupuestos());
+        //licitacion1.agregarCriterio(new ItemsPresupuesto());
+
+        satelite.addLicitacion(licitacion1);
+        impac.addLicitacion(licitacion2);
+
+        organizacion.addEntidad(satelite);
+        organizacion.addEntidad(impac);
+
+    }
+
     private static List<Proveedor> inicializarProveedores(EntityManager entityManager){
         Proveedor prov1 = new Proveedor("HP", 1L, "1234");
         prov1.addItem(new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
@@ -156,68 +305,6 @@ public class ExampleDataCreator {
         return proveedores;
     }
 
-    private static void inicializarUsuarios(EntityManager entityManager){
-        Hash encriptador = new Hash();
-
-        List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
-        List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
-
-        ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
-        ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
-        ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
-
-        resultadosValidacion1.add(ResultadoValidacion1);
-        resultadosValidacion1.add(ResultadoValidacion2);
-        resultadosValidacion1.add(ResultadoValidacion3);
-
-        resultadosValidacion2.add(ResultadoValidacion2);
-        resultadosValidacion2.add(ResultadoValidacion3);
-
-        Mensaje mensaje1 = new Mensaje(resultadosValidacion1);
-        Mensaje mensaje2 = new Mensaje(resultadosValidacion1);
-        Mensaje mensaje3 = new Mensaje(resultadosValidacion2);
-
-        List<Mensaje> listaMensajes1 = new ArrayList<>();
-        List<Mensaje> listaMensajes2 = new ArrayList<>();
-
-        listaMensajes1.add(mensaje1);
-        listaMensajes1.add(mensaje2);
-        listaMensajes1.add(mensaje3);
-
-        listaMensajes2.add(mensaje1);
-        listaMensajes2.add(mensaje2);
-
-        Usuario usuario1;
-        Usuario usuario2;
-        Usuario usuario3;
-        Usuario usuario4;
-
-        try {
-            usuario1 = new Usuario("pepe", encriptador.hashear("pepe"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de medias","Hacemos medias"));
-            usuario2 = new Usuario("carlitos", encriptador.hashear("carlitos"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de helados","Hacemos helados"));
-            usuario3 = new Usuario("ana", encriptador.hashear("ana"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de palas","Hacemos palas"));
-            usuario4 = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, new Organizacion("Grupo 7 S.R.L", "Compañía fabless de semiconductores"));
-
-            usuario1.setBandejaDeMensajes(listaMensajes1);
-            usuario2.setBandejaDeMensajes(listaMensajes2);
-            usuario3.setBandejaDeMensajes(listaMensajes2);
-            usuario4.setBandejaDeMensajes(listaMensajes1);
-
-            crearCategorias(usuario4.getOrganizacion());
-            inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
-
-            entityManager.getTransaction().begin();
-            entityManager.persist(usuario1);
-            entityManager.persist(usuario2);
-            entityManager.persist(usuario3);
-            entityManager.persist(usuario4);
-            entityManager.getTransaction().commit();
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void crearCategorias(Organizacion org){
         Categoria america = new Categoria("America");
         Categoria asia = new Categoria("Asia");
@@ -235,6 +322,26 @@ public class ExampleDataCreator {
         CriterioCategoria criterioPais = new CriterioCategoria("Pais", categoriasPaises);
 
         america.setCriterioHijo(criterioPais);
+
+        org.asociarCriterio(criterioContinente);
+    }
+
+    public static void crearCategoriasPepe(Organizacion org){
+        Categoria caba = new Categoria("Cap. Federal (CABA)");
+        Categoria pba = new Categoria("Provincia (PBA)");
+
+        List<Categoria> categoriasBarrios = new ArrayList<>();
+        categoriasBarrios.add(new Categoria("La Boca"));
+        categoriasBarrios.add(new Categoria("Barracas"));
+
+        List<Categoria> categoriasProvincias = new ArrayList<>();
+        categoriasProvincias.add(caba);
+        categoriasProvincias.add(pba);
+
+        CriterioCategoria criterioContinente = new CriterioCategoria("Provincias", categoriasProvincias);
+        CriterioCategoria criterioBarrio = new CriterioCategoria("Barrios", categoriasBarrios);
+
+        caba.setCriterioHijo(criterioBarrio);
 
         org.asociarCriterio(criterioContinente);
     }

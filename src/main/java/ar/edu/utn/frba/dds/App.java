@@ -61,19 +61,21 @@ public class App {
 
     public static void initPersistence() {
         try {
-            URI dbUri = new URI(System.getenv("JAWSDB_URL"));
-            Map<String, Object> configOverrides = new HashMap<String, Object>();
-
-            if (dbUri != null && !"".equals(dbUri)) {
+            String strUri = System.getenv("JAWSDB_URL");
+            if (strUri != null && !strUri.equals("")) {
+                URI dbUri = new URI(strUri);
+                Map<String, Object> configOverrides = new HashMap<String, Object>();
                 String username = dbUri.getUserInfo().split(":")[0];
                 String password = dbUri.getUserInfo().split(":")[1];
                 String dbUrl = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
                 configOverrides.put("hibernate.connection.url", dbUrl);
                 configOverrides.put("hibernate.connection.username", username);
                 configOverrides.put("hibernate.connection.password", password);
+                entityManagerFactory = Persistence.createEntityManagerFactory("db", configOverrides);
+            }else{
+                entityManagerFactory = Persistence.createEntityManagerFactory("db");
             }
 
-            entityManagerFactory = Persistence.createEntityManagerFactory("db", configOverrides);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,11 +4,8 @@ import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
-import ar.edu.utn.frba.dds.Entidad.Entidad;
 import ar.edu.utn.frba.dds.Entidad.Organizacion;
-import ar.edu.utn.frba.dds.Excepciones.UsuarioExistsException;
 import ar.edu.utn.frba.dds.Licitacion.*;
-import ar.edu.utn.frba.dds.Repositorios.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
@@ -16,22 +13,38 @@ import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import spark.Request;
+import spark.Response;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class ExampleDataCreator {
 
-    public static void main(String[] args) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("db");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public static Object inicializarSistema(Request request, Response response, EntityManager entity) {
+        inicializarUsuarios(entity);
 
-        inicializarUsuarios(entityManager);
+        try {
+            PrintWriter writer = response.raw().getWriter();
+            response.header("Content-Type", "application/json");
+            ObjectNode ob = JsonNodeFactory.instance.objectNode();
+            ob.put("Status", "Creación exitosa.");
+            writer.print(ob);
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private static void inicializarUsuarios(EntityManager entityManager){
@@ -118,19 +131,19 @@ public class ExampleDataCreator {
         List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
         itemsOperacion2.add(itemOperacionEgreso2);
 
-        Egreso e1 = empresa1.generarEgreso(itemsOperacion1, proveedores.get(0),"Egreso 1");
-        Egreso e2 = empresa1.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 2");
-        Egreso e3 = empresa2.generarEgreso(itemsOperacion2, proveedores.get(0),"Egreso 3");
+        Egreso e1 = empresa1.generarEgreso(itemsOperacion1, proveedores.get(0), "Egreso 1");
+        Egreso e2 = empresa1.generarEgreso(itemsOperacion2, proveedores.get(0), "Egreso 2");
+        Egreso e3 = empresa2.generarEgreso(itemsOperacion2, proveedores.get(0), "Egreso 3");
 
 
         // Tengo que setear la fecha porque en la creacion se setea LocalDate.now()
-        e1.setFecha(LocalDate.of(2020,6,11));
-        e2.setFecha(LocalDate.of(2020,6,30));
+        e1.setFecha(LocalDate.of(2020, 6, 11));
+        e2.setFecha(LocalDate.of(2020, 6, 30));
 
 
-        e1.setMedioDePago(new MedioDePago("Tarjeta Macro",100L,"CREDIT_CARD"));
-        e2.setMedioDePago(new MedioDePago("Tarjeta Santander",90L,"CREDIT_CARD"));
-        e3.setMedioDePago(new MedioDePago("Tarjeta Cabal",200L,"DEBIT_CARD"));
+        e1.setMedioDePago(new MedioDePago("Tarjeta Macro", 100L, "CREDIT_CARD"));
+        e2.setMedioDePago(new MedioDePago("Tarjeta Santander", 90L, "CREDIT_CARD"));
+        e3.setMedioDePago(new MedioDePago("Tarjeta Cabal", 200L, "DEBIT_CARD"));
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
@@ -139,40 +152,40 @@ public class ExampleDataCreator {
         listaCategorias.add(categoria1);
 
         //Creo ingresos
-        Ingreso ingreso1 = new Ingreso("Ingreso 1",100.0, LocalDate.of(2020,6,02));
+        Ingreso ingreso1 = new Ingreso("Ingreso 1", 100.0, LocalDate.of(2020, 6, 02));
 
         ingreso1.setCategorias(listaCategorias);
 
-        Ingreso ingreso2 = new Ingreso("Ingreso 2",200.0, LocalDate.of(2020,10,30));
+        Ingreso ingreso2 = new Ingreso("Ingreso 2", 200.0, LocalDate.of(2020, 10, 30));
         List<Ingreso> ingresosEmpresa1 = new ArrayList<>();
         ingresosEmpresa1.add(ingreso1);
         ingresosEmpresa1.add(ingreso2);
         empresa1.setIngresos(ingresosEmpresa1);
 
-        Ingreso ingreso3 = new Ingreso("Ingreso 3",150.0, LocalDate.of(2020,6,17));
+        Ingreso ingreso3 = new Ingreso("Ingreso 3", 150.0, LocalDate.of(2020, 6, 17));
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
 
-        Ingreso ingreso4 = new Ingreso("Ingreso 4",180.0, LocalDate.of(2020, 4,20));
+        Ingreso ingreso4 = new Ingreso("Ingreso 4", 180.0, LocalDate.of(2020, 4, 20));
         ingresosEmpresa2.add(ingreso4);
         empresa2.setIngresos(ingresosEmpresa2);
 
         //Creo licitaciones y presupuestos
-        Licitacion licitacion1 = new Licitacion("Licitacion 1",3);
-        Licitacion licitacion2 = new Licitacion("Licitacion 2",3);
-        ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
-        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
-        ItemPresupuesto ip3 = new ItemPresupuesto(900.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
-        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
-        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
-        ItemOperacionPresupuesto iop3 = new ItemOperacionPresupuesto(3,ip3);
+        Licitacion licitacion1 = new Licitacion("Licitacion 1", 3);
+        Licitacion licitacion2 = new Licitacion("Licitacion 2", 3);
+        ItemPresupuesto ip1 = new ItemPresupuesto(100.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(200.0, CategoriaItem.MONITOR, TipoItem.PRODUCTO);
+        ItemPresupuesto ip3 = new ItemPresupuesto(900.0, CategoriaItem.COMPUTADORA, TipoItem.PRODUCTO);
+        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2, ip1);
+        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2, ip2);
+        ItemOperacionPresupuesto iop3 = new ItemOperacionPresupuesto(3, ip3);
         List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
         items1.add(iop1);
         items1.add(iop2);
         List<ItemOperacionPresupuesto> items2 = new ArrayList<>();
         items2.add(iop3);
-        Presupuesto presupuesto1 = new Presupuesto(items1,proveedores.get(0),"Presupuesto 1");
-        Presupuesto presupuesto2 = new Presupuesto(items2,proveedores.get(0),"Presupuesto 2");
+        Presupuesto presupuesto1 = new Presupuesto(items1, proveedores.get(0), "Presupuesto 1");
+        Presupuesto presupuesto2 = new Presupuesto(items2, proveedores.get(0), "Presupuesto 2");
         licitacion1.addPresupuesto(presupuesto1);
         licitacion2.addPresupuesto(presupuesto2);
 
@@ -279,33 +292,31 @@ public class ExampleDataCreator {
 
     private static List<Proveedor> inicializarProveedores(EntityManager entityManager){
         Proveedor prov1 = new Proveedor("HP", 1L, "1234");
-        prov1.addItem(new ItemEgreso("3482","Computadora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        prov1.addItem(new ItemEgreso("348","Impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        prov1.addItem(new ItemEgreso("48347","Tinta para impresora",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("3482", "Computadora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("348", "Impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("48347", "Tinta para impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
 
         Proveedor prov2 = new Proveedor("Sony", 2L, "1234");
-        prov2.addItem(new ItemEgreso("8359","Computadora",80.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        prov2.addItem(new ItemEgreso("29347","Auriculares",20.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
+        prov2.addItem(new ItemEgreso("8359", "Computadora", 80.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov2.addItem(new ItemEgreso("29347", "Auriculares", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
 
         Proveedor prov3 = new Proveedor("Samsung", 21314l, "666");
-        prov3.addItem(new ItemEgreso("3473","Computadora",60.0,TipoItem.PRODUCTO,CategoriaItem.COMPUTADORA));
-        prov3.addItem(new ItemEgreso("284","Monitor",20.0,TipoItem.PRODUCTO,CategoriaItem.MONITOR));
+        prov3.addItem(new ItemEgreso("3473", "Computadora", 60.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov3.addItem(new ItemEgreso("284", "Monitor", 20.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR));
 
         List<Proveedor> proveedores = new ArrayList<>();
         proveedores.add(prov1);
         proveedores.add(prov2);
         proveedores.add(prov3);
 
-        entityManager.getTransaction().begin();
         entityManager.persist(prov1);
         entityManager.persist(prov2);
         entityManager.persist(prov3);
-        entityManager.getTransaction().commit();
 
         return proveedores;
     }
 
-    public static void crearCategorias(Organizacion org){
+    public static void crearCategorias(Organizacion org) {
         Categoria america = new Categoria("America");
         Categoria asia = new Categoria("Asia");
 

@@ -99,12 +99,10 @@ public class ExampleDataCreator {
             inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
             inicializarOrganizacionPepe(entityManager, usuario1.getOrganizacion());
 
-            entityManager.getTransaction().begin();
             entityManager.persist(usuario1);
             entityManager.persist(usuario2);
             entityManager.persist(usuario3);
             entityManager.persist(usuario4);
-            entityManager.getTransaction().commit();
         }
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

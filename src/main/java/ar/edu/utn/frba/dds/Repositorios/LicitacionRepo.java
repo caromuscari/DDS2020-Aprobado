@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.lang.invoke.LambdaConversionException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,13 @@ public class LicitacionRepo {
 
     public Licitacion obtenerLicitacionPorID(String id){
         return this.entityManager.find(Licitacion.class, Integer.parseInt(id));
+    }
+
+    public List<Licitacion> obtenerLicitaciones(){;
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Licitacion> consulta = cb.createQuery(Licitacion.class);
+        Root<Licitacion> licitaciones = consulta.from(Licitacion.class);
+        return this.entityManager.createQuery(consulta.select(licitaciones)).getResultList();
     }
 
     public List<Licitacion> obtenerLicitacionesConEgresoAsociado(Integer idEgreso){

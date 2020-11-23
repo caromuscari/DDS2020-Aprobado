@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -127,20 +128,33 @@ public class Egresos {
                 RepositorioProveedores repositorioProveedores = new RepositorioProveedores(entity);
                 Proveedor proveedor = repositorioProveedores.obtenerProveedorPorNombre(presupuestoDTO.getProveedor().getNombre());
 
-                Presupuesto presupuesto = new Presupuesto(new ArrayList<>(), proveedor, presupuestoDTO.getNombre());
+                Presupuesto presupuesto = new Presupuesto(presupuestoDTO.getDocumentos(), presupuestoDTO.getItems(), presupuestoDTO.getPrecioTotal(), proveedor, presupuestoDTO.getNombre());
                 new RepositorioPresupuesto(entity).crearPresupuesto(presupuesto);
 
                 Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params("id"));
                 Entidad entidad = new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso);
-                List<Licitacion> licitaciones = entidad.getLicitaciones().stream().filter(licitacion -> {
-                    if (licitacion.getEgreso() != null) {
-                        return licitacion.getEgreso().getId() == egreso.getId();
-                    }
-                    return false;
-                }).collect(Collectors.toList());
-                licitaciones.forEach(licitacion -> licitacion.getPresupuestos().add(presupuesto));
+                List<Licitacion> licitacionesConEgresoAsociado = new LicitacionRepo(entity).obtenerLicitacionesConEgresoAsociado(egreso.getId());
+                List<Licitacion> licitaciones = new LicitacionRepo(entity).obtenerLicitaciones();
 
-                egreso.setPresupuesto(presupuesto);
+                // Me fijo todos los presupuestos cargados en el sistema
+                List<Presupuesto> presupuestos = new ArrayList<>();
+                for(Licitacion l : licitaciones) {
+                    presupuestos.addAll(l.getPresupuestos());
+                }
+
+                // Si existe el presupuesto, no lo creo y le seteo el existente
+                if(presupuestos.stream().filter(p -> p.getNombre().equals(presupuesto.getNombre())).findAny().isPresent()) {
+                    egreso.setPresupuesto(presupuestos.stream().filter(p -> p.getNombre().equals(presupuesto.getNombre())).findAny().get());
+                    // Me fijo si las licitaciones asociadas al egreso no tienen ese presupuesto y el presupuesto
+                    // en el sistema esta cargado en otra licitacion, en ese caso lo agrego
+                    if(licitacionesConEgresoAsociado.stream().noneMatch(l -> l.getPresupuestos().stream().filter(p -> p.getNombre().equals(presupuesto.getNombre())).findAny().isPresent()))
+                        licitacionesConEgresoAsociado.forEach(licitacion -> licitacion.getPresupuestos().add(presupuesto));
+                }
+                else{
+                    new RepositorioPresupuesto(entity).crearPresupuesto(presupuesto);
+                    licitacionesConEgresoAsociado.forEach(licitacion -> licitacion.getPresupuestos().add(presupuesto));
+                    egreso.setPresupuesto(presupuesto);
+                }
 
                 Files.deleteIfExists(tempFile);
             } catch (Exception e) {

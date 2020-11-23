@@ -3,7 +3,9 @@ package ar.edu.utn.frba.dds.Operaciones;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -28,11 +30,12 @@ public class Ingreso {
 
     @OneToMany
     @JoinColumn(name = "ingreso_id")
-    @JsonIgnore
+    @JsonProperty("egresosVinculados")
     private List<Egreso> egresos;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "ingresos_categorias", joinColumns = @JoinColumn(name = "ingreso_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    @JsonIgnore
     private List<Categoria> categorias;
 
     public Ingreso(){

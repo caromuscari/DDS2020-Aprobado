@@ -112,6 +112,11 @@ public class ExampleDataCreator {
     private static void inicializarOrganizacion(EntityManager entityManager, Organizacion organizacion){
         List<Proveedor> proveedores = inicializarProveedores(entityManager);
 
+        // ===============================
+        System.out.println("Cantidad de proveedores: " + proveedores.stream().count());
+        // ===============================
+
+
         TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Agropecuario");
         Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
@@ -202,7 +207,7 @@ public class ExampleDataCreator {
     }
 
     private static void inicializarOrganizacionPepe(EntityManager entityManager, Organizacion organizacion){
-        List<Proveedor> proveedores = inicializarProveedores(entityManager);
+        List<Proveedor> proveedores = inicializarProveedoresPepe(entityManager);
 
         TipoActividad electrónico = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Electrónico");
@@ -301,6 +306,32 @@ public class ExampleDataCreator {
         Proveedor prov3 = new Proveedor("Samsung", 21314l, "666");
         prov3.addItem(new ItemEgreso("3473", "Computadora", 60.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
         prov3.addItem(new ItemEgreso("284", "Monitor", 20.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR));
+
+        List<Proveedor> proveedores = new ArrayList<>();
+        proveedores.add(prov1);
+        proveedores.add(prov2);
+        proveedores.add(prov3);
+
+        entityManager.persist(prov1);
+        entityManager.persist(prov2);
+        entityManager.persist(prov3);
+
+        return proveedores;
+    }
+
+    private static List<Proveedor> inicializarProveedoresPepe(EntityManager entityManager){
+        Proveedor prov1 = new Proveedor("LG", 4L, "8847");
+        prov1.addItem(new ItemEgreso("3482", "Monitor LG", 300.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("3483", "Smart TV", 600.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("7756", "Minicomponentes", 200.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+
+        Proveedor prov2 = new Proveedor("Apple", 8L, "122134");
+        prov2.addItem(new ItemEgreso("8359", "iPad", 450.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov2.addItem(new ItemEgreso("02303", "iMac", 900.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+
+        Proveedor prov3 = new Proveedor("ASUS", 213l, "66632");
+        prov3.addItem(new ItemEgreso("8458", "Notebook ASUS", 450.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov3.addItem(new ItemEgreso("221884", "Tarjeta Grafica", 300.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR));
 
         List<Proveedor> proveedores = new ArrayList<>();
         proveedores.add(prov1);

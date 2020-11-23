@@ -177,11 +177,11 @@
 
 			//Items presupuesto
 			{{#if egreso.presupuesto}}
-				var listaItems = document.getElementById("divItemsPresupuesto");
+				var listaItemsP = document.getElementById("divItemsPresupuesto");
 				{{#each egreso.presupuesto.items}}
-					var divP = listaItems.appendChild(document.createElement("div"));
-					var labelItemP = div.appendChild(document.createElement("label"));
-					var numeroP = div.appendChild(document.createElement("p"));
+					var divP = listaItemsP.appendChild(document.createElement("div"));
+					var labelItemP = divP.appendChild(document.createElement("label"));
+					var numeroP = divP.appendChild(document.createElement("p"));
 
 					divP.style = "display: flex;";
 					labelItemP.textContent = "{{{itemPresupuesto.categoria}}}";

@@ -367,8 +367,8 @@ public class ExampleDataCreator {
     }
 
     public static void crearCategoriasPepe(Organizacion org){
-        Categoria caba = new Categoria("Cap. Federal (CABA)");
-        Categoria pba = new Categoria("Provincia (PBA)");
+        Categoria caba = new Categoria("Cap. Federal - CABA");
+        Categoria pba = new Categoria("Provincia - PBA");
 
         List<Categoria> categoriasBarrios = new ArrayList<>();
         categoriasBarrios.add(new Categoria("La Boca"));

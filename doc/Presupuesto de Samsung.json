@@ -1,0 +1,24 @@
+{
+  "nombre": "Presupuesto Samsung",
+  "proveedor": {
+    "identificador": 821739,
+    "nombre": "SAMSUNG",
+    "direccionPostal": "Bouchard 710"
+  },
+  "items": [  {
+    "cantidad": 2,
+    "itemPresupuesto":{
+      "precio": 250.0,
+      "categoria": "MONITOR",
+      "tipo": "PRODUCTO"
+      }  
+    },{
+    "cantidad": 3,
+    "itemPresupuesto":{
+      "precio": 600.0,
+      "categoria": "COMPUTADORA",
+      "tipo": "PRODUCTO"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+    "documentos": [ ], 
+  "nombre": "Presupuesto Sony",
+  "proveedor": {
+    "nombre": "SONY",
+    "identificador": 231414,
+    "direccionPostal": "Otto Krause 4650"
+  },
+  "items": [  {
+      "cantidad": 2,
+      "itemPresupuesto":{
+        "precio": 150.0,
+        "categoria": "MONITOR",
+        "tipo": "PRODUCTO"
+      }
+  }  ]
+}

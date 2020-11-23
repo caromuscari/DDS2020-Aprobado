@@ -48,10 +48,10 @@ public class Presupuesto {
     public Presupuesto(List<DocumentoComercial> documentos, List<ItemOperacionPresupuesto> items, Double precioTotal, Proveedor proveedor,String nombre) {
         this.documentos = documentos;
         this.items = items;
-        this.precioTotal = precioTotal;
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
         this.nombre = nombre;
+        calcularPrecio();
     }
 
     public Presupuesto(List<ItemOperacionPresupuesto> items, Proveedor proveedor,String nombre) {
@@ -59,6 +59,7 @@ public class Presupuesto {
         this.proveedor = proveedor;
         this.categorias = new ArrayList<>();
         this.nombre = nombre;
+        calcularPrecio();
     }
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }

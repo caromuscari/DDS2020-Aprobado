@@ -4,6 +4,9 @@ import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.DateConverter;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -21,27 +24,33 @@ public class Egreso {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "egreso_id")
+    @JsonIgnore
     private List<DocumentoComercial> documentos;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "egreso_id")
+    @JsonIgnore
     private List<ItemOperacionEgreso> items;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medioDePago_id")
+    @JsonIgnore
     private MedioDePago medioDePago;
     private Double precioTotal;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "proveedor_id")
+    @JsonIgnore
     private Proveedor proveedor;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "presupuesto_id")
+    @JsonIgnore
     private Presupuesto presupuesto;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "egreso_categorias", joinColumns = @JoinColumn(name = "egreso_id"), inverseJoinColumns = @JoinColumn(name = "categorias_id"))
+    @JsonIgnore
     private List<Categoria> categorias;
 
     @Column

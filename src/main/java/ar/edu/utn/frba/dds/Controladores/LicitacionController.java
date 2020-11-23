@@ -53,9 +53,9 @@ public class  LicitacionController {
     }
 
     public static Object mostrarMensajes(Request request, Response response, EntityManager entity) {
-        String licitacion = request.queryMap("nombreLicitacion").value();
+        String licitacion = request.queryMap("idLicitacion").value();
         String nombreUsuario = request.queryMap("usuario").value();
-
+        int idLicitacion;
         try {
             PrintWriter writer = response.raw().getWriter();
             response.header("Content-Type", "application/json");
@@ -71,8 +71,17 @@ public class  LicitacionController {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(nombreUsuario);
 
             if (usuario != null) {
+                try{
+                    idLicitacion = Integer.parseInt(licitacion);
+                }catch (Exception e){
+                    ObjectNode ob = JsonNodeFactory.instance.objectNode();
+                    ob.put("Error", "el id de licitacion tiene que ser un numero");
+                    writer.print(ob);
+                    writer.flush();
+                    return null;
+                }
                 List<MensajeDTO> listaMensajes = usuario.getBandejaDeMensajes().stream()
-                        .filter(l -> l.getResultados().get(0).getLicitacion().getNombre().matches(licitacion))
+                        .filter(l -> l.getResultados().get(0).getLicitacion().getId() == idLicitacion)
                         .map(l -> new MensajeDTO(l.obtenerMensaje(), l.getLeido()))
                         .collect(Collectors.toList());
 

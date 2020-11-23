@@ -13,7 +13,7 @@ public class ResultadoValidacion {
     @Enumerated(EnumType.STRING)
     private EstadoValidacion estado;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "error_id")
     private ErrorValidacion error;
 

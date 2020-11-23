@@ -16,6 +16,7 @@ public class Licitacion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String nombre;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -46,6 +47,9 @@ public class Licitacion {
     }
 
     //Setters y Getters
+
+    public int getId() { return id; }
+
     public List<Presupuesto> getPresupuestos() { return presupuestos; }
     public void setPresupuestos(List<Presupuesto> presupuestos) { this.presupuestos = presupuestos; }
 

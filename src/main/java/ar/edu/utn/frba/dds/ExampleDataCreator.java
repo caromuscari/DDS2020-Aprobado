@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Licitacion.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.ErrorCantidadPresupuestos;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
 import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
 import ar.edu.utn.frba.dds.Usuario.Hash;
@@ -19,14 +20,11 @@ import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
 public class ExampleDataCreator {
 
@@ -52,24 +50,45 @@ public class ExampleDataCreator {
 
         List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
+        List<ResultadoValidacion> resultadosValidacion3 = new ArrayList<>();
+        List<ResultadoValidacion> resultadosValidacion4 = new ArrayList<>();
+
+        Licitacion licitacion4 = new Licitacion("prueba", 6);
+        ErrorCantidadPresupuestos error =  new ErrorCantidadPresupuestos(5, 2);
 
         ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
         ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
         ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
+        ResultadoValidacion ResultadoValidacion4 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba2", 2));
+        ResultadoValidacion ResultadoValidacion5 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba3", 3));
+
+        entityManager.persist(licitacion4);
+        entityManager.persist(error);
+
+        ResultadoValidacion ResultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,error,licitacion4);
+
+        entityManager.persist(ResultadoValidacion6);
 
         resultadosValidacion1.add(ResultadoValidacion1);
         resultadosValidacion1.add(ResultadoValidacion2);
-        resultadosValidacion1.add(ResultadoValidacion3);
 
-        resultadosValidacion2.add(ResultadoValidacion2);
         resultadosValidacion2.add(ResultadoValidacion3);
+
+        resultadosValidacion3.add(ResultadoValidacion4);
+        resultadosValidacion3.add(ResultadoValidacion5);
+
+        resultadosValidacion4.add(ResultadoValidacion6);
 
         Mensaje mensaje1 = new Mensaje(resultadosValidacion1);
         Mensaje mensaje2 = new Mensaje(resultadosValidacion1);
         Mensaje mensaje3 = new Mensaje(resultadosValidacion2);
+        Mensaje mensaje4 = new Mensaje(resultadosValidacion3);
+        Mensaje mensaje5 = new Mensaje(resultadosValidacion4);
 
         List<Mensaje> listaMensajes1 = new ArrayList<>();
         List<Mensaje> listaMensajes2 = new ArrayList<>();
+        List<Mensaje> listaMensajes3 = new ArrayList<>();
+        List<Mensaje> listaMensajes4 = new ArrayList<>();
 
         listaMensajes1.add(mensaje1);
         listaMensajes1.add(mensaje2);
@@ -77,6 +96,13 @@ public class ExampleDataCreator {
 
         listaMensajes2.add(mensaje1);
         listaMensajes2.add(mensaje2);
+
+        listaMensajes3.add(mensaje3);
+        listaMensajes3.add(mensaje4);
+
+        listaMensajes4.add(mensaje4);
+        listaMensajes4.add(mensaje5);
+
 
         Usuario usuario1;
         Usuario usuario2;
@@ -89,8 +115,8 @@ public class ExampleDataCreator {
             usuario3 = new Usuario("ana", encriptador.hashear("ana"), TipoPerfil.ADMINISTRADOR, new Organizacion("Fabrica de palas S.A","Hacemos palas"));
             usuario4 = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, new Organizacion("Grupo 7 S.R.L", "Compañía fabless de semiconductores"));
 
-            usuario1.setBandejaDeMensajes(listaMensajes1);
-            usuario2.setBandejaDeMensajes(listaMensajes2);
+            usuario1.setBandejaDeMensajes(listaMensajes3);
+            usuario2.setBandejaDeMensajes(listaMensajes4);
             usuario3.setBandejaDeMensajes(listaMensajes2);
             usuario4.setBandejaDeMensajes(listaMensajes1);
 
@@ -98,6 +124,8 @@ public class ExampleDataCreator {
             crearCategoriasPepe(usuario1.getOrganizacion());
             inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
             inicializarOrganizacionPepe(entityManager, usuario1.getOrganizacion());
+            crearCategorias(usuario2.getOrganizacion());
+            inicializarOrganizacion(entityManager, usuario2.getOrganizacion());
 
             entityManager.persist(usuario1);
             entityManager.persist(usuario2);
@@ -342,6 +370,8 @@ public class ExampleDataCreator {
         List<Categoria> categoriasBarrios = new ArrayList<>();
         categoriasBarrios.add(new Categoria("La Boca"));
         categoriasBarrios.add(new Categoria("Barracas"));
+        categoriasBarrios.add(new Categoria("Once"));
+        categoriasBarrios.add(new Categoria("Villa Devoto"));
 
         List<Categoria> categoriasProvincias = new ArrayList<>();
         categoriasProvincias.add(caba);

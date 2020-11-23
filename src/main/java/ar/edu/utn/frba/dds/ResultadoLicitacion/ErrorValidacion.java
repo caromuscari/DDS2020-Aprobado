@@ -6,9 +6,11 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipoError", discriminatorType = DiscriminatorType.STRING)
 public abstract class ErrorValidacion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "id", updatable = false, nullable = false)
+    protected int id;
 
     public abstract String obtenerMensaje();
 }

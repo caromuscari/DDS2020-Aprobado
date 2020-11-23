@@ -2,24 +2,19 @@ package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
 import ar.edu.utn.frba.dds.Operaciones.CategoriaItem;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity(name = "ErrorItemFaltante")
 @DiscriminatorValue("ErrorItemFaltante")
 public class ErrorItemFaltante extends ErrorValidacion {
-    @ElementCollection
-    @CollectionTable(name = "ErrorItemFaltante_Categorias")
-    private List<CategoriaItem> categoriasItems;
+
+    @Column
     private String mensaje;
 
     public ErrorItemFaltante(Integer error,List<CategoriaItem> categoriaItem) {
-        this.categoriasItems = categoriaItem;
-        if (error == 1) this.mensaje = "Al egreso registrado le falta el/los item/s de categoria {0}";
-        else this.mensaje = "El egreso tiene mas items que el presupuesto de categoria {0}";
+        if (error == 1) this.mensaje = "Al egreso registrado le falta el/los item/s de categoria" + categoriaItem.toString();
+        else this.mensaje = "El egreso tiene mas items que el presupuesto de categoria" + categoriaItem.toString();
     }
 
     public ErrorItemFaltante() {
@@ -28,6 +23,6 @@ public class ErrorItemFaltante extends ErrorValidacion {
 
     @Override
     public String obtenerMensaje() {
-        return String.format(this.mensaje, this.categoriasItems.toString());
+        return mensaje;
     }
 }

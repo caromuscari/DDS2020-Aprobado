@@ -27,11 +27,11 @@ public class  LicitacionController {
 
     public static Object crearLicitacion(Request request, Response response, EntityManager entity) {
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        Audit.crearAuditoria("ALTA","Licitacion",usuario.getUsuario());
         String jsonLicitacion = request.body();
         Licitacion licitacion = new ObjectMapper().convertValue(jsonLicitacion, Licitacion.class);
         new LicitacionRepo(entity).persistir(licitacion);
         response.body("Licitacion: " + licitacion.getNombre());
+        Audit.crearAuditoria("ALTA","Licitacion",usuario.getUsuario(),licitacion.getId());
         return null;
     }
 

@@ -73,8 +73,8 @@ public class Presupuestos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            Audit.crearAuditoria("MODIFICAR","Presupuesto",usuario.getUsuario());
             ar.edu.utn.frba.dds.Licitacion.Presupuesto presupuesto = new RepositorioPresupuesto(entity).obtenerPresupuestoPorId(request.params(":id"));
+            Audit.crearAuditoria("MODIFICAR","Presupuesto",usuario.getUsuario(),presupuesto.getId());
             Map<String, Object> map = new HashMap<>();
             map.put("presupuesto",presupuesto);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -89,7 +89,6 @@ public class Presupuestos {
         }
 
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        Audit.crearAuditoria("ALTA","Presupuesto",usuario.getUsuario());
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
@@ -102,7 +101,7 @@ public class Presupuestos {
             }
         }
         presupuesto.setCategorias(categorias);
-
+        Audit.crearAuditoria("ALTA","Presupuesto",usuario.getUsuario(),presupuesto.getId());
         response.redirect("/presupuesto");
         return null;
     }

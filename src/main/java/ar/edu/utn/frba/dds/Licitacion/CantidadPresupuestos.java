@@ -14,10 +14,13 @@ public class CantidadPresupuestos extends CriterioSeleccion {
     @Override
     public ResultadoValidacion validar(Licitacion licitacion) {
         ResultadoValidacion resultado;
-        if (licitacion.getPresupuestos().size() < licitacion.getPresupuestosRequeridos()){
-            resultado = new ResultadoValidacion(EstadoValidacion.ERROR,new ErrorCantidadPresupuestos(licitacion.getPresupuestosRequeridos(), licitacion.getPresupuestos().size()),licitacion);
+        try {
+            if (licitacion.getPresupuestos().size() < licitacion.getPresupuestosRequeridos()) {
+                resultado = new ResultadoValidacion(EstadoValidacion.ERROR, new ErrorCantidadPresupuestos(licitacion.getPresupuestosRequeridos(), licitacion.getPresupuestos().size()), licitacion);
+            } else resultado = new ResultadoValidacion(EstadoValidacion.OK, licitacion);
+        }catch (Exception e) {
+            resultado = new ResultadoValidacion(EstadoValidacion.ERROR, licitacion);;
         }
-        else resultado = new ResultadoValidacion(EstadoValidacion.OK,licitacion);
         return resultado;
     }
 }

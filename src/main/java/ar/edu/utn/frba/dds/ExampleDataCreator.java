@@ -52,12 +52,12 @@ public class ExampleDataCreator {
         List<ResultadoValidacion> resultadosValidacion3 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion4 = new ArrayList<>();
 
-        Licitacion licitacion4 = new Licitacion("prueba", 6);
-        licitacion4.agregarCriterio(new CantidadPresupuestos());
-        licitacion4.agregarCriterio(new MenorValor());
+
         ErrorCantidadPresupuestos errorCantidadPresupuestos1 =  new ErrorCantidadPresupuestos(5, 2);
         ErrorCantidadPresupuestos errorCantidadPresupuestos2 =  new ErrorCantidadPresupuestos(7, 3);
         Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba", 10);
+        licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
+        licitacionPrueba.agregarCriterio(new MenorValor());
         ResultadoValidacion resultadoValidacion0 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
         ResultadoValidacion resultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
         ResultadoValidacion resultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
@@ -65,24 +65,17 @@ public class ExampleDataCreator {
         ResultadoValidacion resultadoValidacion4 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba2", 2));
         ResultadoValidacion resultadoValidacion5 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba3", 3));
 
-        entityManager.persist(licitacion4);
         entityManager.persist(errorCantidadPresupuestos1);
         entityManager.persist(errorCantidadPresupuestos2);
 
-        ResultadoValidacion resultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos1,licitacion4);
-
         ResultadoValidacion resultadoValidacion7 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos2,licitacionPrueba);
-
-
-        entityManager.persist(resultadoValidacion6);
 
         resultadosValidacion0.add(resultadoValidacion0);
 
         resultadosValidacion1.add(resultadoValidacion1);
         resultadosValidacion1.add(resultadoValidacion2);
 
-        resultadosValidacion2.add(resultadoValidacion0);
-        resultadosValidacion2.add(resultadoValidacion6);
+        resultadosValidacion2.add(resultadoValidacion3);
 
         resultadosValidacion3.add(resultadoValidacion4);
         resultadosValidacion3.add(resultadoValidacion5);

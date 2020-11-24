@@ -14,12 +14,15 @@ public class MenorValor extends CriterioSeleccion{
     @Override
     public ResultadoValidacion validar(Licitacion licitacion) {
         ResultadoValidacion resultado;
-        licitacion.getPresupuestos().sort(Comparator.comparingDouble(Presupuesto::getPrecioTotal));
-        Presupuesto menorValor = licitacion.getPresupuestos().get(0);
-        if (Double.compare(licitacion.getEgreso().getPrecioTotal(),menorValor.getPrecioTotal()) != 0){
-            resultado = new ResultadoValidacion(EstadoValidacion.ERROR,new ErrorMenorValor(licitacion.getEgreso().getPrecioTotal(),menorValor.getPrecioTotal()),licitacion);
+        try {
+            licitacion.getPresupuestos().sort(Comparator.comparingDouble(Presupuesto::getPrecioTotal));
+            Presupuesto menorValor = licitacion.getPresupuestos().get(0);
+            if (Double.compare(licitacion.getEgreso().getPrecioTotal(), menorValor.getPrecioTotal()) != 0) {
+                resultado = new ResultadoValidacion(EstadoValidacion.ERROR, new ErrorMenorValor(licitacion.getEgreso().getPrecioTotal(), menorValor.getPrecioTotal()), licitacion);
+            } else resultado = new ResultadoValidacion(EstadoValidacion.OK, licitacion);
+        }catch (Exception e){
+            resultado = new ResultadoValidacion(EstadoValidacion.ERROR, licitacion);
         }
-        else resultado = new ResultadoValidacion(EstadoValidacion.OK, licitacion);
         return resultado;
     }
 }

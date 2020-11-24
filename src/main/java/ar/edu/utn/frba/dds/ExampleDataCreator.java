@@ -46,6 +46,7 @@ public class ExampleDataCreator {
     private static void inicializarUsuarios(EntityManager entityManager){
         Hash encriptador = new Hash();
 
+        List<ResultadoValidacion> resultadosValidacion0 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion1 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion2 = new ArrayList<>();
         List<ResultadoValidacion> resultadosValidacion3 = new ArrayList<>();
@@ -54,55 +55,55 @@ public class ExampleDataCreator {
         Licitacion licitacion4 = new Licitacion("prueba", 6);
         licitacion4.agregarCriterio(new CantidadPresupuestos());
         licitacion4.agregarCriterio(new MenorValor());
-        ErrorCantidadPresupuestos errorCantidadPresupuestos =  new ErrorCantidadPresupuestos(5, 2);
-        ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
-        ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
-        ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
-        ResultadoValidacion ResultadoValidacion4 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba2", 2));
-        ResultadoValidacion ResultadoValidacion5 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba3", 3));
+        ErrorCantidadPresupuestos errorCantidadPresupuestos1 =  new ErrorCantidadPresupuestos(5, 2);
+        ErrorCantidadPresupuestos errorCantidadPresupuestos2 =  new ErrorCantidadPresupuestos(7, 3);
+        Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba", 10);
+        ResultadoValidacion resultadoValidacion0 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
+        ResultadoValidacion resultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
+        ResultadoValidacion resultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
+        ResultadoValidacion resultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
+        ResultadoValidacion resultadoValidacion4 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba2", 2));
+        ResultadoValidacion resultadoValidacion5 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba3", 3));
 
         entityManager.persist(licitacion4);
-        entityManager.persist(errorCantidadPresupuestos);
+        entityManager.persist(errorCantidadPresupuestos1);
+        entityManager.persist(errorCantidadPresupuestos2);
 
-        ResultadoValidacion ResultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos,licitacion4);
+        ResultadoValidacion resultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos1,licitacion4);
+
+        ResultadoValidacion resultadoValidacion7 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos2,licitacionPrueba);
 
 
-        entityManager.persist(ResultadoValidacion6);
+        entityManager.persist(resultadoValidacion6);
 
-        resultadosValidacion1.add(ResultadoValidacion1);
-        resultadosValidacion1.add(ResultadoValidacion2);
+        resultadosValidacion0.add(resultadoValidacion0);
 
-        resultadosValidacion2.add(ResultadoValidacion3);
+        resultadosValidacion1.add(resultadoValidacion1);
+        resultadosValidacion1.add(resultadoValidacion2);
 
-        resultadosValidacion3.add(ResultadoValidacion4);
-        resultadosValidacion3.add(ResultadoValidacion5);
+        resultadosValidacion2.add(resultadoValidacion0);
+        resultadosValidacion2.add(resultadoValidacion6);
 
-        resultadosValidacion4.add(ResultadoValidacion6);
+        resultadosValidacion3.add(resultadoValidacion4);
+        resultadosValidacion3.add(resultadoValidacion5);
+
+        resultadosValidacion4.add(resultadoValidacion7);
 
         Mensaje mensaje1 = new Mensaje(resultadosValidacion1);
-        Mensaje mensaje2 = new Mensaje(resultadosValidacion1);
-        Mensaje mensaje3 = new Mensaje(resultadosValidacion2);
-        Mensaje mensaje4 = new Mensaje(resultadosValidacion3);
-        Mensaje mensaje5 = new Mensaje(resultadosValidacion4);
+        Mensaje mensaje2 = new Mensaje(resultadosValidacion2);
+        Mensaje mensaje3 = new Mensaje(resultadosValidacion3);
+        Mensaje mensaje4 = new Mensaje(resultadosValidacion4);
+        Mensaje mensaje5 = new Mensaje(resultadosValidacion0);
 
         List<Mensaje> listaMensajes1 = new ArrayList<>();
         List<Mensaje> listaMensajes2 = new ArrayList<>();
         List<Mensaje> listaMensajes3 = new ArrayList<>();
-        List<Mensaje> listaMensajes4 = new ArrayList<>();
 
         listaMensajes1.add(mensaje1);
         listaMensajes1.add(mensaje2);
         listaMensajes1.add(mensaje3);
-
-        listaMensajes2.add(mensaje1);
-        listaMensajes2.add(mensaje2);
-
-        listaMensajes3.add(mensaje3);
-        listaMensajes3.add(mensaje4);
-
-        listaMensajes4.add(mensaje4);
-        listaMensajes4.add(mensaje5);
-
+        listaMensajes1.add(mensaje4);
+        listaMensajes1.add(mensaje5);
 
         Usuario usuario1;
         Usuario usuario2;
@@ -116,8 +117,7 @@ public class ExampleDataCreator {
             usuario4 = new Usuario("gesoc", encriptador.hashear("prueba"), TipoPerfil.OPERADOR, new Organizacion("Grupo 7 S.R.L", "Compañía fabless de semiconductores"));
 
             usuario1.setBandejaDeMensajes(listaMensajes3);
-            usuario2.setBandejaDeMensajes(listaMensajes4);
-            usuario3.setBandejaDeMensajes(listaMensajes2);
+            usuario4.setBandejaDeMensajes(listaMensajes2);
             usuario4.setBandejaDeMensajes(listaMensajes1);
 
             crearCategorias(usuario4.getOrganizacion());

@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -7,10 +9,15 @@ import javax.persistence.Entity;
 @Entity(name = "ErrorMenorValor")
 @DiscriminatorValue("ErrorMenorValor")
 public class ErrorMenorValor extends ErrorValidacion {
+    @Expose(serialize = true)
     @Column
     private Double precioTotalEgreso;
+
+    @Expose(serialize = true)
     @Column
     private Double precioTotalMenorPresupuesto;
+
+    @Expose(serialize = true)
     @Column
     private String mensaje;
 

@@ -48,4 +48,13 @@ public class RepositorioEntidades {
         return this.entityManager.createQuery(where).getSingleResult();
     }
 
+    public Entidad getEntidadById(int idEntidad){
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Entidad> consulta = cb.createQuery(Entidad.class);
+        Root<Entidad> entidades = consulta.from(Entidad.class);
+        Predicate condicion = cb.equal(entidades.get("id"), idEntidad);
+        CriteriaQuery<Entidad> where = consulta.select(entidades).where(condicion);
+        return this.entityManager.createQuery(where).getSingleResult();
+    }
+
 }

@@ -43,6 +43,10 @@ public abstract class Entidad {
         this.ingresos = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getNombre() {
         return nombre;
     }

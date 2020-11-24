@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
 import ar.edu.utn.frba.dds.Licitacion.Licitacion;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 
@@ -8,17 +9,21 @@ import javax.persistence.*;
 public class ResultadoValidacion {
     @Id
     @GeneratedValue
+    @Expose(serialize = false)
     private int id;
 
     @Enumerated(EnumType.STRING)
+    @Expose(serialize = true)
     private EstadoValidacion estado;
 
     @ManyToOne
     @JoinColumn(name = "error_id")
+    @Expose(serialize = true)
     private ErrorValidacion error;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "licitacion_id")
+    @Expose(serialize = false)
     private Licitacion licitacion;
 
     public ResultadoValidacion() {

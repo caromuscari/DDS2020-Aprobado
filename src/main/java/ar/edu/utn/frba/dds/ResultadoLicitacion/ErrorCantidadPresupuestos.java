@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -8,12 +10,15 @@ import javax.persistence.Entity;
 @DiscriminatorValue("ErrorCantidadPrespuestos")
 public class ErrorCantidadPresupuestos extends ErrorValidacion {
 
+    @Expose(serialize = true)
     @Column
     private Integer cantidadSolicitada;
 
+    @Expose(serialize = true)
     @Column
     private Integer cantidadObtenida;
 
+    @Expose(serialize = true)
     @Column
     private String mensaje;
 

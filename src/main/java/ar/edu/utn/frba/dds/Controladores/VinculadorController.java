@@ -15,6 +15,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,12 +44,19 @@ public class VinculadorController {
         ResultadoVinculacion resultadoVinculacion;
         String seleccionado = request.queryMap("seleccionado").value();
         String orden = request.queryMap("orden").value();
-        String ent = request.queryMap("entidad").value();
+        String idEntidad = request.queryMap("entidad").value();
+        int idEntity;
+
+        try{
+            idEntity = Integer.parseInt(idEntidad);
+        }catch (Exception e){
+            return e.getMessage();
+        }
 
         //=====================================================
         // Busco la entidad en la DB
 
-        Entidad entidad = new RepositorioEntidades(entityManager).obtenerEntidadPorNombre(ent);
+        Entidad entidad = new RepositorioEntidades(entityManager).getEntidadById(idEntity);
 
         //=====================================================
 

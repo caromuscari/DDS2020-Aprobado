@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.Request;
 import spark.Response;
 
@@ -19,6 +20,7 @@ import javax.persistence.EntityManager;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.google.gson.Gson;
 
 public class  LicitacionController {
 
@@ -34,16 +36,16 @@ public class  LicitacionController {
     }
 
     public static Object validarLicitacion(Request request, Response response, EntityManager entitys) {
-        String nombreLicitacion = request.queryMap("idLicitacion").value();
-        Licitacion licitacion = new LicitacionRepo(entitys).obtenerLicitacionPorID(nombreLicitacion);
+        String idLicitacion = request.queryMap("idLicitacion").value();
+        Licitacion licitacion = new LicitacionRepo(entitys).obtenerLicitacionPorID(idLicitacion);
         response.header("Content-Type", "application/json");
         try {
             if (licitacion != null) {
                 List<ResultadoValidacion> resultadoValidacions = licitacion.validarLicitacion();
-                ObjectMapper mapper = new ObjectMapper();
-                String s = mapper.writeValueAsString(resultadoValidacions);
-                ArrayNode sa = mapper.readValue(s, ArrayNode.class);
-                return sa;
+                Gson gson = new GsonBuilder()
+                        .excludeFieldsWithoutExposeAnnotation()
+                        .create();
+                return gson.toJson(resultadoValidacions);
             }
         } catch (Exception e) {
             e.printStackTrace();

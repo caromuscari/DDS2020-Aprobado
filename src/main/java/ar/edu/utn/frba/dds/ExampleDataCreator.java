@@ -8,9 +8,7 @@ import ar.edu.utn.frba.dds.Entidad.Organizacion;
 import ar.edu.utn.frba.dds.Licitacion.*;
 import ar.edu.utn.frba.dds.Entidad.TipoActividad;
 import ar.edu.utn.frba.dds.Operaciones.*;
-import ar.edu.utn.frba.dds.ResultadoLicitacion.ErrorCantidadPresupuestos;
-import ar.edu.utn.frba.dds.ResultadoLicitacion.EstadoValidacion;
-import ar.edu.utn.frba.dds.ResultadoLicitacion.ResultadoValidacion;
+import ar.edu.utn.frba.dds.ResultadoLicitacion.*;
 import ar.edu.utn.frba.dds.Usuario.Hash;
 import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
@@ -54,8 +52,9 @@ public class ExampleDataCreator {
         List<ResultadoValidacion> resultadosValidacion4 = new ArrayList<>();
 
         Licitacion licitacion4 = new Licitacion("prueba", 6);
-        ErrorCantidadPresupuestos error =  new ErrorCantidadPresupuestos(5, 2);
-
+        licitacion4.agregarCriterio(new CantidadPresupuestos());
+        licitacion4.agregarCriterio(new MenorValor());
+        ErrorCantidadPresupuestos errorCantidadPresupuestos =  new ErrorCantidadPresupuestos(5, 2);
         ResultadoValidacion ResultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 23", 2));
         ResultadoValidacion ResultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 24", 23));
         ResultadoValidacion ResultadoValidacion3 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("Licitacion 25", 24));
@@ -63,9 +62,10 @@ public class ExampleDataCreator {
         ResultadoValidacion ResultadoValidacion5 = new ResultadoValidacion(EstadoValidacion.OK,new Licitacion("prueba3", 3));
 
         entityManager.persist(licitacion4);
-        entityManager.persist(error);
+        entityManager.persist(errorCantidadPresupuestos);
 
-        ResultadoValidacion ResultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,error,licitacion4);
+        ResultadoValidacion ResultadoValidacion6 = new ResultadoValidacion(EstadoValidacion.ERROR,errorCantidadPresupuestos,licitacion4);
+
 
         entityManager.persist(ResultadoValidacion6);
 

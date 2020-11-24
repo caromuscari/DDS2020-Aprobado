@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.ResultadoLicitacion;
 
 import ar.edu.utn.frba.dds.Operaciones.CategoriaItem;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 @DiscriminatorValue("ErrorItemFaltante")
 public class ErrorItemFaltante extends ErrorValidacion {
 
+    @Expose(serialize = true)
     @Column
     private String mensaje;
 

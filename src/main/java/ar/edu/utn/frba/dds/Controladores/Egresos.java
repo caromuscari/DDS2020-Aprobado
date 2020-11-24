@@ -129,6 +129,7 @@ public class Egresos {
 
                 Presupuesto presupuesto = new Presupuesto(presupuestoDTO.getDocumentos(), presupuestoDTO.getItems(), presupuestoDTO.getPrecioTotal(), proveedor, presupuestoDTO.getNombre());
                 new RepositorioPresupuesto(entity).crearPresupuesto(presupuesto);
+                presupuesto.setCategorias(presupuestoDTO.getCategorias());
 
                 Egreso egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params("id"));
                 Entidad entidad = new RepositorioEntidades(entity).obtenerEntidadDeEgreso(egreso);

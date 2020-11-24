@@ -1,5 +1,8 @@
 {
   "nombre": "Presupuesto HP (sin items)",
+  "categorias":[{
+    "nombre": "PCs"
+  }],
   "proveedor": {
     "identificador": 381380,
     "nombre": "HP",

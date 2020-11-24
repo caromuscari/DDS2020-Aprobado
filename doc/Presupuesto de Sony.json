@@ -1,6 +1,9 @@
 {
     "documentos": [ ], 
   "nombre": "Presupuesto Sony",
+  "categorias":[{
+    "nombre": "Tecnología"
+  }],
   "proveedor": {
     "nombre": "SONY",
     "identificador": 231414,

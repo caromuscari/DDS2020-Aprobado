@@ -110,7 +110,6 @@ public class Egresos {
             return Login.paginaLogin(request, response);
         } else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            Audit.crearAuditoria("AGREGAR_PRESUPUESTO","Ingresos",usuario.getUsuario());
             Path tempFile;
             File uploadDir = new File("upload");
             uploadDir.mkdir();
@@ -157,12 +156,12 @@ public class Egresos {
                 }
 
                 Files.deleteIfExists(tempFile);
+                Audit.crearAuditoria("AGREGAR_PRESUPUESTO","Ingresos",usuario.getUsuario(),egreso.getId());
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 uploadDir.delete();
             }
-
             response.redirect("/egreso");
             return null;
         }
@@ -191,7 +190,6 @@ public class Egresos {
             return Login.paginaLogin(request, response);
         }
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        Audit.crearAuditoria("BAJA","Egreso",usuario.getUsuario());
         String id = request.params(":id");
 
 
@@ -203,7 +201,7 @@ public class Egresos {
         }
 
         new RepositorioEgresos(entity).borrarEgreso(id);
-
+        Audit.crearAuditoria("BAJA","Egreso",usuario.getUsuario(),Integer.parseInt(id));
         return "Borrado exitoso";
     }
 
@@ -241,15 +239,14 @@ public class Egresos {
         Egreso egreso = null;
 
         if (id == null) {
-            Audit.crearAuditoria("ALTA","Egreso",usuario.getUsuario());
             egreso = new RepositorioEgresos(entity).crearEgreso(items, proveedor, nombreEgreso);
+            Audit.crearAuditoria("ALTA","Egreso",usuario.getUsuario(),egreso.getId());
         } else {
-            Audit.crearAuditoria("MODIFICAR","Egreso",usuario.getUsuario());
             egreso = new RepositorioEgresos(entity).obtenerEgresoPorId(request.params(":id"));
             egreso.setNombre(nombreEgreso);
             egreso.setProveedor(proveedor);
             egreso.setItems(items);
-
+            Audit.crearAuditoria("MODIFICAR","Egreso",usuario.getUsuario(),egreso.getId());
             repoEntidades.obtenerEntidadDeEgreso(egreso).getEgresos().remove(egreso);
         }
 

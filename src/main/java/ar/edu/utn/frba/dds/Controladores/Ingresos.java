@@ -64,8 +64,8 @@ public class Ingresos {
         }
         else {
             Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-            Audit.crearAuditoria("MODIFICACION","Ingresos",usuario.getUsuario());
             ar.edu.utn.frba.dds.Operaciones.Ingreso ingreso = new RepositorioIngreso(entity).obtenerIngresoPorId(request.params(":id"));
+            Audit.crearAuditoria("MODIFICACION","Ingresos",usuario.getUsuario(),ingreso.getId());
             Map<String, Object> map = new HashMap<>();
             map.put("ingreso",ingreso);
             map.put("categorias", new Gson().toJson(usuario.getOrganizacion().getCriterios()));
@@ -80,7 +80,6 @@ public class Ingresos {
         }
 
         Usuario usuario = new RepoUsuarios(entity).buscarUsuario(request.session().attribute("usuario"));
-        Audit.crearAuditoria("ALTA","Ingresos",usuario.getUsuario());
         String[] nombreCategorias = request.queryParamsValues("categorias");
         String id = request.params(":id");
 
@@ -93,7 +92,7 @@ public class Ingresos {
             }
         }
         ingreso.setCategorias(categorias);
-
+        Audit.crearAuditoria("ALTA","Ingresos",usuario.getUsuario(),ingreso.getId());
         response.redirect("/ingreso");
         return null;
     }

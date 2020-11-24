@@ -26,6 +26,15 @@ public class Audit {
     private String usuario;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date fecha;
+    private int entidad_id;
+
+    public int getEntidad_id() {
+        return entidad_id;
+    }
+
+    public void setEntidad_id(int entidad_id) {
+        this.entidad_id = entidad_id;
+    }
 
     public Audit() {
     }
@@ -71,11 +80,12 @@ public class Audit {
         this.fecha = fecha;
     }
 
-    public Audit(String accion, String entidad, String usuario) {
+    public Audit(String accion, String entidad, String usuario, int id) {
         this.accion = accion;
         this.entidad = entidad;
         this.usuario = usuario;
         this.fecha = new Date();
+        this.entidad_id = id;
     }
 
     public static Object list (Request request, Response response){
@@ -97,8 +107,8 @@ public class Audit {
         }
     }
 
-    public static void crearAuditoria(String accion, String entidad, String usuario){
-        Audit audit = new Audit(accion,entidad,usuario);
+    public static void crearAuditoria(String accion, String entidad, String usuario, int id){
+        Audit audit = new Audit(accion,entidad,usuario,id);
         App.getDatastore().save(audit);
     }
 }

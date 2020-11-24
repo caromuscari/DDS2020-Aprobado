@@ -1,5 +1,8 @@
 {
   "nombre": "Presupuesto Samsung",
+  "categorias":[{
+    "nombre": "Tecnología"
+  }],
   "proveedor": {
     "identificador": 821739,
     "nombre": "SAMSUNG",

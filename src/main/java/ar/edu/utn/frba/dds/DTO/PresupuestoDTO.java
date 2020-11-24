@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.DTO;
 
+import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Licitacion.ItemOperacionPresupuesto;
 import ar.edu.utn.frba.dds.Licitacion.Presupuesto;
 import ar.edu.utn.frba.dds.Operaciones.DocumentoComercial;
@@ -14,6 +15,7 @@ public class PresupuestoDTO {
     private int id;
     private List<ItemOperacionPresupuesto> items;
     private List<DocumentoComercial> documentos;
+    private List<Categoria> categorias;
 
     public PresupuestoDTO() {
     }
@@ -25,6 +27,7 @@ public class PresupuestoDTO {
         this.id = presupuesto.getId();
         this.items = presupuesto.getItems();
         this.documentos = presupuesto.getDocumentos();
+        this.categorias = presupuesto.getCategorias();
     }
 
     public Double getPrecioTotal() {
@@ -56,4 +59,7 @@ public class PresupuestoDTO {
 
     public List<DocumentoComercial> getDocumentos() { return documentos; }
     public void setDocumentos(List<DocumentoComercial> documentos) { this.documentos = documentos; }
+
+    public List<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
 }

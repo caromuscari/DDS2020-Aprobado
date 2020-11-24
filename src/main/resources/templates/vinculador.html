@@ -143,7 +143,7 @@
 						type: 'POST',
 						data: { seleccionado: seleccionado, orden: orden, inicioRango: inicioRango, finRango: finRango, entidad: entidad },
 						success: function (data) {
-							descargarArchivo(data, entidad, seleccionado);
+							descargarArchivo(data, seleccionado);
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
 							console.log(textStatus + " " + errorThrown);
@@ -155,14 +155,15 @@
 				}
 			}
 
-			function descargarArchivo(data, nombreEntidad, tipoCriterio) {
+			function descargarArchivo(data, tipoCriterio) {
 
 				// Creo link
 				var blob = new Blob([data], { type: "octec/stream" });
 				var url = window.URL.createObjectURL(blob);
-
+				var nombre = $("#entidades option:selected").text();
 				var link = document.createElement('a');
-				link.download = "vinculacion-" + nombreEntidad + "-" + tipoCriterio + ".json";
+				
+				link.download = "vinculacion-" + nombre + "-" + tipoCriterio + ".json";
 				link.href = url;
 				link.click();
 			}

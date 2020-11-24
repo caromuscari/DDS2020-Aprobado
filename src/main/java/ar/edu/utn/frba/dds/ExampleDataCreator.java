@@ -124,8 +124,8 @@ public class ExampleDataCreator {
             crearCategoriasPepe(usuario1.getOrganizacion());
             inicializarOrganizacion(entityManager, usuario4.getOrganizacion());
             inicializarOrganizacionPepe(entityManager, usuario1.getOrganizacion());
-            crearCategorias(usuario2.getOrganizacion());
-            inicializarOrganizacion(entityManager, usuario2.getOrganizacion());
+            //crearCategorias(usuario2.getOrganizacion());
+            //inicializarOrganizacion(entityManager, usuario2.getOrganizacion());
 
             entityManager.persist(usuario1);
             entityManager.persist(usuario2);
@@ -140,11 +140,6 @@ public class ExampleDataCreator {
     private static void inicializarOrganizacion(EntityManager entityManager, Organizacion organizacion){
         List<Proveedor> proveedores = inicializarProveedores(entityManager);
 
-        // ===============================
-        System.out.println("Cantidad de proveedores: " + proveedores.stream().count());
-        // ===============================
-
-
         TipoActividad agropecuario = new TipoActividad(12890000, 48480000, 345430000,
                 5, 10, 50, "Agropecuario");
         Empresa empresa1 = new Empresa("Empresa 1", "LME SRL", Long.parseLong("123456"),
@@ -152,29 +147,43 @@ public class ExampleDataCreator {
         Empresa empresa2 = new Empresa("Empresa 2", "MercadoLibre SRL", Long.parseLong("234567"),
                 1111, 1, 1000, 10000.0, agropecuario, 1000.0);
 
-        ItemEgreso itemEgreso = new ItemEgreso("1234", "Computadora", 10.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemEgreso itemEgreso = new ItemEgreso("1234", "Computadora", 40.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         ItemEgreso itemEgreso2 = new ItemEgreso("5678", "Monitor", 50.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+        ItemEgreso itemEgreso3 = new ItemEgreso("5673", "Monitores", 30.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+        ItemEgreso itemEgreso4 = new ItemEgreso("5671", "Computadora", 50.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
         ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(1, itemEgreso);
-        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(2, itemEgreso2);
+        ItemOperacionEgreso itemOperacionEgreso2 = new ItemOperacionEgreso(1, itemEgreso2);
+        ItemOperacionEgreso itemOperacionEgreso3 = new ItemOperacionEgreso(2, itemEgreso3);
+        ItemOperacionEgreso itemOperacionEgreso4 = new ItemOperacionEgreso(3, itemEgreso4);
 
         List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
         itemsOperacion1.add(itemOperacionEgreso);
         List<ItemOperacionEgreso> itemsOperacion2 = new ArrayList<>();
         itemsOperacion2.add(itemOperacionEgreso2);
+        List<ItemOperacionEgreso> itemsOperacion3 = new ArrayList<>();
+        itemsOperacion3.add(itemOperacionEgreso3);
+        List<ItemOperacionEgreso> itemsOperacion4 = new ArrayList<>();
+        itemsOperacion4.add(itemOperacionEgreso4);
 
         Egreso e1 = empresa1.generarEgreso(itemsOperacion1, proveedores.get(0), "Egreso 1");
         Egreso e2 = empresa1.generarEgreso(itemsOperacion2, proveedores.get(0), "Egreso 2");
-        Egreso e3 = empresa2.generarEgreso(itemsOperacion2, proveedores.get(0), "Egreso 3");
+        Egreso e3 = empresa2.generarEgreso(itemsOperacion3, proveedores.get(0), "Egreso 3");
+        Egreso e4 = empresa2.generarEgreso(itemsOperacion4, proveedores.get(0), "Egreso 4");
+
 
 
         // Tengo que setear la fecha porque en la creacion se setea LocalDate.now()
         e1.setFecha(LocalDate.of(2020, 6, 11));
         e2.setFecha(LocalDate.of(2020, 6, 30));
+        e3.setFecha(LocalDate.of(2020, 6, 01));
+        e4.setFecha(LocalDate.of(2020, 6, 04));
 
 
         e1.setMedioDePago(new MedioDePago("Tarjeta Macro", 100L, "CREDIT_CARD"));
         e2.setMedioDePago(new MedioDePago("Tarjeta Santander", 90L, "CREDIT_CARD"));
         e3.setMedioDePago(new MedioDePago("Tarjeta Cabal", 200L, "DEBIT_CARD"));
+        e4.setMedioDePago(new MedioDePago("Tarjeta Visa", 210L, "DEBIT_CARD"));
+
 
         //creo categoria
         List<Categoria> listaCategorias = new ArrayList<>();
@@ -183,7 +192,7 @@ public class ExampleDataCreator {
         listaCategorias.add(categoria1);
 
         //Creo ingresos
-        Ingreso ingreso1 = new Ingreso("Ingreso 1", 100.0, LocalDate.of(2020, 6, 02));
+        Ingreso ingreso1 = new Ingreso("Ingreso 1", 100.0, LocalDate.of(2020, 6, 19));
 
         ingreso1.setCategorias(listaCategorias);
 
@@ -193,11 +202,11 @@ public class ExampleDataCreator {
         ingresosEmpresa1.add(ingreso2);
         empresa1.setIngresos(ingresosEmpresa1);
 
-        Ingreso ingreso3 = new Ingreso("Ingreso 3", 150.0, LocalDate.of(2020, 6, 17));
+        Ingreso ingreso3 = new Ingreso("Ingreso 3", 150.0, LocalDate.of(2020, 6, 01));
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
 
-        Ingreso ingreso4 = new Ingreso("Ingreso 4", 180.0, LocalDate.of(2020, 4, 20));
+        Ingreso ingreso4 = new Ingreso("Ingreso 4", 180.0, LocalDate.of(2020, 6, 04));
         ingresosEmpresa2.add(ingreso4);
         empresa2.setIngresos(ingresosEmpresa2);
 

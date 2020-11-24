@@ -202,11 +202,11 @@ public class ExampleDataCreator {
         ingresosEmpresa1.add(ingreso2);
         empresa1.setIngresos(ingresosEmpresa1);
 
-        Ingreso ingreso3 = new Ingreso("Ingreso 3", 150.0, LocalDate.of(2020, 6, 01));
+        Ingreso ingreso3 = new Ingreso("Ingreso 3", 150.0, LocalDate.of(2020, 6, 17));
         List<Ingreso> ingresosEmpresa2 = new ArrayList<>();
         ingresosEmpresa2.add(ingreso3);
 
-        Ingreso ingreso4 = new Ingreso("Ingreso 4", 180.0, LocalDate.of(2020, 6, 04));
+        Ingreso ingreso4 = new Ingreso("Ingreso 4", 180.0, LocalDate.of(2020, 6, 20));
         ingresosEmpresa2.add(ingreso4);
         empresa2.setIngresos(ingresosEmpresa2);
 
@@ -234,6 +234,7 @@ public class ExampleDataCreator {
 
         licitacion1.agregarCriterio(new CantidadPresupuestos());
         //licitacion1.agregarCriterio(new ItemsPresupuesto());
+
 
         empresa1.addLicitacion(licitacion1);
         empresa2.addLicitacion(licitacion2);

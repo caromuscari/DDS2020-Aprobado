@@ -571,7 +571,7 @@ public class ExampleDataCreator {
     private static Licitacion createLicitacionPrueba3(EntityManager entityManager){
         Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba 3", 1);
 
-        Proveedor prov1 = new Proveedor("EPSON", 1L, "1234");
+        Proveedor prov1 = new Proveedor("ROG", 1L, "1234");
         prov1.addItem(new ItemEgreso("7997", "Impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
 
         List<Proveedor> proveedores = new ArrayList<>();

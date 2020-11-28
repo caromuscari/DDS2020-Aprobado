@@ -55,9 +55,9 @@ public class ExampleDataCreator {
 
         ErrorCantidadPresupuestos errorCantidadPresupuestos1 =  new ErrorCantidadPresupuestos(5, 2);
         ErrorCantidadPresupuestos errorCantidadPresupuestos2 =  new ErrorCantidadPresupuestos(7, 3);
-        Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba", 10);
-        licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
-        licitacionPrueba.agregarCriterio(new MenorValor());
+        Licitacion licitacionPrueba =  createLicitacionPrueba(entityManager);
+        Licitacion licitacionPrueba2 =  createLicitacionPrueba2(entityManager);
+        entityManager.persist(licitacionPrueba2);
         ResultadoValidacion resultadoValidacion0 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
         ResultadoValidacion resultadoValidacion1 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
         ResultadoValidacion resultadoValidacion2 = new ResultadoValidacion(EstadoValidacion.OK,licitacionPrueba);
@@ -417,5 +417,116 @@ public class ExampleDataCreator {
         caba.setCriterioHijo(criterioBarrio);
 
         org.asociarCriterio(criterioContinente);
+    }
+
+    private static Licitacion createLicitacionPrueba(EntityManager entityManager){
+        Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba", 10);
+
+        Proveedor prov1 = new Proveedor("SONY", 1L, "1234");
+        prov1.addItem(new ItemEgreso("7866", "Computadora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("7867", "Impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+        prov1.addItem(new ItemEgreso("7968", "Tinta para impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+
+        List<Proveedor> proveedores = new ArrayList<>();
+        proveedores.add(prov1);
+
+        entityManager.persist(prov1);
+
+        ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
+        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
+        List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
+        items1.add(iop1);
+        items1.add(iop2);
+        Presupuesto presupuesto1 = new Presupuesto(items1,prov1,"Presupuesto prueba 1");
+
+        entityManager.persist(presupuesto1);
+
+        licitacionPrueba.addPresupuesto(presupuesto1);
+
+        ItemEgreso itemEgreso = new ItemEgreso("6655", "Placa de Video", 40.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+
+        entityManager.persist(itemEgreso);
+
+        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(4, itemEgreso);
+
+        entityManager.persist(itemOperacionEgreso);
+
+        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
+        itemsOperacion1.add(itemOperacionEgreso);
+
+        TipoActividad tecnologia = new TipoActividad(12890000, 48480000, 345430000,
+                5, 10, 50, "Tecnologia");
+
+        entityManager.persist(tecnologia);
+
+        Empresa empresa1 = new Empresa("Empresa prueba", "LME BLA BLA", Long.parseLong("123400"),
+                1451, 14, 1000, 10000.0, tecnologia, 1000.0);
+
+        Egreso e1 = empresa1.generarEgreso(itemsOperacion1, prov1, "Egreso prueba validarLicitacion");
+
+        entityManager.persist(e1);
+
+        licitacionPrueba.setEgreso(e1);
+
+        licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
+        licitacionPrueba.agregarCriterio(new MenorValor());
+
+        return licitacionPrueba;
+    }
+
+    private static Licitacion createLicitacionPrueba2(EntityManager entityManager){
+        Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba 2", 1);
+
+        Proveedor prov1 = new Proveedor("EPSON", 1L, "1234");
+        prov1.addItem(new ItemEgreso("7997", "Impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
+
+        List<Proveedor> proveedores = new ArrayList<>();
+        proveedores.add(prov1);
+
+        entityManager.persist(prov1);
+
+        ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+        ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
+        ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
+        List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
+        items1.add(iop1);
+        items1.add(iop2);
+        Presupuesto presupuesto1 = new Presupuesto(items1,prov1,"Presupuesto prueba 2");
+
+        entityManager.persist(presupuesto1);
+
+        licitacionPrueba.addPresupuesto(presupuesto1);
+
+        ItemEgreso itemEgreso = new ItemEgreso("6655", "Placa de Video", 40.0, TipoItem.PRODUCTO, CategoriaItem.MONITOR);
+
+        entityManager.persist(itemEgreso);
+
+        ItemOperacionEgreso itemOperacionEgreso = new ItemOperacionEgreso(4, itemEgreso);
+
+        entityManager.persist(itemOperacionEgreso);
+
+        List<ItemOperacionEgreso> itemsOperacion1 = new ArrayList<>();
+        itemsOperacion1.add(itemOperacionEgreso);
+
+        TipoActividad tecnologia = new TipoActividad(12890000, 48480000, 345430000,
+                5, 10, 50, "Tecnologia 2");
+
+        entityManager.persist(tecnologia);
+
+        Empresa empresa1 = new Empresa("Empresa prueba 2 ", "LME BLA BLA", Long.parseLong("12200"),
+                1451, 14, 1000, 10000.0, tecnologia, 1000.0);
+
+        Egreso e1 = empresa1.generarEgreso(itemsOperacion1, prov1, "Egreso prueba validarLicitacion 2");
+
+        entityManager.persist(e1);
+
+        licitacionPrueba.setEgreso(e1);
+
+        licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
+
+        return licitacionPrueba;
     }
 }

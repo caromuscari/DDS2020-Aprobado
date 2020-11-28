@@ -24,7 +24,7 @@ public class ErrorMenorValor extends ErrorValidacion {
     public ErrorMenorValor(Double precioTotalEgreso, Double precioTotalMenorPresupuesto) {
         this.precioTotalEgreso = precioTotalEgreso;
         this.precioTotalMenorPresupuesto = precioTotalMenorPresupuesto;
-        this.mensaje = "No se eligió el presupuesto de menor valor. El egreso registrado tiene un precio total de "+precioTotalEgreso+" y el presupuesto de menor valor tiene un precio total de " + precioTotalMenorPresupuesto;
+        this.mensaje = "No se eligi el presupuesto de menor valor. El egreso registrado tiene un precio total de "+precioTotalEgreso+" y el presupuesto de menor valor tiene un precio total de " + precioTotalMenorPresupuesto;
     }
 
     public ErrorMenorValor(){

@@ -427,7 +427,7 @@ public class ExampleDataCreator {
     private static Licitacion createLicitacionPrueba(EntityManager entityManager){
         Licitacion licitacionPrueba =  new Licitacion("Licitacion prueba", 10);
 
-        Proveedor prov1 = new Proveedor("SONY", 1L, "1234");
+        Proveedor prov1 = new Proveedor("NET", 1L, "1234");
         prov1.addItem(new ItemEgreso("7866", "Computadora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
         prov1.addItem(new ItemEgreso("7867", "Impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));
         prov1.addItem(new ItemEgreso("7968", "Tinta para impresora", 20.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA));

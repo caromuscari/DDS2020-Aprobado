@@ -16,7 +16,7 @@ public class ResultadoValidacion {
     @Expose(serialize = true)
     private EstadoValidacion estado;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "error_id")
     @Expose(serialize = true)
     private ErrorValidacion error;

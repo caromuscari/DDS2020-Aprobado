@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.BandejaDeMendajes.Mensaje;
+import ar.edu.utn.frba.dds.BandejaDeMendajes.NotificadorValidador;
 import ar.edu.utn.frba.dds.Categorizacion.Categoria;
 import ar.edu.utn.frba.dds.Categorizacion.CriterioCategoria;
 import ar.edu.utn.frba.dds.Entidad.Empresa;
@@ -14,9 +15,11 @@ import ar.edu.utn.frba.dds.Usuario.TipoPerfil;
 import ar.edu.utn.frba.dds.Usuario.Usuario;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.mozilla.javascript.EcmaError;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
@@ -475,6 +478,22 @@ public class ExampleDataCreator {
         licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
         licitacionPrueba.agregarCriterio(new MenorValor());
 
+        NotificadorValidador notificadorValidador =  new NotificadorValidador();
+
+        Hash encriptador = new Hash();
+
+        Usuario usuario;
+        try {
+            usuario = new Usuario("pepito1", encriptador.hashear("pepito"), TipoPerfil.ADMINISTRADOR, new Organizacion("Grupo MediaTek S.A", "Hacemos medias"));
+            entityManager.persist(usuario);
+            notificadorValidador.suscribir(usuario);
+
+        }catch (Exception e){
+            System.out.println("error creando usuario");
+        }
+
+        licitacionPrueba.setNotificador(notificadorValidador);
+
         return licitacionPrueba;
     }
 
@@ -528,6 +547,22 @@ public class ExampleDataCreator {
         licitacionPrueba.setEgreso(e1);
 
         licitacionPrueba.agregarCriterio(new CantidadPresupuestos());
+
+        NotificadorValidador notificadorValidador =  new NotificadorValidador();
+
+        Hash encriptador = new Hash();
+
+        Usuario usuario;
+        try {
+            usuario = new Usuario("pepito2", encriptador.hashear("pepito"), TipoPerfil.ADMINISTRADOR, new Organizacion("Grupo MediaTek S.A", "Hacemos medias"));
+            entityManager.persist(usuario);
+            notificadorValidador.suscribir(usuario);
+
+        }catch (Exception e){
+            System.out.println("error creando usuario");
+        }
+
+        licitacionPrueba.setNotificador(notificadorValidador);
 
         return licitacionPrueba;
     }
@@ -583,6 +618,22 @@ public class ExampleDataCreator {
         licitacionPrueba.setEgreso(e1);
 
         licitacionPrueba.agregarCriterio(new ItemsPresupuesto());
+
+        NotificadorValidador notificadorValidador =  new NotificadorValidador();
+
+        Hash encriptador = new Hash();
+
+        Usuario usuario;
+        try {
+            usuario = new Usuario("pepito3", encriptador.hashear("pepito"), TipoPerfil.ADMINISTRADOR, new Organizacion("Grupo MediaTek S.A", "Hacemos medias"));
+            entityManager.persist(usuario);
+            notificadorValidador.suscribir(usuario);
+
+        }catch (Exception e){
+            System.out.println("error creando usuario");
+        }
+
+        licitacionPrueba.setNotificador(notificadorValidador);
 
         return licitacionPrueba;
     }

@@ -23,17 +23,19 @@ public class PrimeroEgreso extends Vinculador{
 
     @Override
     public ResultadoVinculacion vincular(Entidad entidad) {
-        Iterator<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos()).iterator();
+        List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
+        Iterator<Egreso> egresos = egrOrdenados.iterator();
         List <Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
         List <Ingreso> ingresosVinculados = new ArrayList<>();
 
         for (int i=0; ingrOrdenados.size()>i; i++){
              Ingreso ingreso = ingrOrdenados.get(i);
-             while(ingreso.montoTotalEgresos()< ingreso.getMontoTotal() && egrOrdenados.hasNext()){
-                 Egreso egreso = egrOrdenados.next();
+             if (!egresos.hasNext()) egresos = egrOrdenados.iterator();
+             while(ingreso.montoTotalEgresos()< ingreso.getMontoTotal() && egresos.hasNext()){
+                 Egreso egreso = egresos.next();
                  if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (egreso.getPrecioTotal() + ingreso.montoTotalEgresos() <= ingreso.getMontoTotal())){
                      ingreso.asociarEgreso(egreso);
-                     ingresosVinculados.add(ingreso);
+                     if (!ingresosVinculados.contains(ingreso)) ingresosVinculados.add(ingreso);
                  }
              }
         }

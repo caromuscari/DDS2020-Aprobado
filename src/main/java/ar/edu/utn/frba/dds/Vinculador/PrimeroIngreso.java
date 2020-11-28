@@ -25,16 +25,18 @@ public class PrimeroIngreso extends Vinculador{
     public ResultadoVinculacion vincular(Entidad entidad) {
         List<Ingreso> ingrOrdenados = ordenarIngresos(entidad.getIngresos());
         List<Egreso> egrOrdenados = ordenarEgresos(entidad.getEgresos());
-        Iterator<Ingreso> ingresos = ingrOrdenados.iterator();
+        Iterator<Ingreso> ingresos;
         List <Ingreso> ingresosVinculados = new ArrayList<>();
 
         for(int i = 0; i<egrOrdenados.size(); i++) {
             Egreso egreso = egrOrdenados.get(i);
-            if (!ingresos.hasNext()) ingresos = ingrOrdenados.iterator();
-            Ingreso ingreso = ingresos.next();
-            if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())){
-                ingreso.asociarEgreso(egreso);
-                ingresosVinculados.add(ingreso);
+            ingresos = ingrOrdenados.iterator();
+            while (!egreso.getVinculado() && ingresos.hasNext()) {
+                Ingreso ingreso = ingresos.next();
+                if (this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso, ingreso)) && (ingreso.montoTotalEgresos() + egreso.getPrecioTotal() < ingreso.getMontoTotal())) {
+                    ingreso.asociarEgreso(egreso);
+                    if (!ingresosVinculados.contains(ingreso)) ingresosVinculados.add(ingreso);
+                }
             }
         }
         return new ResultadoVinculacion(entidad, LocalDate.now(), ingresosNoCompletos(entidad.getIngresos()), egresosNoVinculados(entidad.getEgresos()), ingresosVinculados);

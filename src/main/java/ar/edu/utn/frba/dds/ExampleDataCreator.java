@@ -438,7 +438,7 @@ public class ExampleDataCreator {
         entityManager.persist(prov1);
 
         ItemPresupuesto ip1 = new ItemPresupuesto(100.0,CategoriaItem.COMPUTADORA,TipoItem.PRODUCTO);
-        ItemPresupuesto ip2 = new ItemPresupuesto(200.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
+        ItemPresupuesto ip2 = new ItemPresupuesto(100.0,CategoriaItem.MONITOR,TipoItem.PRODUCTO);
         ItemOperacionPresupuesto iop1 = new ItemOperacionPresupuesto(2,ip1);
         ItemOperacionPresupuesto iop2 = new ItemOperacionPresupuesto(2,ip2);
         List<ItemOperacionPresupuesto> items1 = new ArrayList<>();
@@ -450,7 +450,7 @@ public class ExampleDataCreator {
 
         licitacionPrueba.addPresupuesto(presupuesto1);
 
-        ItemEgreso itemEgreso = new ItemEgreso("6655", "Placa de Video", 40.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
+        ItemEgreso itemEgreso = new ItemEgreso("6655", "Placa de Video", 150.0, TipoItem.PRODUCTO, CategoriaItem.COMPUTADORA);
 
         entityManager.persist(itemEgreso);
 

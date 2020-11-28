@@ -31,7 +31,7 @@ public class Mix extends Vinculador{
             if (!egresos.hasNext()) egresos = egrOrdenados.iterator();
             while(ingreso.montoTotalEgresos()< ingreso.getMontoTotal() && egresos.hasNext()){
                 Egreso egreso = egresos.next();
-                if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (egreso.getPrecioTotal() + ingreso.montoTotalEgresos() <= ingreso.getMontoTotal())){
+                if(this.getCondiciones().stream().allMatch(c -> c.validarCondicion(egreso,ingreso)) && (egreso.getPrecioTotal() + ingreso.montoTotalEgresos() <= ingreso.getMontoTotal()) && !egreso.getVinculado()){
                     ingreso.asociarEgreso(egreso);
                     if (!ingresosVinculados.contains(ingreso)) ingresosVinculados.add(ingreso);
                 }
